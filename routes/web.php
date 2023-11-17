@@ -25,4 +25,10 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    //Uploader
+        Route::get('/uploader', function () {
+            return view('admin/uploader');
+        })->name('uploader');
+        
+        Route::post('book/create', 'App\Http\Controllers\BookController@create')->name('book.create');
 });
