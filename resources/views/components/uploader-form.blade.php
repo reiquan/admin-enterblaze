@@ -43,6 +43,7 @@
   }
   ```
 -->
+<livewire:ImagesService />
 <form method="POST" action="{{ route('book.create') }}">
   @csrf
 
