@@ -25,10 +25,21 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    //Uploader
-        Route::get('/uploader', function () {
-            return view('admin/uploader');
-        })->name('uploader');
-        
-        Route::post('book/create', 'App\Http\Controllers\BookController@create')->name('book.create');
+
+    //Universe
+        Route::get('/universe', 'App\Http\Controllers\UniverseController@index')->name('universe.index');
+        Route::get('/universe/create', 'App\Http\Controllers\UniverseController@create')->name('universe.create');
+        Route::post('/universe/{universe_id}/update', 'App\Http\Controllers\UniverseController@update')->name('universe.update');
+        Route::get('/universe/{universe_id}/show', 'App\Http\Controllers\UniverseController@show')->name('universe.show');
+        Route::post('/universe/{universe_id}/delete', 'App\Http\Controllers\UniverseController@delete')->name('universe.delete');
+        Route::post('/universe/store', 'App\Http\Controllers\UniverseController@store')->name('universe.store');
+   //Book
+        Route::get('/book', 'App\Http\Controllers\BookController@index')->name('book.index');
+        Route::get('/book/create', 'App\Http\Controllers\BookController@create')->name('book.create');
+        Route::get('/book/{book_id}/update', 'App\Http\Controllers\BookController@update')->name('book.update');
+        Route::get('/book/{book_id}/show', 'App\Http\Controllers\BookController@show')->name('book.show');
+        Route::get('/book/{book_id}/delete', 'App\Http\Controllers\BookController@delete')->name('book.delete');
+        //Uploader
+            Route::get('/uploader', 'App\Http\Controllers\BookController@index')->name('admin.uploader');
+
 });

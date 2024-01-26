@@ -1,53 +1,4 @@
-
-
-
-
-<div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-
-    <nav class="flex" aria-label="Breadcrumb">
-      <ol role="list" class="flex space-x-4 rounded-md bg-white px-6 shadow">
-
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Book Info</a>
-          </div>
-        </li>
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Upload Images</a>
-          </div>
-        </li>
-      </ol>
-    </nav>
-
-</div>
-
-<div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
-<!--
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
-<livewire:ImagesService />
-<form method="POST" action="{{ route('book.create') }}">
-  @csrf
-
-  <div class="space-y-12">
+<div class="">
     <div class="border-b border-gray-900/10 pb-12">
       <h2 class="text-base font-semibold leading-7 text-gray-900">Profile</h2>
       <p class="mt-1 text-sm leading-6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
@@ -112,11 +63,6 @@
             <button type="button" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Change</button>
           </div>
         </div> -->
-
-        <div class="col-span-full">
-          <label for="about" class="block text-sm font-medium leading-6 text-gray-900">Upload Cover</label>
-          <x-single-upload-image />
-        </div>
       </div>
     </div>
 
@@ -171,7 +117,3 @@
     <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
     <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
   </div>
-</form>
-
-
-</div>

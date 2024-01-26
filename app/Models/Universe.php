@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Book extends Model
+class Universe extends Model
 {
     use HasFactory;
-       /**
+
+         /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'books';
+    protected $table = 'universes';
       /**
      * The attributes that are mass assignable.
      *
@@ -27,14 +28,12 @@ class Book extends Model
      * @var array
      */
     protected $fillable = [
-      
+        'universe_name', 'universe_image_url', 'universe_logo'
     ];
-
+    public function books(){
+        return $this->hasMany(Book::class);
+    }
     public function volumes(){
         return $this->hasMany(Volume::class);
-    }
-
-    public function universe(){
-        return $this->belongsTo(Universe::class, 'book_universe_id');
     }
 }

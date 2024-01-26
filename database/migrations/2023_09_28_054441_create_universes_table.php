@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('universes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('image_url');
-            $table->string('universe_logo');
-            $table->string('slug_name');
+            $table->string('universe_name');
+            $table->string('universe_image_url')->nullable();
+            $table->string('universe_logo')->nullable();
+            $table->string('universe_slug_name')->nullable();
             $table->timestamps();
         });
     }
