@@ -15,7 +15,7 @@ class UniverseController extends Controller
     public function index()
     {
         //
-        return view('admin/universe');
+        return view('universe/index');
     }
 
     /**
@@ -77,6 +77,8 @@ class UniverseController extends Controller
     public function show(string $id)
     {
         //
+        $universe = Universe::find($id);
+        return view('universe/show', compact('universe'));
     }
 
     /**
@@ -85,6 +87,8 @@ class UniverseController extends Controller
     public function edit(string $id)
     {
         //
+        $universe = Universe::find($id);
+        return view('universe/create', compact('universe'));
     }
 
   /**
@@ -114,5 +118,7 @@ class UniverseController extends Controller
     public function destroy(string $id)
     {
         //
+        $universe = Universe::find($id)->destroy();
+        return view('universe/index');
     }
 }

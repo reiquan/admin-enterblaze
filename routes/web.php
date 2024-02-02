@@ -34,11 +34,11 @@ Route::middleware([
         Route::post('/universe/{universe_id}/delete', 'App\Http\Controllers\UniverseController@delete')->name('universe.delete');
         Route::post('/universe/store', 'App\Http\Controllers\UniverseController@store')->name('universe.store');
    //Book
-        Route::get('/book', 'App\Http\Controllers\BookController@index')->name('book.index');
-        Route::get('/book/create', 'App\Http\Controllers\BookController@create')->name('book.create');
-        Route::get('/book/{book_id}/update', 'App\Http\Controllers\BookController@update')->name('book.update');
-        Route::get('/book/{book_id}/show', 'App\Http\Controllers\BookController@show')->name('book.show');
-        Route::get('/book/{book_id}/delete', 'App\Http\Controllers\BookController@delete')->name('book.delete');
+        Route::get('/universe/{universe_id}/books', 'App\Http\Controllers\BookController@index')->name('books.index');
+        Route::get('/universe/{universe_id}/books/create', 'App\Http\Controllers\BookController@create')->name('books.create');
+        Route::get('/universe/{universe_id}/books/{book_id}/update', 'App\Http\Controllers\BookController@update')->name('books.update');
+        Route::get('/universe/{universe_id}/books/{book_id}/show', 'App\Http\Controllers\BookController@show')->name('books.show');
+        Route::get('/universe/{universe_id}/books/{book_id}/delete', 'App\Http\Controllers\BookController@delete')->name('books.delete');
         //Uploader
             Route::get('/uploader', 'App\Http\Controllers\BookController@index')->name('admin.uploader');
 

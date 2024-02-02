@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Models\Universe;
 
 class BannerUpload extends Component
 {
@@ -24,7 +25,14 @@ class BannerUpload extends Component
             'photo' => 'image|max:1024', // 1MB Max
         ]);
  
-        $this->photo->store('universe/'. $this->universe_id .'/images/banner', 's3-public');
-        return redirect()->route('universe.create', ['step' => 4, 'universe_id' => $this->universe_id]);
+        $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/images/banner', 's3-public');
+        $universe = Universe::find($this->universe_id);
+        if($universe) {
+            $universe->universe_image_url = $fileUrl;
+            $universe->save();
+        } else {
+            abort(500, 'Something went wrong. Our developers are on it!');
+        }
+        return redirect()->route('universe.index', ['universe_name' => $universe->universe_name]);
     }
 }

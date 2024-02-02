@@ -25,10 +25,15 @@ class BookController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(REQUEST $request)
+    public function create($universe_id)
     {
-        dd($request->all());
         //
+      
+        $step = 1;
+        $universe = Universe::find($universe_id);
+        
+        return view('universe/books/create', compact('step', 'universe'));
+ 
     }
 
     /**
@@ -37,14 +42,47 @@ class BookController extends Controller
     public function store(Request $request)
     {
         //
+        // dd($request->all());
+         //validate info
+         $request->validate([
+            'universe_name' => ['required', 'string', 'max:255'],  
+            'universe_description' => ['required', 'string', 'max:255'],   
+            'universe_audience' => 'required',            
+        ]);
+        //save info
+                //save universe
+                    $universe = new Universe;
+                        $universe->universe_name = $request->universe_name;
+                        $universe->universe_description = $request->universe_description;
+                        $universe->universe_audience = $request->universe_audience;
+                    $universe->save();
+
+           
+            //if request->step == 4
+            if($request->step == 4){
+        
+                return view('universe.index');
+               
+
+            } else {
+                
+     
+                $step = $request->step += 1;
+            
+                return redirect()->route('universe.create', ['universe_id' => $universe->id, 'step' => $step]);
+
+            }
+          ;
     }
 
-    /**
+  /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
         //
+        $book = Book::find($id);
+        return view('books/show', compact('books'));
     }
 
     /**
@@ -53,6 +91,8 @@ class BookController extends Controller
     public function edit(string $id)
     {
         //
+        $universe = Book::find($id);
+        return view('books/create', compact('books'));
     }
 
     /**
@@ -62,7 +102,6 @@ class BookController extends Controller
     {
         //validate info
         $request->validate([
-            'universe_name' => ['required', 'string', 'max:255'],
             'book_title' => ['required'],
             'book_creator' => ['required'],
             'book_audience' => ['required'],
