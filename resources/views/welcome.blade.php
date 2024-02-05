@@ -11,6 +11,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
         <link href="/dist/output.css" rel="stylesheet">
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+        <script src="jquery-3.7.1.min.js"></script>
 
         <!-- Styles -->
         <style>

@@ -12,7 +12,7 @@
             <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
               <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
             </svg>
-            <a href="#" class="ml-4 text-lg font-medium text-gray-500 hover:text-gray-700">Create a Universe</a>
+            <a href="#" class="ml-4 text-lg font-medium text-gray-500 hover:text-gray-700">Create a Book</a>
           </div>
         </li>
         <li class="flex">
@@ -20,7 +20,7 @@
             <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
               <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
             </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 1 - Universe Info</a>
+            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 1 - Book Info</a>
           </div>
         </li>
         
@@ -29,7 +29,7 @@
             <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
               <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
             </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 2 - Profile Picture</a>
+            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 2 - Book Cover</a>
           </div>
         </li>
         <li class="flex">
@@ -37,7 +37,7 @@
             <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
               <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
             </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 3 - Banner Upload</a>
+            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 3 - Upload Story</a>
           </div>
         </li>
         <li class="flex">
@@ -70,10 +70,10 @@
 -->
 @if($step !== 1)
 
-    @include('components.universe.universe-form-step-'.$step)
+    @include('components.universe.books.book-form-step-'.$step)
 
 @else
-  <form method="POST" action="{{ route('universe.store') }}" >
+  <form method="POST" action="{{ route('books.store', $universe->id) }}" >
     @csrf
     <input type="hidden" name="step" value="1" >
     <div class="">
@@ -89,35 +89,73 @@
       <br>
       <div class="border-b border-gray-900/10 pb-12">
 
-        <h2 class="text-base font-semibold leading-7 text-gray-900">Profile</h2>
+        <h2 class="text-base font-semibold leading-7 text-gray-900">Publish Your Book</h2>
         <p class="mt-1 text-sm leading-6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
 
         <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div class="sm:col-span-4">
-            <label for="universe_name" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
+            <label for="book_title" class="block text-sm font-medium leading-6 text-gray-900">Book Title</label>
             <div class="mt-2">
               <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                <span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm">enterblazecomics.com/unverse/</span>
-                <input type="text" name="universe_name" id="universe_name" autocomplete="universe_name" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
+                <input type="text" name="book_title" id="book_title" autocomplete="book_title" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
+              </div>
+            </div>
+          </div>
+          <div class="sm:col-span-4">
+            <label for="book_subtitle" class="block text-sm font-medium leading-6 text-gray-900">Subtitle</label>
+            <div class="mt-2">
+              <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                <input type="text" name="book_subtitle" id="book_subtitle" autocomplete="book_subtitle" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
               </div>
             </div>
           </div>
 
-            <div class="">
-              <label for="universe_audience" class="block text-sm font-medium leading-6 text-gray-900">Audience</label>
-              <div class="mt-2">
-                <select id="universe_audience" name="universe_audience" autocomplete="universe_audience" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                  <option>Teens</option>
-                  <option>Mature Audience</option>
-                  <option>Adults Only</option>
-                </select>
+          <div class="sm:col-span-4">
+            <label for="book_creator" class="block text-sm font-medium leading-6 text-gray-900">Subtitle</label>
+            <div class="mt-2">
+              <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                <input type="text" name="book_creator" id="book_creator" autocomplete="book_creator" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
               </div>
             </div>
+          </div>
+
+          <div class="sm:col-span-4">
+            <label for="book_published_at" class="block text-sm font-medium leading-6 text-gray-900">Publication Date</label>
+            <div class="mt-2">
+              <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                <input type="date" name="book_published_at" id="book_published_at" autocomplete="book_published_at" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
+              </div>
+            </div>
+          </div>
+
+          <div class="">
+            <label for="book_type" class="block text-sm font-medium leading-6 text-gray-900">Book Type</label>
+            <div class="mt-2">
+              <select id="book_type" name="book_type" autocomplete="book_type" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                <option>Web Comic</option>
+                <option>Book for Sale</option>
+                <option>Manga</option>
+              </select>
+            </div>
+          </div>
+
+          
+
+          <div class="">
+            <label for="book_audience" class="block text-sm font-medium leading-6 text-gray-900">Audience</label>
+            <div class="mt-2">
+              <select id="book_audience" name="book_audience" autocomplete="book_audience" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                <option>Teens</option>
+                <option>Mature Audience</option>
+                <option>Adults Only</option>
+              </select>
+            </div>
+          </div>
 
           <div class="col-span-full">
-            <label for="universe_description" class="block text-sm font-medium leading-6 text-gray-900">Universe Description</label>
+            <label for="book_description" class="block text-sm font-medium leading-6 text-gray-900">Book Summary</label>
             <div class="mt-2">
-              <textarea id="universe_description" name="universe_description" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+              <textarea id="book_description" name="book_description" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
             </div>
             <p class="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about your universe.</p>
           </div>

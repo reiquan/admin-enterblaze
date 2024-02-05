@@ -28,11 +28,13 @@ class BookController extends Controller
     public function create($universe_id)
     {
         //
-      
-        $step = 1;
+  
+        $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
         $universe = Universe::find($universe_id);
-        
-        return view('universe/books/create', compact('step', 'universe'));
+        $universe_id = isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : '';
+        $book_id = isset($_REQUEST['book_id']) ? $_REQUEST['book_id'] : '';
+
+        return view('universe/books/create', compact('step', 'universe', 'universe_id', 'book_id'));
  
     }
 
@@ -41,35 +43,57 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        // dd($request->all());
-         //validate info
-         $request->validate([
-            'universe_name' => ['required', 'string', 'max:255'],  
-            'universe_description' => ['required', 'string', 'max:255'],   
-            'universe_audience' => 'required',            
+       
+          //validate info
+          $request->validate([
+            'book_title' => ['required'],
+            'book_creator' => ['required'],
+            'book_audience' => ['required'],
+            'book_description' => ['required'],
+            'book_type' => ['required'],
+            // 'book_genres' => ['required'],
+            
         ]);
         //save info
-                //save universe
-                    $universe = new Universe;
-                        $universe->universe_name = $request->universe_name;
-                        $universe->universe_description = $request->universe_description;
-                        $universe->universe_audience = $request->universe_audience;
-                    $universe->save();
+            if(isset($request->step) and $request->step == 1){
+                //save book
+                    $book = new Book;
+                        $book->book_title = $request->book_title;
+                        $book->book_creator = $request->book_creator;
+                        $book->book_audience = $request->book_audience;
+                        $book->book_description = $request->book_description;
+                        $book->book_universe_id = $request->universe_id;
+                        $book->book_type = $request->book_type;
+                        if(isset($request->book_subtitle)){
+                            $book->book_subtitle = $request->book_subtitle;
+                        }
+                        // $book->book_genres = $request->book_genres;
+                        // if(isset($request->issue_number)){
+                        //     $issue
+                        //     $book->issue_number = $request->issue_number;
+                        // }
+                        // if(isset($request->volume_number)){
+                        //     $book->volume_number = $request->volume_number;
+                        // }
+                    $book->save();
+
+            }
 
            
             //if request->step == 4
             if($request->step == 4){
         
-                return view('universe.index');
+                return view('books.index');
                
 
             } else {
                 
      
                 $step = $request->step += 1;
-            
-                return redirect()->route('universe.create', ['universe_id' => $universe->id, 'step' => $step]);
+                $universe_id = $request->universe_id;
+                $book_id = $book->id;
+
+                return view('universe.books.create', compact('step', 'universe_id', 'book_id'));
 
             }
           ;
@@ -100,6 +124,9 @@ class BookController extends Controller
      */
     public function update(Request $request)
     {
+        dd($request->json()->all());
+
+        return response()->json($request->all());
         //validate info
         $request->validate([
             'book_title' => ['required'],

@@ -107,6 +107,13 @@
     </template>
 
 <script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
+<script>
 const fileTempl = document.getElementById("file-template"),
   imageTempl = document.getElementById("image-template"),
   empty = document.getElementById("empty");

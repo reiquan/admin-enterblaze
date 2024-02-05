@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Universe;
 use App\Models\Book;
+use Livewire\WithFileUploads;
 
 class BookCoverUpload extends Component
 {
@@ -34,7 +35,7 @@ class BookCoverUpload extends Component
             } else {
                 abort(500, 'Something went wrong. Our developers are on it!');
             }
-        return redirect()->route('universe.create', ['step' => 3, 'universe_id' => $this->universe_id, 'book_id' => $this->book_id]);
+        return redirect()->route('books.create', ['step' => 3, 'universe_id' => $this->universe_id, 'book_id' => $this->book_id]);
     }
     public function render()
     {

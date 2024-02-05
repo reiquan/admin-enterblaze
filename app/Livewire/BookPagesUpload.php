@@ -6,22 +6,33 @@ use Livewire\Component;
 use App\Models\Universe;
 use App\Models\Book;
 use App\Http\Controllers\UploadController;
+use Livewire\WithFileUploads;
 
 class BookPagesUpload extends Component
 {
     use WithFileUploads;
 
     public $photos = [];
+    public $universe_id;
+    public $book_id;
+
+    public function mount($universe_id, $book_id)
+    {
+        $this->universe_id = $universe_id;
+        $this->book_id = $book_id;
+    }
+
+
 
     public function uploadMultiple()
     {
-        dd('hi');
+      
         $this->validate([
             'photos.*' => 'image|max:1024', // 1MB Max
         ]);
  
-        foreach ($this->photos as $photo) {
-            $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/'.'books/'.$this->book_id.'/pages', 's3-public');
+        foreach ($photos as $photo) {
+            $fileUrl = $photo->store('universe/'. $this->universe_id .'/'.'books/'.$this->book_id.'/pages', 's3-public');
             // $book = Book::find($this->book_id);
             //     if($book) {
             //         $book->book_image_path = $fileUrl;
@@ -30,7 +41,7 @@ class BookPagesUpload extends Component
             //         abort(500, 'Something went wrong. Our developers are on it!');
             //     }
         }
-        return redirect()->route('universe.create', ['step' => 3, 'universe_id' => $this->universe_id, 'book_id' => $this->book_id]);
+        return redirect()->route('books.create', ['step' => 4, 'universe_id' => $this->universe_id, 'book_id' => $this->book_id]);
     }
 
     public function render()
@@ -38,3 +49,4 @@ class BookPagesUpload extends Component
         return view('livewire.book-pages-upload');
     }
 }
+
