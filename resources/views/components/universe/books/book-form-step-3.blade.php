@@ -41,6 +41,7 @@
 
             <!-- sticky footer -->
             <footer class="flex justify-end px-8 pb-8 pt-4">
+              <p class=" w-1/6 px-9 py-1 text-red-500 focus:shadow-outline focus:outline-none" id="error"></p>
               <button id="submit" class="rounded-sm px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none">
                 Upload now
               </button>
@@ -82,7 +83,7 @@
     </template>
 
     <template id="image-template">
-      <li class="block p-1 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 xl:w-1/8 h-24">
+      <li class="block p-1 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 xl:w-1/8 h-3/5">
         <article tabindex="0" class="group hasImage w-full h-full rounded-md focus:outline-none focus:shadow-outline bg-gray-100 cursor-pointer relative text-transparent hover:text-white shadow-sm">
           <img alt="upload preview" class="img-preview w-full h-full sticky object-cover rounded-md bg-fixed" />
 
@@ -117,12 +118,26 @@ const fileTempl = document.getElementById("file-template"),
 // use to store pre selected files
 let FILES = {};
 
+let uploadError = document.getElementById('error');
+console.log(uploadError);
 // check if file is of type image and prepend the initialied
 // template to the target element
 function addFile(target, file) {
-  const isImage = file.type.match("image.*"),
-    objectURL = URL.createObjectURL(file);
 
+  const isImage = file.type.match("image.*"),
+  objectURL = URL.createObjectURL(file);
+
+  sendImage(objectURL, file);
+    //make surre the size isnt too big
+  if(file.size > 50000){
+    
+    uploadError.innerHTML = "Make sure size is less than 50 GB";
+
+    console.log(file.size);
+    return;
+  } else {
+    uploadError.text = "";
+  }
   const clone = isImage
     ? imageTempl.content.cloneNode(true)
     : fileTempl.content.cloneNode(true);
@@ -146,8 +161,9 @@ function addFile(target, file) {
   empty.classList.add("hidden");
   target.prepend(clone);
 
-  FILES[objectURL] = file;
+  // FILES[objectURL] = file;
 }
+
 
 const gallery = document.getElementById("gallery"),
   overlay = document.getElementById("overlay");
@@ -201,6 +217,45 @@ function dragOverHandler(e) {
   if (hasFiles(e)) {
     e.preventDefault();
   }
+}
+function sendImage(objURL, file) {
+  // Convert the Object URL to a Blob
+  fetch(objURL)
+  .then(response => response.blob())
+  .then(blob => {
+    // Create FormData and append the Blob
+    var formData = new FormData();
+    formData.append("file", blob, file.name);
+    var u_id = "<?php echo $universe->id; ?>";
+  var b_id = "<?php echo $book_id; ?>";
+    // Perform the AJAX request using jQuery
+    $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+    });
+    $.ajax({
+      url: '/universe/' + u_id + '/books/' + b_id + '/update', // Replace with your server endpoint
+      type: "POST",
+      data: formData,
+      processData: false, // Prevent jQuery from processing the data
+      contentType: false, // Prevent jQuery from setting contentType
+      success: function(response) {
+        // Handle success
+        console.log("Success:", response);
+      },
+      error: function(xhr, status, error) {
+        // Handle error
+        console.error("Error:", status, error);
+      }
+    });
+  })
+  .catch(error => {
+    // Handle fetch or blob conversion error
+    console.error("Error:", error);
+  });
+
+  
 }
 
 // event delegation to caputre delete events

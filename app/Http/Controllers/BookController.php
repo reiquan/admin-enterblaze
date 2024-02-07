@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\BookController;
 use App\Models\Universe;
+use App\Models\Issue;
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 use Validator;
 
 class BookController extends Controller
@@ -124,19 +128,42 @@ class BookController extends Controller
      */
     public function update(Request $request)
     {
+        $f = $request->json()->all();
+        dd('hello', $request->all());
+        $page = 1;
+        foreach ($f as $key => $value){
+            dd(file_get_contents($key));
+            // create image manager with desired driver
+            $manager = new ImageManager(
+                new Driver
+            );
+            $file = $manager->read($key);
+            // encode edited file
+            $encoded = $file->toJpg();
+
+            dd($encoded);
+            $file->encode('jpg');
+            $s3 = Storage::disk('s3-public');
+            $s3->put('universe/57/'.'books/48/page_'.$page, $file);
+            // Storage::disk('s3-public')->put('universe/57/'.'books/48/page_'.$page, $key);
+            $page += 1;
+        
+            dd($key);
+        }
+
         dd($request->json()->all());
 
         return response()->json($request->all());
         //validate info
-        $request->validate([
-            'book_title' => ['required'],
-            'book_creator' => ['required'],
-            'book_audience' => ['required'],
-            'book_description' => ['required'],
-            'book_type' => ['required'],
-            // 'book_genres' => ['required'],
+        // $request->validate([
+        //     'book_title' => ['required'],
+        //     'book_creator' => ['required'],
+        //     'book_audience' => ['required'],
+        //     'book_description' => ['required'],
+        //     'book_type' => ['required'],
+        //     // 'book_genres' => ['required'],
             
-        ]);
+        // ]);
         //save info
             if(isset($request->step) and $request->step == 1){
                  //step 1
