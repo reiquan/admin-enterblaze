@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('issues', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('volume_id')->unsigned()->nullable();
             $table->string('title');
             $table->string('image_cover');
             $table->longText('description')->nullable();

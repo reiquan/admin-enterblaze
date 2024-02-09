@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\BookController;
 use App\Models\Universe;
 use App\Models\Issue;
+use App\Services\BookService;
+use App\Models\IssuePage;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -128,97 +130,33 @@ class BookController extends Controller
      */
     public function update(Request $request)
     {
-        $f = $request->json()->all();
-        dd('hello', $request->all());
-        $page = 1;
-        foreach ($f as $key => $value){
-            dd(file_get_contents($key));
-            // create image manager with desired driver
-            $manager = new ImageManager(
-                new Driver
-            );
-            $file = $manager->read($key);
-            // encode edited file
-            $encoded = $file->toJpg();
+        $request->validate([
+            'book_id' => ['required'],
+            'universe_id' => ['required'],
+            'issue_id' => ['required'],            
+        ]);
 
-            dd($encoded);
-            $file->encode('jpg');
-            $s3 = Storage::disk('s3-public');
-            $s3->put('universe/57/'.'books/48/page_'.$page, $file);
-            // Storage::disk('s3-public')->put('universe/57/'.'books/48/page_'.$page, $key);
-            $page += 1;
+        ////make sure file is present
+            if(!empty($request->file)){
+
+                $fileName = $request->file('file')->getClientOriginalName();
+                $path = 'universe/'.$request->universe_id.'/'.'books/'.$request->book_id.'/'.'issues/';
         
-            dd($key);
-        }
-
-        dd($request->json()->all());
-
-        return response()->json($request->all());
-        //validate info
-        // $request->validate([
-        //     'book_title' => ['required'],
-        //     'book_creator' => ['required'],
-        //     'book_audience' => ['required'],
-        //     'book_description' => ['required'],
-        //     'book_type' => ['required'],
-        //     // 'book_genres' => ['required'],
+                $file = $request->file('file');
             
-        // ]);
-        //save info
-            if(isset($request->step) and $request->step == 1){
-                 //step 1
-                //save universe
-                    $universe = new Universe;
-                        $universe->universe_name = $request->universe_name;
-                    $universe->save();
-                //save book
-                    $book = new Book;
-                        $book->book_title = $request->book_title;
-                        $book->book_creator = $request->book_creator;
-                        $book->book_audience = $request->book_audience;
-                        $book->book_description = $request->book_description;
-                        $book->book_type = $request->book_type;
-                        if(isset($request->book_subtitle)){
-                            $book->book_subtitle = $request->book_subtitle;
-                        }
-                        // $book->book_genres = $request->book_genres;
-                        // if(isset($request->issue_number)){
-                        //     $issue
-                        //     $book->issue_number = $request->issue_number;
-                        // }
-                        // if(isset($request->volume_number)){
-                        //     $book->volume_number = $request->volume_number;
-                        // }
-                    $book->save();
-
+                $s3 = Storage::disk('s3-public');
+                $s3->putFileAs($path.$request->issue_number, $file, $fileName);
             }
-           
-            //step 2
-                //save universe
-                    //image_url
-            //step3
-                //if issue
-                    //save issue
-                        // issue_number
-                //if volume
-                    //save volume
-                    // volume_number
 
-        //if request->step == 4
-            if($request->step == 4){
-               
-                return view('dashboard');
-                dd('there');
+            $bookService = new BookService($request->universe_id);
 
+            $page_submitted = $bookService->checkIssuePage($path, $fileName);
+
+            if($page_submitted){
+                return response()->json(['Success' => 'Page Uploaded Succesfully']);
             } else {
-               
-                $step = $request->step += 1;
- 
-                return view('admin/uploader', compact('step'));
-
+                return response()->json(['Error' => 'Page was not uploaded']);
             }
-  
-
      
     }
 

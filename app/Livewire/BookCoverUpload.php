@@ -27,7 +27,7 @@ class BookCoverUpload extends Component
             'photo' => 'image|max:1024', // 1MB Max
         ]);
  
-        $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/'.'books/'.$this->book_id.'/covers', 's3-public');
+        
         $book = Book::find($this->book_id);
             if($book) {
                 $book->book_image_path = $fileUrl;

@@ -12,7 +12,7 @@ class Issue extends Model
      *
      * @var string
      */
-    protected $table = 'issues';
+    protected $table = 'issue_pages';
       /**
      * The attributes that are mass assignable.
      *
@@ -26,18 +26,12 @@ class Issue extends Model
      * @var array
      */
     protected $fillable = [
-      'title',
-      'image_cover',
-      'description',
-      'is_adult',
-      'is_locked',
-      'issue_number'
+      'issue_page_url',
+      'issue_page_is_locked',
+      'issue_page_is_adult'
     ];
 
-    public function pages(){
-        return $this->hasMany(IssuePage::class);
-    }
-    public function book(){
-        return $this->belongsTo(Book::class);
+    public function issue(){
+        return $this->belongsTo(Issue::class);
     }
 }
