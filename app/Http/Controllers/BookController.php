@@ -18,14 +18,15 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(REQUEST $request)
     {
         //
        
-        $step = 1;
-
+        $books = Book::where('book_universe_id', $request->universe_id)->get();
+       
+        $universe = Universe::find($request->universe_id);
       
-        return view('admin/uploader', compact('step'));
+        return view('universe/books/index', compact('books', 'universe'));
     }
 
     /**
@@ -111,6 +112,7 @@ class BookController extends Controller
     public function show(string $id)
     {
         //
+    
         $book = Book::find($id);
         return view('books/show', compact('books'));
     }
@@ -158,6 +160,24 @@ class BookController extends Controller
                 return response()->json(['Error' => 'Page was not uploaded']);
             }
      
+    }
+
+         /**
+     * Show the form for publishing the specified resource.
+     */
+    public function publish(Request $request, string $id)
+    {
+        //
+        $book = Book::find($id);
+        if($request->action == 'publish'){
+            $book->is_active = 1;
+            $book->save();
+        } else {
+            $book->is_active = 0;
+            $book->save();
+        }
+       
+        return redirect()->route('books.index', $book->book_universe_id);
     }
 
     /**

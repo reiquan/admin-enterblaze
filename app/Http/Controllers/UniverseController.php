@@ -15,7 +15,10 @@ class UniverseController extends Controller
     public function index()
     {
         //
-        return view('universe/index');
+        $universes = Universe::where('universe_user_id', auth()->user()->id)->get();
+        // dd($universes->toArray());
+
+        return view('universe/index', compact('universes'));
     }
 
     /**
@@ -78,6 +81,7 @@ class UniverseController extends Controller
     {
         //
         $universe = Universe::find($id);
+ 
         return view('universe/show', compact('universe'));
     }
 
@@ -89,6 +93,24 @@ class UniverseController extends Controller
         //
         $universe = Universe::find($id);
         return view('universe/create', compact('universe'));
+    }
+
+     /**
+     * Show the form for publishing the specified resource.
+     */
+    public function publish(Request $request, string $id)
+    {
+        //
+        $universe = Universe::find($id);
+        if($request->action == 'publish'){
+            $universe->is_active = 1;
+            $universe->save();
+        } else {
+            $universe->is_active = 0;
+            $universe->save();
+        }
+       
+        return redirect()->route('universe.index');
     }
 
   /**

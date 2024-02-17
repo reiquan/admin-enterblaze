@@ -31,6 +31,7 @@ Route::middleware([
         Route::get('/universe/create', 'App\Http\Controllers\UniverseController@create')->name('universe.create');
         Route::post('/universe/{universe_id}/update', 'App\Http\Controllers\UniverseController@update')->name('universe.update');
         Route::get('/universe/{universe_id}/show', 'App\Http\Controllers\UniverseController@show')->name('universe.show');
+        Route::post('/universe/{universe_id}/publish', 'App\Http\Controllers\UniverseController@publish')->name('universe.publish');
         Route::post('/universe/{universe_id}/delete', 'App\Http\Controllers\UniverseController@delete')->name('universe.delete');
         Route::post('/universe/store', 'App\Http\Controllers\UniverseController@store')->name('universe.store');
    //Book
@@ -38,6 +39,7 @@ Route::middleware([
         Route::get('/universe/{universe_id}/books/create', 'App\Http\Controllers\BookController@create')->name('books.create');
         Route::post('/universe/{universe_id}/books/{book_id}/update', 'App\Http\Controllers\BookController@update')->name('books.update');
         Route::get('/universe/{universe_id}/books/{book_id}/show', 'App\Http\Controllers\BookController@show')->name('books.show');
+        Route::post('/universe/{universe_id}/books/{book_id}/publish', 'App\Http\Controllers\BookController@publish')->name('books.publish');
         Route::post('/universe/{universe_id}/books/{book_id}/delete', 'App\Http\Controllers\BookController@delete')->name('books.delete');
         Route::post('/universe/{universe_id}/books/store', 'App\Http\Controllers\BookController@store')->name('books.store');
         //Uploader
