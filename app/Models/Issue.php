@@ -26,11 +26,11 @@ class Issue extends Model
      * @var array
      */
     protected $fillable = [
-      'title',
-      'image_cover',
-      'description',
-      'is_adult',
-      'is_locked',
+      'issue_title',
+      'issue_image_cover',
+      'issue_description',
+      'issue_is_adult',
+      'issue_is_locked',
       'issue_number'
     ];
 

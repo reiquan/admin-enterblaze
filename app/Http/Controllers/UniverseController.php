@@ -54,6 +54,9 @@ class UniverseController extends Controller
                         $universe->universe_name = $request->universe_name;
                         $universe->universe_description = $request->universe_description;
                         $universe->universe_audience = $request->universe_audience;
+                        $universe->is_active = 0;
+                        $universe->universe_user_id = auth()->user()->id;
+                        $universe->universe_slug_name = strtolower(str_replace(" ","_", $request->universe_name));
                     $universe->save();
 
            

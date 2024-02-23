@@ -12,7 +12,7 @@
         ecosystem to be a breath of fresh air. We hope you love it.
     </p>
 </div>
-<a type="button" href="{{ route('universe.create') }}" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+<a type="button" href="{{ route('books.create', $universe->id) }}" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
     <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6" />
     </svg>
@@ -68,7 +68,7 @@
             <div class="group relative">
                 <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                     @if($book->book_image_path)
-                        <a href="{{ route('books.show', ['universe_id' => $universe->id, 'book_id' => $book->id ]) }}" target="_blank">
+                        <a href="{{ route('books.show', ['universe_id' => $universe->id, 'book_id' => $book->id, 'u_id' => $universe->id, 'b_id' => $book->id]) }}">
                             <img src="{{ Storage::disk('s3-public')->url($book->book_image_path) }}" alt="Image" class="h-full w-full object-cover object-center lg:h-full lg:w-full">
                         </a>
                     @else
@@ -78,9 +78,6 @@
                 <div class="mt-4 flex justify-between">
                     <div>
                         <h3 class="text-sm text-gray-700">
-                        <a href="{{ route('universe.show', $universe->id ) }}">
-                            <span aria-hidden="true" class="absolute inset-0"></span>
-                        </a>
                         </h3>
                         <div>
                             <div class="sm:hidden">

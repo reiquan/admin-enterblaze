@@ -13,35 +13,35 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Validator;
 
-class BookController extends Controller
+class IssuesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(REQUEST $request)
     {
-        //
+        // //
        
-        $books = Book::where('book_universe_id', $request->universe_id)->get();
+        // $books = Book::where('book_universe_id', $request->universe_id)->get();
        
-        $universe = Universe::find($request->universe_id);
+        // $universe = Universe::find($request->universe_id);
       
-        return view('universe/books/index', compact('books', 'universe'));
+        // return view('universe/books/index', compact('books', 'universe'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create($universe_id)
+    public function create(REQUEST $request)
     {
         //
-        
+      
         $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
-        $universe = Universe::find($universe_id);
-        $universe_id = isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : '';
-        $book_id = isset($_REQUEST['book_id']) ? $_REQUEST['book_id'] : '';
+        $universe = Universe::find($request->universe_id);
+        $universe_id = isset($request->universe_id) ? $request->universe_id : '';
+        $book_id = isset($request->book_id) ? $request->book_id : '';
 
-        return view('universe/books/create', compact('step', 'universe', 'universe_id', 'book_id'));
+        return view('universe/books/issues/create', compact('step', 'universe', 'universe_id', 'book_id'));
  
     }
 
@@ -50,39 +50,37 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-       
+    
           //validate info
           $request->validate([
-            'book_title' => ['required'],
-            'book_creator' => ['required'],
-            'book_audience' => ['required'],
-            'book_description' => ['required'],
-            'book_type' => ['required'],
+            'issue_title' => ['required'],
+
+       
+            'issue_description' => ['required'],
+       
             // 'book_genres' => ['required'],
             
         ]);
         //save info
             if(isset($request->step) and $request->step == 1){
                 //save book
-                    $book = new Book;
-                        $book->book_title = $request->book_title;
-                        $book->book_creator = $request->book_creator;
-                        $book->book_audience = $request->book_audience;
-                        $book->book_description = $request->book_description;
-                        $book->book_universe_id = $request->universe_id;
-                        $book->book_type = $request->book_type;
-                        if(isset($request->book_subtitle)){
-                            $book->book_subtitle = $request->book_subtitle;
-                        }
-                        // $book->book_genres = $request->book_genres;
+                    $issue = new Issue;
+                        $issue->issue_title = $request->issue_title;
+                        $issue->issue_description = $request->issue_description;
+                        $issue->issue_number = $request->issue_number;
+                        $issue->issue_is_adult = $request->issue_is_adult ? 1 : 0;
+                        $issue->issue_book_id = $request->book_id;
+                        $issue->issue_slug_name = strtolower(str_replace(" ","_", $request->issue_title));
+          
+                        // $issue->issue_genres = $request->issue_genres;
                         // if(isset($request->issue_number)){
                         //     $issue
-                        //     $book->issue_number = $request->issue_number;
+                        //     $issue->issue_number = $request->issue_number;
                         // }
                         // if(isset($request->volume_number)){
-                        //     $book->volume_number = $request->volume_number;
+                        //     $issue->volume_number = $request->volume_number;
                         // }
-                    $book->save();
+                    $issue->save();
 
             }
 
@@ -98,9 +96,10 @@ class BookController extends Controller
      
                 $step = $request->step += 1;
                 $universe_id = $request->universe_id;
-                $book_id = $book->id;
+                $book_id = $request->book_id;
+                $issue_id = $issue->id ?? '';
 
-                return view('universe.books.create', compact('step', 'universe_id', 'book_id'));
+                return view('universe.books.issues.create', compact('step', 'universe_id', 'book_id', 'issue_id'));
 
             }
           ;

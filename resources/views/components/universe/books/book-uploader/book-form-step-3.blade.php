@@ -227,7 +227,9 @@ function sendImage(objURL, file) {
     var formData = new FormData();
     formData.append("file", blob, file.name);
     var u_id = "<?php echo $universe->id; ?>";
-  var b_id = "<?php echo $book_id; ?>";
+    var b_id = "<?php echo $book_id; ?>";
+    formData.append("universe_id",u_id);
+    formData.append("book_id",b_id);
     // Perform the AJAX request using jQuery
     $.ajaxSetup({
     headers: {

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class BookService
 {
     
-    public function __construct(Universe $universe_id){
+    public function __construct($universe_id){
 
         $this->universe_id = $universe_id;
 

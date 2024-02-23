@@ -8,20 +8,22 @@ use App\Models\Book;
 use App\Http\Controllers\UploadController;
 use Livewire\WithFileUploads;
 
-class BookPagesUpload extends Component
+class IssuePagesUpload extends Component
 {
     use WithFileUploads;
 
     public $photos = [];
     public $universe_id;
     public $book_id;
+    public $issue_id;
 
-    public function mount($universe_id, $book_id)
+
+    public function mount($universe_id, $book_id, $issue_id)
     {
         $this->universe_id = $universe_id;
         $this->book_id = $book_id;
+        $this->issue_id = $issue_id;
     }
-
 
 
     public function uploadMultiple()
@@ -31,7 +33,8 @@ class BookPagesUpload extends Component
         ]);
  
         foreach ($photos as $photo) {
-            $fileUrl = $photo->store('universe/'. $this->universe_id .'/'.'books/'.$this->book_id.'/pages', 's3-public');
+            $issue = new IssuePage;
+             $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/'.'books/'.$this->book_id.'issues/'.$this->issue_id.'/', 's3-public');
             // $book = Book::find($this->book_id);
             //     if($book) {
             //         $book->book_image_path = $fileUrl;
