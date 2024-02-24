@@ -98,7 +98,7 @@ class IssuesController extends Controller
                 $universe_id = $request->universe_id;
                 $book_id = $request->book_id;
                 $issue_id = $issue->id ?? '';
-
+              
                 return view('universe.books.issues.create', compact('step', 'universe_id', 'book_id', 'issue_id'));
 
             }
@@ -132,31 +132,44 @@ class IssuesController extends Controller
      */
     public function update(Request $request)
     {
-        dd($request->all());
+     
         $request->validate([
             'book_id' => ['required'],
             'universe_id' => ['required'],
+            'issue_id' => ['required'],
                  
         ]);
+        $path;
+        $fileName;
 
         ////make sure file is present
             if(!empty($request->file)){
 
                 $fileName = $request->file('file')->getClientOriginalName();
-                $path = 'universe/'.$request->universe_id.'/'.'books/'.$request->book_id.'/'.'pages/';
+                $path = 'universe/'.$request->universe_id.'/'.'books/'.$request->book_id.'/issues'.'/'.$request->issue_id.'/'.'pages/';
         
                 $file = $request->file('file');
             
                 $s3 = Storage::disk('s3-public');
                 $s3->putFileAs($path.$request->issue_number, $file, $fileName);
             }
+           
 
             $bookService = new BookService($request->universe_id);
-
             $page_submitted = $bookService->checkIssuePage($path, $fileName);
 
+            // /Save to DB
+            $issue_page = new IssuePage;
+            $issue = Issue::find($request->issue_id);
+
+            if($issue){
+                $issue_page->issue_id = $request->issue_id;
+                $issue_page->issue_page_url = $path.$fileName;
+                $issue_page->save();
+            }
+
             if($page_submitted){
-                return response()->json(['Success' => 'Page Uploaded Succesfully']);
+                return response()->json(['success' => 'Page Uploaded Succesfully', 'issue_page_id' => $issue_page->id]);
             } else {
                 return response()->json(['Error' => 'Page was not uploaded']);
             }
@@ -184,8 +197,27 @@ class IssuesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        // dd($request->all());
+        $request->validate([
+            'book_id' => ['required'],
+            'universe_id' => ['required'],
+            'issue_id' => ['required'],
+            'issue_page_id' => ['required']
+                 
+        ]);
+        $issue_page = IssuePage::find($request->issue_page_id);
+        if($issue_page){
+             // Delete file from S3
+            if (Storage::disk('s3-public')->exists($issue_page->issue_page_url)) {
+                Storage::disk('s3-public')->delete($issue_page->issue_page_url);
+                $issue_page->delete();
+                return response()->json(['success' => 'File deleted successfully.']);
+            } else {
+                return response()->json(['success' => 'File Not Found']);
+            }
+            //
+        }
     }
 }

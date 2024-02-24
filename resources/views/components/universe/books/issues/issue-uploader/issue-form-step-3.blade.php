@@ -127,7 +127,6 @@ function addFile(target, file) {
   const isImage = file.type.match("image.*"),
   objectURL = URL.createObjectURL(file);
 
-  sendImage(objectURL, file);
     //make surre the size isnt too big
   if(file.size > 50000){
     
@@ -145,6 +144,10 @@ function addFile(target, file) {
   clone.querySelector("h1").textContent = file.name;
   clone.querySelector("li").id = objectURL;
   clone.querySelector(".delete").dataset.target = objectURL;
+  clone.querySelector(".delete").id = 'delete' + objectURL;
+  clone.querySelector(".delete").value = '';
+  let dname = 'delete' + objectURL;
+  // clone.querySelector(".delete").value = file.name;
   clone.querySelector(".size").textContent =
     file.size > 1024
       ? file.size > 1048576
@@ -158,8 +161,10 @@ function addFile(target, file) {
       alt: file.name
     });
 
+
   empty.classList.add("hidden");
   target.prepend(clone);
+  sendImage(objectURL, file, dname);
 
   // FILES[objectURL] = file;
 }
@@ -218,8 +223,9 @@ function dragOverHandler(e) {
     e.preventDefault();
   }
 }
-function sendImage(objURL, file) {
+function sendImage(objURL, file, dname) {
   // Convert the Object URL to a Blob
+  let id = null;
   fetch(objURL)
   .then(response => response.blob())
   .then(blob => {
@@ -228,8 +234,10 @@ function sendImage(objURL, file) {
     formData.append("file", blob, file.name);
     var u_id = "<?php echo $universe->id; ?>";
     var b_id = "<?php echo $book_id; ?>";
+    var i_id = "<?php echo $_REQUEST['issue_id']; ?>";
     formData.append("universe_id",u_id);
     formData.append("book_id",b_id);
+    formData.append("issue_id",i_id);
     // Perform the AJAX request using jQuery
     $.ajaxSetup({
     headers: {
@@ -237,7 +245,7 @@ function sendImage(objURL, file) {
     }
     });
     $.ajax({
-      url: '/universe/' + u_id + '/books/' + b_id + '/update', // Replace with your server endpoint
+      url: '/universe/' + u_id + '/books/' + b_id + '/issues/' + i_id + '/update', // Replace with your server endpoint
       type: "POST",
       data: formData,
       processData: false, // Prevent jQuery from processing the data
@@ -245,6 +253,24 @@ function sendImage(objURL, file) {
       success: function(response) {
         // Handle success
         console.log("Success:", response);
+        console.log();
+        let id = response.issue_page_id;
+
+        // // Create a hidden input element
+        var hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.id = response.issue_page_id;
+        hiddenInput.name = 'issue_page' + response.issue_page_id; // Set the name attribute if needed
+        hiddenInput.value = response.issue_page_id; // Set the initial value if needed
+        document.body.appendChild(hiddenInput);
+        console.log(objURL);
+        let nname = document.getElementById(dname);
+        nname.value = response.issue_page_id;
+        console.log('ayyye');
+        console.log(nname.value);
+
+        console.log(id);
+
       },
       error: function(xhr, status, error) {
         // Handle error
@@ -256,7 +282,6 @@ function sendImage(objURL, file) {
     // Handle fetch or blob conversion error
     console.error("Error:", error);
   });
-
   
 }
 
@@ -265,8 +290,50 @@ function sendImage(objURL, file) {
 gallery.onclick = ({ target }) => {
   if (target.classList.contains("delete")) {
     const ou = target.dataset.target;
+    console.log(ou);
+    let imj =  document.getElementById('delete' + ou).value;
+    console.log(imj);
+
+    // Create FormData and append the Blob
+    var formData = new FormData();
+    var u_id = "<?php echo $universe->id; ?>";
+    var b_id = "<?php echo $book_id; ?>";
+    var i_id = "<?php echo $_REQUEST['issue_id']; ?>";
+    formData.append("universe_id",u_id);
+    formData.append("book_id",b_id);
+    formData.append("issue_id",i_id);
+    formData.append("issue_page_id",imj);
+    // Perform the AJAX request using jQuery
+    $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+    });
+    $.ajax({
+      url: '/universe/' + u_id + '/books/' + b_id + '/issues/' + i_id + '/delete', // Replace with your server endpoint
+      type: "POST",
+      data: formData,
+      processData: false, // Prevent jQuery from processing the data
+      contentType: false, // Prevent jQuery from setting contentType
+      success: function(response) {
+        // Handle success
+        console.log("Success:", response);
+
+      },
+      error: function(xhr, status, error) {
+        // Handle error
+        console.error("Error:", status, error);
+      }
+    });
+
+
+
+
+
+
     document.getElementById(ou).remove(ou);
     gallery.children.length === 1 && empty.classList.remove("hidden");
+    console.log(FILES[ou]);
     delete FILES[ou];
   }
 };
@@ -275,12 +342,14 @@ gallery.onclick = ({ target }) => {
 document.getElementById("submit").onclick = (e) => {
   e.preventDefault();
   alert(`Submitted Files:\n${JSON.stringify(FILES)}`);
+  window.location.assign('/universe/' + u_id + '/books/' + b_id  + '/issues');
   console.log(FILES);
 
   var formData = new FormData();
   var fileInput = document.getElementById('hidden-input');
   var u_id = "<?php echo $universe->id; ?>";
   var b_id = "<?php echo $book_id; ?>";
+  var i_id = "<?php echo $_REQUEST['issue_id']; ?>";
   console.log( '/universe/' + u_id + '/books/' + b_id + '/update');
 
   // Check if a file is selected
@@ -292,7 +361,7 @@ document.getElementById("submit").onclick = (e) => {
         }
        });
       $.ajax({
-          url: '/universe/' + u_id + '/books/' + b_id + '/update', // Replace with your server endpoint
+          url: '/universe/' + u_id + '/books/' + b_id + '/issues/' + i_id + '/update', // Replace with your server endpoint
           type: 'POST',
           data: JSON.stringify(FILES),
           processData: false,

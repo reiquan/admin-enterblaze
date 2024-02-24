@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('issue_pages', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('issue_id')->unsigned();
-            $table->string('issue_page_url');
-            $table->boolean('issue_page_is_adult');
-            $table->boolean('issue_page_is_locked');
+            $table->string('issue_page_url')->nullable();
+            $table->boolean('issue_page_is_adult')->nullable();
+            $table->boolean('issue_page_is_locked')->nullable();
             $table->timestamps();
 
             $table->foreign('issue_id')->references('id')->on('issues');

@@ -14,7 +14,7 @@ class IssueCoversUpload extends Component
     public $photo;
     public $universe_id;
     public $book_id;
-    public $issue_id
+    public $issue_id;
 
 
     public function mount($universe_id, $book_id, $issue_id)
@@ -32,7 +32,8 @@ class IssueCoversUpload extends Component
  
         
         $issue = Issue::find($this->issue_id);
-            $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/'.'books/'.$this->book_id.'issues/'.$this->issue_id.'/cover', 's3-public');
+            $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/'.'books/'.$this->book_id.'/'.'issues/'.$this->issue_id.'/covers', 's3-public');
+
             if($issue) {
                 $issue->issue_image_cover = $fileUrl;
                 $issue->save();

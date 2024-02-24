@@ -33,15 +33,17 @@ class IssuePagesUpload extends Component
         ]);
  
         foreach ($photos as $photo) {
-            $issue = new IssuePage;
+            $issue =Issue::find($this->issue_id);
              $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/'.'books/'.$this->book_id.'issues/'.$this->issue_id.'/', 's3-public');
-            // $book = Book::find($this->book_id);
-            //     if($book) {
-            //         $book->book_image_path = $fileUrl;
-            //         $book->save();
-            //     } else {
-            //         abort(500, 'Something went wrong. Our developers are on it!');
-            //     }
+             //save in DB
+            $issue_page = new IssuePage;
+                if($issue) {
+                   $issue_page->issue_id = $issue->id;
+                   $issue_page->issue_page_url = $fileUrl;
+                   $issue_page->save();
+                } else {
+                    abort(500, 'Something went wrong!!');
+                }
         }
         return redirect()->route('books.create', ['step' => 4, 'universe_id' => $this->universe_id, 'book_id' => $this->book_id]);
     }

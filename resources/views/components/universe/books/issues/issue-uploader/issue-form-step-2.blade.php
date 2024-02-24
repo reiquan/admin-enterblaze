@@ -39,7 +39,7 @@
         <div class="col-span-full"></div>
         <div class="sm:col-span-3">
           <div class="mt-2">
-        
+        {{ $issue_id }}
 
             @livewire('issue-covers-upload', ['universe_id' => $universe_id, 'book_id' => $book_id, 'issue_id' => $issue_id])
           </div>

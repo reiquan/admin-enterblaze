@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Issue extends Model
+class IssuePage extends Model
 {
     //
       /**
