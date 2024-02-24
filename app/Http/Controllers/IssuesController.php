@@ -69,6 +69,7 @@ class IssuesController extends Controller
                         $issue->issue_description = $request->issue_description;
                         $issue->issue_number = $request->issue_number;
                         $issue->issue_is_adult = $request->issue_is_adult ? 1 : 0;
+                        $issue->issue_is_locked = 1;
                         $issue->issue_book_id = $request->book_id;
                         $issue->issue_slug_name = strtolower(str_replace(" ","_", $request->issue_title));
           
@@ -111,10 +112,13 @@ class IssuesController extends Controller
     public function show(Request $request, string $id)
     {
         //
-       
+     
         $book = Book::find($request->b_id);
+        $issue = Issue::find($request->issue_id);
+
+        
       
-        return view('universe/books/show', compact('book'));
+        return view('universe/books/issues/show', compact('book', 'issue'));
     }
 
     /**

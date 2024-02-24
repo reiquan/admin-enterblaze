@@ -114,8 +114,10 @@ class BookController extends Controller
         //
        
         $book = Book::find($request->b_id);
-      
-        return view('universe/books/show', compact('book'));
+        $issues = $book->issues;
+        // dd($issues->toArray());
+       
+        return view('universe/books/show', compact('book', 'issues'));
     }
 
     /**
@@ -133,7 +135,7 @@ class BookController extends Controller
      */
     public function update(Request $request)
     {
-        dd($request->all());
+       
         $request->validate([
             'book_id' => ['required'],
             'universe_id' => ['required'],

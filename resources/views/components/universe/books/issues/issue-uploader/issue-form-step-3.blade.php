@@ -341,8 +341,8 @@ gallery.onclick = ({ target }) => {
 // print all selected files
 document.getElementById("submit").onclick = (e) => {
   e.preventDefault();
-  alert(`Submitted Files:\n${JSON.stringify(FILES)}`);
-  window.location.assign('/universe/' + u_id + '/books/' + b_id  + '/issues');
+  alert(`Submitted Files`);
+ 
   console.log(FILES);
 
   var formData = new FormData();
@@ -350,7 +350,7 @@ document.getElementById("submit").onclick = (e) => {
   var u_id = "<?php echo $universe->id; ?>";
   var b_id = "<?php echo $book_id; ?>";
   var i_id = "<?php echo $_REQUEST['issue_id']; ?>";
-  console.log( '/universe/' + u_id + '/books/' + b_id + '/update');
+  window.location.assign('/universe/' + u_id + '/books/' + b_id  + '/show');
 
   // Check if a file is selected
   if (fileInput.files.length > 0) {

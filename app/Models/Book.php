@@ -34,8 +34,8 @@ class Book extends Model
         return $this->hasMany(Volume::class);
     }
 
-    public function pages(){
-        return $this->hasMany(IssuePage::class);
+    public function issues(){
+        return $this->hasMany(Issue::class, 'issue_book_id');
     }
 
     public function universe(){
