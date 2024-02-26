@@ -55,7 +55,7 @@ Route::middleware([
     Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/pages/{page_id}/pageIsVisible', 'App\Http\Controllers\IssuePagesController@pageIsVisible')->name('issue_pages.pageIsVisible');
     Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/pages/{page_id}/update', 'App\Http\Controllers\IssuePagesController@update')->name('issue_pages.update');
     Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/pages/{page_id}/delete', 'App\Http\Controllers\IssuePagesController@destroy')->name('issue_pages.delete');
-    Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/pages/{?page_id}/editPage', 'App\Http\Controllers\IssuePagesController@editPage')->name('issue_pages.editPage');
+    Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/pages/{page_id?}/editPage', 'App\Http\Controllers\IssuePagesController@editPage')->name('issue_pages.editPage');
 
         //Uploader
             Route::get('/uploader', 'App\Http\Controllers\BookController@index')->name('admin.uploader');

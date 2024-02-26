@@ -38,6 +38,6 @@ class Issue extends Model
         return $this->hasMany(IssuePage::class);
     }
     public function book(){
-        return $this->belongsTo(Book::class);
+        return $this->belongsTo(Book::class, 'issue_book_id');
     }
 }

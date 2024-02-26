@@ -24,9 +24,9 @@
     </div>
 </div>
 <br>
-<form action="{{ route('issues.create', ['universe_id' => $_REQUEST['u_id'] , 'book_id' => $_REQUEST['b_id']] ) }}" method="GET" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-    <input type="hidden" name="universe_id" value="{{$_REQUEST['u_id']}}">
-    <input type="hidden" name="book_id" value="{{$_REQUEST['b_id']}}">  
+<form action="{{ route('issues.create', ['universe_id' => $_REQUEST['u_id'] ?? $book->universe->id , 'book_id' => $_REQUEST['b_id'] ?? $book->id] ) }}" method="GET" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+    <input type="hidden" name="universe_id" value="{{$_REQUEST['u_id'] ?? $book->universe->id }}">
+    <input type="hidden" name="book_id" value="{{ $_REQUEST['b_id'] ?? $book->universe->id }}">  
     
     <span class="mt-2 block text-sm font-semibold text-gray-900">
         <button type="submit">
@@ -51,7 +51,7 @@
             <table class="min-w-full divide-y divide-gray-300">
                     <thead>
                     <tr>
-                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">{{ $page->id }}</th>
+                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">{{ $page->issue_page_number }}</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Page #</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
 
@@ -66,9 +66,9 @@
                         <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                         <div class="flex items-center">
                             <div class="h-11 w-11 flex-shrink-0">
-                                @if($issue->issue_image_cover)
+                                @if($page->issue_page_url)
                                 
-                                    <img src="{{ Storage::disk('s3-public')->url($issue->issue_image_cover) }}" alt="Image" class="rounded-full h-48 w-48 object-cover object-center lg:h-full lg:w-full">
+                                    <img src="{{ Storage::disk('s3-public')->url($page->issue_page_url) }}" alt="Image" class="rounded-full h-48 w-48 object-cover object-center lg:h-full lg:w-full">
                 
                                 @else
                                     <img class="h-11 w-11 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
@@ -81,7 +81,7 @@
                         </div>
                         </td>
                         <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                        <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $issue->issue_page_number }}</span>
+                        <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $page->issue_page_number }}</span>
                         </td>
                         <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                             @if($page->issue_page_is_locked)
@@ -94,10 +94,11 @@
                             <button onclick="confirmDelete('{{ $page->id }}')" class="text-red-600 hover:text-red-900">Delete<span class="sr-only">, Lindsay Walton</span></button>
                         </td>
                         <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                        <form action="{{ route('issues.show', ['universe_id' => $_REQUEST['u_id'], 'book_id' => $_REQUEST['b_id'], 'issue_id' => $issue->id ]) }}">
-                            <input type="hidden" id ="u_id" name="u_id" value="{{ $_REQUEST['u_id']}}">
-                            <input type="hidden" id ="b_id" name="b_id" value="{{ $_REQUEST['b_id']}}">
+                        <form action="{{ route('issue_pages.editPage', ['universe_id' => $_REQUEST['u_id'] ?? $book->universe->id, 'book_id' => $_REQUEST['b_id'] ?? $book->id, 'issue_id' => $issue->id, 'page_id' => $page->id]) }}">
+                            <input type="hidden" id ="u_id" name="u_id" value="{{ $_REQUEST['u_id'] ?? $book->universe->id }}">
+                            <input type="hidden" id ="b_id" name="b_id" value="{{ $_REQUEST['b_id'] ?? $book->id }}">
                             <input type="hidden" id ="i_id" name="issue_id" value="{{ $issue->id }}">
+                            <input type="hidden" id ="issue_page_id" name="issue_page_id" value="{{ $page->id }}">
                             <button class="text-green-600 hover:text-green-900">Replace<span class="sr-only">, Lindsay Walton</span></button>
                         </form>
                         </td>

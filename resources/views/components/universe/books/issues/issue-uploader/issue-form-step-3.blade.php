@@ -350,35 +350,7 @@ document.getElementById("submit").onclick = (e) => {
   var u_id = "<?php echo $universe->id; ?>";
   var b_id = "<?php echo $book_id; ?>";
   var i_id = "<?php echo $_REQUEST['issue_id']; ?>";
-  window.location.assign('/universe/' + u_id + '/books/' + b_id  + '/show');
-
-  // Check if a file is selected
-  if (fileInput.files.length > 0) {
-      formData.append('file', fileInput.files[0]);
-      $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-       });
-      $.ajax({
-          url: '/universe/' + u_id + '/books/' + b_id + '/issues/' + i_id + '/update', // Replace with your server endpoint
-          type: 'POST',
-          data: JSON.stringify(FILES),
-          processData: false,
-          contentType: false,
-          success: function(response) {
-              console.log('File uploaded successfully:', response);
-              // Handle the response from the server
-              console.log('done');
-          },
-          error: function(error) {
-              console.error('Error uploading file:', error);
-              // Handle errors
-          }
-      });
-  } else {
-      console.log('No file selected.');
-  }
+  window.location.assign('/universe/' + u_id + '/books/' + b_id  + '/show?b_id=' + b_id +'&u_id=' + u_id);
 
 };
 

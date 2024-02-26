@@ -112,7 +112,6 @@ class BookController extends Controller
     public function show(Request $request, string $id)
     {
         //
-       
         $book = Book::find($request->b_id);
         $issues = $book->issues;
         // dd($issues->toArray());

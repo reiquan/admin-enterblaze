@@ -26,15 +26,17 @@ class IssuePagesUpload extends Component
     }
 
 
-    public function uploadMultiple()
+    public function saveIssuePage()
     {
+      
         $this->validate([
             'photos.*' => 'image|max:1024', // 1MB Max
         ]);
  
         foreach ($photos as $photo) {
             $issue =Issue::find($this->issue_id);
-             $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/'.'books/'.$this->book_id.'issues/'.$this->issue_id.'/', 's3-public');
+             $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/'.'books/'.$this->book_id.'issues/'.$this->issue_id.'/pages', 's3-public');
+          
              //save in DB
             $issue_page = new IssuePage;
                 if($issue) {

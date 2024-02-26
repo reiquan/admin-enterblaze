@@ -90,7 +90,7 @@
                         <input type="hidden" name="u_id" value="{{ $_REQUEST['u_id']}}">
                         <input type="hidden" name="b_id" value="{{ $_REQUEST['b_id']}}">
                         <input type="hidden" name="issue_id" value="{{ $issue->id }}">
-                        <button class="text-green-600 hover:text-green-900">Edit<span class="sr-only">, Lindsay Walton</span></button>
+                        <button class="text-green-600 hover:text-green-900">View<span class="sr-only">, Lindsay Walton</span></button>
                       </form>
                     </td>
                   </tr>

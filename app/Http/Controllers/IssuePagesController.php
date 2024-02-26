@@ -20,11 +20,13 @@ class IssuePagesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function editPage(Request $request)
     {
         //
-        $issue_page = IssuePage::find($id);
-        return view('books/issues/edit', compact('issue_page'));
+        
+        $issue_page = IssuePage::find($request->issue_page_id);
+       
+        return view('universe/books/issues/edit', compact('issue_page'));
     }
 
     /**

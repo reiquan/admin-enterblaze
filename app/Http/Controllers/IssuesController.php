@@ -113,7 +113,7 @@ class IssuesController extends Controller
     {
         //
      
-        $book = Book::find($request->b_id);
+        $book = Book::find($request->b_id ?? $request->book_id);
         $issue = Issue::find($request->issue_id);
 
         // dd($issue->pages->toArray());
@@ -247,7 +247,7 @@ class IssuesController extends Controller
                
                 return response()->json(['success' => 'File deleted successfully.']);
             } else {
-                return response()->json(['Errr' => 'File Not Found']);
+                return response()->json(['Error' => 'File Not Found']);
             }
             //
         }
