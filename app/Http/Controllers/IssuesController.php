@@ -116,7 +116,7 @@ class IssuesController extends Controller
         $book = Book::find($request->b_id);
         $issue = Issue::find($request->issue_id);
 
-        
+        // dd($issue->pages->toArray());
       
         return view('universe/books/issues/show', compact('book', 'issue'));
     }
@@ -186,7 +186,7 @@ class IssuesController extends Controller
     public function publish(Request $request, string $id)
     {
         //
-        $book = Book::find($id);
+        $book = Issue::find($id);
         if($request->action == 'publish'){
             $book->is_active = 1;
             $book->save();
@@ -196,6 +196,25 @@ class IssuesController extends Controller
         }
        
         return redirect()->route('books.index', $book->book_universe_id);
+    }
+
+             /**
+     * Show the form for publishing the specified resource.
+     */
+    public function pageIsVisible(Request $request, string $id)
+    {
+        //
+     
+        $request->validate([
+            'issue_page_id' => ['required']
+                 
+        ]);
+        $issue_page = IssuePage::find($request->page_id);
+       
+            $issue_page->issue_page_is_locked =  $issue_page->issue_page_is_locked == 1 ? 0 : 1;
+            $issue_page->save();
+       
+        return response()->json(['success' => 'Page Updated  Succesfully']);
     }
 
     /**
@@ -208,18 +227,27 @@ class IssuesController extends Controller
             'book_id' => ['required'],
             'universe_id' => ['required'],
             'issue_id' => ['required'],
-            'issue_page_id' => ['required']
                  
         ]);
-        $issue_page = IssuePage::find($request->issue_page_id);
-        if($issue_page){
+        $issue= Issue::find($request->issue_id);
+        if($issue){
              // Delete file from S3
-            if (Storage::disk('s3-public')->exists($issue_page->issue_page_url)) {
-                Storage::disk('s3-public')->delete($issue_page->issue_page_url);
-                $issue_page->delete();
+            if (Storage::disk('s3-public')->exists($issue->issue_image_cover)) {
+                Storage::disk('s3-public')->delete($issue->issue_image_cover);
+                if($issue->pages) {
+                    foreach($issue->pages as $page){
+                        if (Storage::disk('s3-public')->exists($page->issue_page_url)) {
+                            Storage::disk('s3-public')->delete($page->issue_page_url);
+                            $page->delete();
+                        }
+                    }
+                }
+
+                $issue->delete();
+               
                 return response()->json(['success' => 'File deleted successfully.']);
             } else {
-                return response()->json(['success' => 'File Not Found']);
+                return response()->json(['Errr' => 'File Not Found']);
             }
             //
         }

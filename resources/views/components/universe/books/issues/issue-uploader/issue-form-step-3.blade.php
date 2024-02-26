@@ -310,7 +310,7 @@ gallery.onclick = ({ target }) => {
     }
     });
     $.ajax({
-      url: '/universe/' + u_id + '/books/' + b_id + '/issues/' + i_id + '/delete', // Replace with your server endpoint
+      url: '/universe/' + u_id + '/books/' + b_id + '/issues/' + i_id +  '/pages/' + imj + '/delete', // Replace with your server endpoint
       type: "POST",
       data: formData,
       processData: false, // Prevent jQuery from processing the data
