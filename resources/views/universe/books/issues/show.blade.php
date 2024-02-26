@@ -49,5 +49,41 @@
                 console.log('User canceled the action.');
             }
         }
+
+        function confirmDelete(page_id) {
+            console.log('here');
+            let universe_id = document.getElementById("u_id").value;
+            let book_id = document.getElementById("b_id").value;
+            let issue_id = document.getElementById("i_id").value;
+    
+
+            // Display a confirmation dialog
+            var userConfirmed = window.confirm('Are you sure you want to delete page ' + page_id + '?');
+
+            // If the user clicks "OK" (true), redirect to another page
+            if (userConfirmed) {
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
+                $.ajax({
+                url: '/universe/' + universe_id + '/books/' + book_id + '/issues' + '/' + issue_id + '/pages' + '/' + page_id + '/delete?issue_page_id=' + page_id, // Replace with your server endpoint
+                type: "POST",
+                success: function(response) {
+                    // Handle success
+                    console.log("Success:", response);
+                    window.location.reload();
+                },
+                error: function(xhr, status, error) {
+                    // Handle error
+                    console.error("Error:", status, error);
+                }
+                });
+            } else {
+                // If the user clicks "Cancel" (false), you can add additional actions or do nothing
+                console.log('User canceled the action.');
+            }
+        }
     </script>
 </x-app-layout>

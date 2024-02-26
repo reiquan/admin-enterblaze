@@ -102,16 +102,13 @@ class IssuePagesController extends Controller
      */
     public function destroy(Request $request)
     {
-     
+    
         $request->validate([
-            'book_id' => ['required'],
-            'universe_id' => ['required'],
-            'issue_id' => ['required'],
             'issue_page_id' => ['required']
                  
         ]);
         $issue_page = IssuePage::find($request->issue_page_id);
-   
+        // dd($issue_page->toArray());
         if($issue_page){
              // Delete file from S3
             if (Storage::disk('s3-public')->exists($issue_page->issue_page_url)) {

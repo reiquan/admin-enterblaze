@@ -51,7 +51,7 @@
             <table class="min-w-full divide-y divide-gray-300">
                     <thead>
                     <tr>
-                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">{{ $issue->issue_title }} {{ $page->issue_page_is_locked }}</th>
+                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">{{ $page->id }}</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Page #</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
 
@@ -85,13 +85,13 @@
                         </td>
                         <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                             @if($page->issue_page_is_locked)
-                            <span id="toggleLock{{ $page->id }}" onclick="isVisible('{{ $page->id }}', 'Unlock')"class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">Locked</span>
+                            <span id="toggleLock{{ $page->id }}" onclick="isVisible('{{ $page->id }}', 'Unlock')"class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20"><button>Locked</button></span>
                             @else
-                            <span id="toggleLock{{ $page->id }}" onclick="isVisible('{{ $page->id }}', 'Lock')"class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Unlocked</span>
+                            <span id="toggleLock{{ $page->id }}" onclick="isVisible('{{ $page->id }}', 'Lock')"class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"><button>Unlocked</button></span>
                             @endif
                         </td>
                         <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                        <a href="#" class="text-red-600 hover:text-red-900">Delete<span class="sr-only">, Lindsay Walton</span></a>
+                            <button onclick="confirmDelete('{{ $page->id }}')" class="text-red-600 hover:text-red-900">Delete<span class="sr-only">, Lindsay Walton</span></button>
                         </td>
                         <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                         <form action="{{ route('issues.show', ['universe_id' => $_REQUEST['u_id'], 'book_id' => $_REQUEST['b_id'], 'issue_id' => $issue->id ]) }}">
