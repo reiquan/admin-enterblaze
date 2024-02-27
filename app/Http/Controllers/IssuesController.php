@@ -170,6 +170,14 @@ class IssuesController extends Controller
                 $issue_page->issue_id = $request->issue_id;
                 $issue_page->issue_page_url = $path.$fileName;
                 $issue_page->save();
+                $count = 0;
+                foreach($issue->pages as $page){
+                    $p = IssuePage::find($page->id);
+                
+                    $p->issue_page_number = $count += 1;
+                    $p->save();
+
+                }
             }
 
             if($page_submitted){

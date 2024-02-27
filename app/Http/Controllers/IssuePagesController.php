@@ -29,6 +29,19 @@ class IssuePagesController extends Controller
         return view('universe/books/issues/edit', compact('issue_page'));
     }
 
+        /**
+     * Show the form for editing the specified resource.
+     */
+    public function addPage(Request $request)
+    {
+        //
+
+        
+        $issue = Issue::find($request->issue_id);
+       
+        return view('universe/books/issues/add-page', compact('issue'));
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -65,11 +78,12 @@ class IssuePagesController extends Controller
             // /Save to DB
             $issue_page = new IssuePage;
             $issue = Issue::find($request->issue_id);
+            
 
             if($issue){
+                $num = 0;
                 $issue_page->issue_id = $request->issue_id;
                 $issue_page->issue_page_url = $path.$fileName;
-                $issue_page->save();
             }
 
             if($page_submitted){

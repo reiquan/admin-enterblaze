@@ -24,7 +24,7 @@
     </div>
 </div>
 <br>
-<form action="{{ route('issues.create', ['universe_id' => $_REQUEST['u_id'] ?? $book->universe->id , 'book_id' => $_REQUEST['b_id'] ?? $book->id] ) }}" method="GET" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+<form action="{{ route('issue_pages.addPage', ['universe_id' => $_REQUEST['u_id'] ?? $book->universe->id , 'book_id' => $_REQUEST['b_id'] ?? $book->id, 'issue_id' => $issue->id] ) }}" method="GET" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
     <input type="hidden" name="universe_id" value="{{$_REQUEST['u_id'] ?? $book->universe->id }}">
     <input type="hidden" name="book_id" value="{{ $_REQUEST['b_id'] ?? $book->universe->id }}">  
     
@@ -75,7 +75,7 @@
                                 @endif
                             </div>
                             <div class="ml-4">
-                            <div class="font-medium text-gray-900">{{ $issue->issue_number }}</div>
+                            <div class="font-medium text-gray-900">{{ $page->id }}</div>
                             <div class="mt-1 text-gray-500">{{ $issue->title }}</div>
                             </div>
                         </div>
