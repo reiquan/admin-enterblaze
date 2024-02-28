@@ -43,7 +43,7 @@
 
 <br>
 
-    @foreach ($issue->pages as $page)
+    @foreach ($pages as $page)
       <div class="px-4 sm:px-6 lg:px-8">
         <div class="mt-8 flow-root">
           <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -81,7 +81,33 @@
                         </div>
                         </td>
                         <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                        <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ $page->issue_page_number }}</span>
+                        <span>                                                        <!--
+                            This example requires some changes to your config:
+                            
+                            ```
+                            // tailwind.config.js
+                            module.exports = {
+                                // ...
+                                plugins: [
+                                // ...
+                                require('@tailwindcss/forms'),
+                                ],
+                            }
+                            ```
+                            -->
+                            <div>
+                
+                                <select id="issue_page_number{{$page->id}}"  onchange="swapPageNumber('{{ $page->id }}', 'Unlock')" name="issue_page_number" class="mt-2 block rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                   @foreach($issue->pages as $count)
+                                        @if($count->issue_page_number == $page->issue_page_number)
+                                            <option id="{{$count->id}}" value="{{$count->issue_page_number}}" selected >{{$count->issue_page_number}}</option>
+                                        @else
+                                            <option id="{{$count->id}}" value="{{$count->issue_page_number}}">{{$count->issue_page_number}}</option>
+                                        @endif
+                                   @endforeach
+                                </select>
+                            </div>
+                        </span>
                         </td>
                         <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                             @if($page->issue_page_is_locked)

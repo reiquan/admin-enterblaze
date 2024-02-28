@@ -114,6 +114,39 @@ class IssuePagesController extends Controller
     }
 
     /**
+    * Show the form for swapping the specified resourpage for anotherce.
+     */
+   public function swapPageNumber(Request $request)
+   {
+       //
+      
+       $request->validate([
+            'issue_id' => ['required'],
+           'issue_page_id' => ['required'],
+           'swapFor' => ['required']
+                
+       ]);
+       $issue_page = IssuePage::find($request->issue_page_id);
+
+        $swapped_page_number = $issue_page->issue_page_number;
+        $issue = $issue_page->issue;
+
+        $issue_page_to_swap =IssuePage::where('issue_id', $issue->id)
+                                        ->where('issue_page_number', $request->swapFor)
+                                        ->first();
+
+        $issue_page_to_swap->issue_page_number = $swapped_page_number = $issue_page->issue_page_number;
+        $issue_page_to_swap->save();
+
+        $issue_page->issue_page_number = $request->swapFor;
+        $issue_page->save();
+
+      
+       return response()->json(['success' => 'Pages Updated  Succesfully']);
+   }
+
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request)
@@ -130,6 +163,14 @@ class IssuePagesController extends Controller
             if (Storage::disk('s3-public')->exists($issue_page->issue_page_url)) {
                 Storage::disk('s3-public')->delete($issue_page->issue_page_url);
                 $issue_page->delete();
+             
+                foreach($issue_page->issue->pages as $page){
+                    $p = IssuePage::find($page->id);
+                    $new_page_number = $p->issue_page_number - 1;
+                    $p->issue_page_number = $new_page_number;
+                    $p->save();
+
+                }
                 return response()->json(['success' => 'File deleted successfully.']);
             } else {
                 return response()->json(['error' => 'File Not Found']);

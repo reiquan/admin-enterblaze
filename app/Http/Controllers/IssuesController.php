@@ -115,10 +115,12 @@ class IssuesController extends Controller
      
         $book = Book::find($request->b_id ?? $request->book_id);
         $issue = Issue::find($request->issue_id);
+        $pages = $issue->pages->sortBy('issue_page_number');
+
 
         // dd($issue->pages->toArray());
       
-        return view('universe/books/issues/show', compact('book', 'issue'));
+        return view('universe/books/issues/show', compact('book', 'issue', 'pages'));
     }
 
     /**
