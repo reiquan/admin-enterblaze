@@ -46,6 +46,7 @@ Route::middleware([
     //Issues
         Route::get('/universe/{universe_id}/books/{book_id}/issues', 'App\Http\Controllers\IssuesController@index')->name('issues.index');
         Route::get('/universe/{universe_id}/books/{book_id}/issues/create', 'App\Http\Controllers\IssuesController@create')->name('issues.create');
+        Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/edit', 'App\Http\Controllers\IssuesController@edit')->name('issues.edit');
         Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/update', 'App\Http\Controllers\IssuesController@update')->name('issues.update');
         Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/show', 'App\Http\Controllers\IssuesController@show')->name('issues.show');
         Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/publish', 'App\Http\Controllers\IssuesController@publish')->name('issues.publish');

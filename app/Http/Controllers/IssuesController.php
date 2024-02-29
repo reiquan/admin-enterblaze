@@ -50,7 +50,6 @@ class IssuesController extends Controller
      */
     public function store(Request $request)
     {
-    
           //validate info
           $request->validate([
             'issue_title' => ['required'],
@@ -63,8 +62,9 @@ class IssuesController extends Controller
         ]);
         //save info
             if(isset($request->step) and $request->step == 1){
+      
                 //save book
-                    $issue = new Issue;
+                    $issue = $request->issue_id ? Issue::find($request->issue_id) : new Issue;
                         $issue->issue_title = $request->issue_title;
                         $issue->issue_description = $request->issue_description;
                         $issue->issue_number = $request->issue_number;
@@ -126,11 +126,16 @@ class IssuesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request)
     {
         //
-        $universe = Book::find($id);
-        return view('books/create', compact('books'));
+
+        $step = 1;
+        $issue = Issue::find($request->i_id);
+        $book_id = $request->b_id;
+        $universe_id = $request->u_id;
+
+        return view('universe/books/issues/create', compact('issue', 'step', 'book_id', 'universe_id'));
     }
 
     /**
@@ -193,19 +198,20 @@ class IssuesController extends Controller
          /**
      * Show the form for publishing the specified resource.
      */
-    public function publish(Request $request, string $id)
+    public function publish(Request $request)
     {
         //
-        $book = Issue::find($id);
+        $issue = Issue::find($request->issue_id);
         if($request->action == 'publish'){
-            $book->is_active = 1;
-            $book->save();
+            $issue->issue_is_locked = 1;
+            $issue->save();
         } else {
-            $book->is_active = 0;
-            $book->save();
+            $issue->issue_is_locked = 0;
+            $issue->save();
         }
-       
-        return redirect()->route('books.index', $book->book_universe_id);
+       $universe_id =  $issue->book->universe->id;
+
+        return response()->json(['success' => 'Issue Updated Succesfully', 'issue_id' => $issue->id]);
     }
 
              /**
@@ -234,8 +240,6 @@ class IssuesController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'book_id' => ['required'],
-            'universe_id' => ['required'],
             'issue_id' => ['required'],
                  
         ]);

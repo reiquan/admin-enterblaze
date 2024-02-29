@@ -69,9 +69,9 @@
                         <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                             <div class="flex items-center">
                                 <div class="h-11 w-11 flex-shrink-0">
-                                    @if($book->book_image_path)
+                                    @if($issue->issue_image_cover)
                                     
-                                        <img src="{{ Storage::disk('s3-public')->url($book->book_image_path) }}" alt="Image" class="rounded-full h-48 w-48 object-cover object-center lg:h-full lg:w-full">
+                                        <img src="{{ Storage::disk('s3-public')->url($issue->issue_image_cover) }}" alt="Image" class="rounded-full h-48 w-48 object-cover object-center lg:h-full lg:w-full">
                     
                                     @else
                                         <img class="h-11 w-11 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
@@ -84,14 +84,14 @@
                             </div>
                         </td>
                         <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                            @if($book->is_active)
-                                <button id="unpublish{{ $issue->id }}" onclick="publishAction('unpublish', '{{ $issue->issue_slug_name }}', '{{ $issue->id }}')" class="text-gray-900 rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-yellow-600 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
+                            @if($issue->issue_is_locked)
+                                <button id="unpublish{{ $issue->id }}" onclick="isVisible('unpublish', '{{ $issue->issue_slug_name }}', '{{ $issue->id }}')" class="text-gray-900 rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-yellow-600 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
 
                                         <span>Unlock</span>
                                         <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
                                 </button>
                             @else
-                                <button id="publish{{ $issue->id }}" onclick="publishAction('publish', '{{ $issue->issue_slug_name }}', '{{ $issue->id }}')" class="text-white rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-green-700 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
+                                <button id="publish{{ $issue->id }}" onclick="isVisible('publish', '{{ $issue->issue_slug_name }}', '{{ $issue->id }}')" class="text-white rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-green-700 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
                                     <span>Lock</span>
                                     <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
                                 </button>
@@ -100,18 +100,19 @@
                         <td scope="col" class="mt-1 text-gray-500">{{ $issue->issue_is_adult ? 'Adult' : '' }}</td>
                 
                         <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                            <button onclick="confirmDelete('{{ $book->id }}')" class="text-red-600 hover:text-red-900">Delete<span class="sr-only">, Lindsay Walton</span></button>
+                            <button onclick="confirmDelete('{{ $issue->id }}')" class="text-red-600 hover:text-red-900">Delete<span class="sr-only">, Lindsay Walton</span></button>
                         </td>
 
                         <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                            <form action="{{ route('books.edit', ['universe_id' => $book->universe->id, 'book_id' => $book->id]) }}">
-                                <input type="hidden" id ="u_id{{ $book->id }}" name="u_id" value="{{ $book->universe->id }}">
-                                <input type="hidden" id ="b_id{{ $book->id }}" name="b_id" value="{{ $book->id }}">
+                            <form action="{{ route('issues.edit', ['universe_id' => $book->universe->id, 'book_id' => $book->id,  'issue_id' => $issue->id]) }}">
+                                <input type="hidden" id ="u_id{{ $issue->id }}" name="u_id" value="{{ $book->universe->id }}">
+                                <input type="hidden" id ="b_id{{ $issue->id }}" name="b_id" value="{{ $book->id }}">
+                                <input type="hidden" id ="i_id{{ $issue->id }}" name="i_id" value="{{ $issue->id }}">
                                 <button class="text-green-600 hover:text-green-900">Edit<span class="sr-only">, Lindsay Walton</span></button>
                             </form>
                         </td>
                         <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                            <form action="{{ route('books.show', ['universe_id' => $book->universe->id, 'book_id' => $book->id]) }}">
+                            <form action="{{ route('issues.show', ['universe_id' => $book->universe->id, 'book_id' => $book->id, 'issue_id' => $issue->id]) }}">
                                 <input type="hidden" id ="u_id{{ $book->id }}" name="u_id" value="{{ $book->universe->id }}">
                                 <input type="hidden" id ="b_id{{ $book->id }}" name="b_id" value="{{ $book->id }}">
                                 <button class="text-gray-400 hover:text-green-900"><strong>View</strong><span class="sr-only">, Lindsay Walton</span></button>
