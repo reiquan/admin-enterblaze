@@ -21,7 +21,7 @@ class BookController extends Controller
     public function index(REQUEST $request)
     {
         //
-       
+
         $books = Book::where('book_universe_id', $request->universe_id)->get();
        
         $universe = Universe::find($request->universe_id);
@@ -50,7 +50,7 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-       
+        // dd($request->toArray());
           //validate info
           $request->validate([
             'book_title' => ['required'],
@@ -63,8 +63,9 @@ class BookController extends Controller
         ]);
         //save info
             if(isset($request->step) and $request->step == 1){
+               
                 //save book
-                    $book = new Book;
+                    $book = isset($request->book_id) ? Book::find($request->book_id) : new Book;
                         $book->book_title = $request->book_title;
                         $book->book_creator = $request->book_creator;
                         $book->book_audience = $request->book_audience;
@@ -122,11 +123,12 @@ class BookController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request)
     {
         //
-        $universe = Book::find($id);
-        return view('books/create', compact('books'));
+        $book = Book::find($request->book_id);
+        $step = 1;
+        return view('universe/books/edit', compact('book', 'step'));
     }
 
     /**
@@ -171,7 +173,10 @@ class BookController extends Controller
     public function publish(Request $request, string $id)
     {
         //
-        $book = Book::find($id);
+        $request->validate([
+            'book_id' => ['required']
+        ]);
+        $book = Book::find($request->book_id);
         if($request->action == 'publish'){
             $book->is_active = 1;
             $book->save();
@@ -186,8 +191,41 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        //  dd($request->all());
+         $request->validate([
+            'book_id' => ['required'],
+                 
+        ]);
+        $book = Book::find($request->book_id);
+        $issues= $book->issues;
+        if($issues){
+            foreach($issues as $issue) {
+                 // Delete file from S3
+                if (Storage::disk('s3-public')->exists($issue->issue_image_cover)) {
+                    Storage::disk('s3-public')->delete($issue->issue_image_cover);
+                    if($issue->pages) {
+                        foreach($issue->pages as $page){
+                            if (Storage::disk('s3-public')->exists($page->issue_page_url)) {
+                                Storage::disk('s3-public')->delete($page->issue_page_url);
+                                $page->delete();
+                            }
+                        }
+                    }
+
+                }
+
+                $issue->delete();
+            } 
+
+        }
+        if($book->book_image_path) {
+            if (Storage::disk('s3-public')->exists($book->book_image_path)) {
+                Storage::disk('s3-public')->delete($book->book_image_path);
+            }
+        }
+        $book->delete();
+         return response()->json(['success' => 'Book deleted successfully.']);
     }
 }

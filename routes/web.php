@@ -37,10 +37,11 @@ Route::middleware([
    //Book
         Route::get('/universe/{universe_id}/books', 'App\Http\Controllers\BookController@index')->name('books.index');
         Route::get('/universe/{universe_id}/books/create', 'App\Http\Controllers\BookController@create')->name('books.create');
+        Route::get('/universe/{universe_id}/books/{book_id}/edit', 'App\Http\Controllers\BookController@edit')->name('books.edit');
         Route::post('/universe/{universe_id}/books/{book_id}/update', 'App\Http\Controllers\BookController@update')->name('books.update');
         Route::get('/universe/{universe_id}/books/{book_id}/show', 'App\Http\Controllers\BookController@show')->name('books.show');
         Route::post('/universe/{universe_id}/books/{book_id}/publish', 'App\Http\Controllers\BookController@publish')->name('books.publish');
-        Route::post('/universe/{universe_id}/books/{book_id}/delete', 'App\Http\Controllers\BookController@delete')->name('books.delete');
+        Route::post('/universe/{universe_id}/books/{book_id}/delete', 'App\Http\Controllers\BookController@destroy')->name('books.delete');
         Route::post('/universe/{universe_id}/books/store', 'App\Http\Controllers\BookController@store')->name('books.store');
     //Issues
         Route::get('/universe/{universe_id}/books/{book_id}/issues', 'App\Http\Controllers\IssuesController@index')->name('issues.index');

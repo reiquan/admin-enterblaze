@@ -12,117 +12,108 @@
         ecosystem to be a breath of fresh air. We hope you love it.
     </p>
 </div>
-<a type="button" href="{{ route('books.create', $universe->id) }}" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6" />
-    </svg>
+<br>
+<form action="{{ route('books.create', ['universe_id' => $universe->id]) }}" method="GET" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+    <input type="hidden" name="universe_id" value="{{ $universe->id }}">
     
+    <span class="mt-2 block text-sm font-semibold text-gray-900">
+        <button type="submit">
+          <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6" />
+          </svg>
     
-    <span class="mt-2 block text-sm font-semibold text-gray-900">Create a New Book</span>
-</a>
-<div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
-    
-    <!--
-    This example requires some changes to your config:
-    
-    ```
-    // tailwind.config.js
-    module.exports = {
-        // ...
-        plugins: [
-        // ...
-        require('@tailwindcss/aspect-ratio'),
-        ],
-    }
-    ```
-    -->
-    
-    @foreach($books as $book)
-        <!--
-        This example requires some changes to your config:
-        
-        ```
-        // tailwind.config.js
-        module.exports = {
-            // ...
-            plugins: [
-            // ...
-            require('@tailwindcss/aspect-ratio'),
-            ],
-        }
-        ```
-        -->
-        <div class="bg-white">
-        <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-            <h2 class="text-2xl font-bold tracking-tight text-gray-900">{{ $book->book_title }}</h2>
-           @if($book->is_active)
-            <div class="mt-2 text-sm text-green-700">
-                <p>Active</p>
-            </div>
-            @else
-            <div class="mt-2 text-sm text-red-700">
-                <p>Inactive</p>
-            </div>
-           @endif
-            <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-            <div class="group relative">
-                <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                    @if($book->book_image_path)
-                        <a href="{{ route('books.show', ['universe_id' => $universe->id, 'book_id' => $book->id, 'u_id' => $universe->id, 'b_id' => $book->id]) }}">
-                            <img src="{{ Storage::disk('s3-public')->url($book->book_image_path) }}" alt="Image" class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                        </a>
-                    @else
-                    <img src="https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg" alt="Front of men&#039;s Basic Tee in black." class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                    @endif
-                </div>
-                <div class="mt-4 flex justify-between">
-                    <div>
-                        <h3 class="text-sm text-gray-700">
-                        </h3>
-                        <div>
-                            <div class="sm:hidden">
-                                <label for="tabs" class="sr-only">Select a tab</label>
-                                <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
-                                <select id="tabs" name="tabs" class="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
-                                <option selected>My Account</option>
-                                <option>Company</option>
-                                <option>Team Members</option>
-                                <option>Billing</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="hidden sm:block">
-                <nav class="isolate flex divide-x divide-gray-200 rounded-lg shadow" aria-label="Tabs">
-                        <!-- Current: "text-gray-900", Default: "text-gray-500 hover:text-gray-700" -->
-                        <input type="hidden" id="{{ $book->book_slug_name }}" value="{{ $book->id }}">
-                    @if($book->is_active)
-                        <button id="unpublish" onclick="publishAction('unpublish', '{{ $book->book_slug_name }}', '{{ $book->id }}')" class="text-gray-900 rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
+          Add New Book
 
-                                <span>Un-publish</span>
-                                <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
-                        </button>
-                    @else
-                        <button id="publish" onclick="publishAction('publish', '{{ $book->book_slug_name }}', '{{ $book->id }}')" class="text-white rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-green-700 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
-                            <span>Publish</span>
-                            <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
-                        </button>
-                    @endif
+        </button>
+    </span>
+
+</form>
+
+<br>
+
+    @foreach ($books as $book)
+      <div class="px-4 sm:px-6 lg:px-8">
+        <div class="mt-8 flow-root">
+          <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <table class="min-w-full divide-y divide-gray-300">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">{{ $book->book_title }}</th>
+                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status: <p class="mt-1 text-gray-500">{{ $book->is_active ? 'Published' : 'Unpublished' }}</p> </th>
+                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Creator</th>
+                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Audience</th>
+
+                        
+                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                        <span class="sr-only">Edit</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 bg-white">
+                    <tr>
+                        <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                            <div class="flex items-center">
+                                <div class="h-11 w-11 flex-shrink-0">
+                                    @if($book->book_image_path)
+                                    
+                                        <img src="{{ Storage::disk('s3-public')->url($book->book_image_path) }}" alt="Image" class="rounded-full h-48 w-48 object-cover object-center lg:h-full lg:w-full">
                     
-                </nav>
-            </div>
+                                    @else
+                                        <img class="h-11 w-11 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                                    @endif
+                                </div>
+                                <div class="ml-4">
+                                <div class="font-medium text-gray-900">{{ $book->id }}</div>
+                                <div class="mt-1 text-gray-500">{{ $book->book_subtitle }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                            @if($book->is_active)
+                                <button id="unpublish" onclick="publishAction('unpublish', '{{ $book->book_slug_name }}', '{{ $book->id }}')" class="text-gray-900 rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-yellow-600 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
 
-            <!-- More products... -->
-            </div>
-        </div>
-        </div>
+                                        <span>Unpublish</span>
+                                        <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+                                </button>
+                            @else
+                                <button id="publish" onclick="publishAction('publish', '{{ $book->book_slug_name }}', '{{ $book->id }}')" class="text-white rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-green-700 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
+                                    <span>Publish</span>
+                                    <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+                                </button>
+                            @endif
+                        </td>
+                        <td scope="col" class="mt-1 text-gray-500">{{ $book->book_creator }}</td>
+                        <td scope="col" class="mt-1 text-gray-500">{{ $book->book_audience }}</td>
+                        <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                            <button onclick="confirmDelete('{{ $book->id }}')" class="text-red-600 hover:text-red-900">Delete<span class="sr-only">, Lindsay Walton</span></button>
+                        </td>
 
+                        <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                            <form action="{{ route('books.edit', ['universe_id' => $book->universe->id, 'book_id' => $book->id]) }}">
+                                <input type="hidden" id ="u_id{{ $book->id }}" name="u_id" value="{{ $book->universe->id }}">
+                                <input type="hidden" id ="b_id{{ $book->id }}" name="b_id" value="{{ $book->id }}">
+                                <button class="text-green-600 hover:text-green-900">Edit<span class="sr-only">, Lindsay Walton</span></button>
+                            </form>
+                        </td>
+                        <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                            <form action="{{ route('books.show', ['universe_id' => $book->universe->id, 'book_id' => $book->id]) }}">
+                                <input type="hidden" id ="u_id{{ $book->id }}" name="u_id" value="{{ $book->universe->id }}">
+                                <input type="hidden" id ="b_id{{ $book->id }}" name="b_id" value="{{ $book->id }}">
+                                <button class="text-gray-400 hover:text-green-900"><strong>View</strong><span class="sr-only">, Lindsay Walton</span></button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    <!-- More people... -->
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+      </div>
     @endforeach
 
-</div>
 
 
 
-</div>
