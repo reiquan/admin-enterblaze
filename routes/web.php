@@ -32,7 +32,8 @@ Route::middleware([
         Route::post('/universe/{universe_id}/update', 'App\Http\Controllers\UniverseController@update')->name('universe.update');
         Route::get('/universe/{universe_id}/show', 'App\Http\Controllers\UniverseController@show')->name('universe.show');
         Route::post('/universe/{universe_id}/publish', 'App\Http\Controllers\UniverseController@publish')->name('universe.publish');
-        Route::post('/universe/{universe_id}/delete', 'App\Http\Controllers\UniverseController@delete')->name('universe.delete');
+        Route::get('/universe/{universe_id}/edit', 'App\Http\Controllers\UniverseController@edit')->name('universe.edit');
+        Route::post('/universe/{universe_id}/delete', 'App\Http\Controllers\UniverseController@destroy')->name('universe.delete');
         Route::post('/universe/store', 'App\Http\Controllers\UniverseController@store')->name('universe.store');
    //Book
         Route::get('/universe/{universe_id}/books', 'App\Http\Controllers\BookController@index')->name('books.index');

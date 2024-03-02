@@ -113,8 +113,19 @@
                             <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
                         </button>
                     @endif
-                    
+
                 </nav>
+                <nav class="isolate flex divide-x divide-gray-200 rounded-lg shadow" aria-label="Tabs">
+                    <button id="publish" onclick="editAction('{{ $universe->id }}')" class="text-gray-600 rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-gray-300 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
+                        <span>Edit</span>
+                        <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+                    </button>
+                    <button id="publish" onclick="confirmDelete('{{ $universe->id }}')" class=" text-white bg-red-700 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
+                        <span>Delete</span>
+                        <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+                    </button>
+                </nav>
+                
             </div>
 
             <!-- More products... -->

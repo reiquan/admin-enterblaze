@@ -9,14 +9,9 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
 
-            @if(isset($_REQUEST['step']))
-          
-                <x-universe.universe-form :step="$_REQUEST['step']"/>
-            @else
-        
                 <x-universe.universe-form :step="$step" :universe="$universe"/>
-            @endif
-        
+
+              
             </div>
         </div>
     </div>

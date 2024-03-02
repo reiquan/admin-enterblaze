@@ -6,18 +6,21 @@ use App\Models\Universe;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UniverseController extends Controller
 {
+    use SoftDeletes;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         //
-        $universes = Universe::where('universe_user_id', auth()->user()->id)->get();
+        $universes = Universe::where('universe_user_id', auth()->user()->id)
+                                ->whereNull('deleted_at')->get();
         // dd($universes->toArray());
-
+      
         return view('universe/index', compact('universes'));
     }
 
@@ -50,7 +53,7 @@ class UniverseController extends Controller
         ]);
         //save info
                 //save universe
-                    $universe = new Universe;
+                    $universe = isset($request->universe_id) ? Universe::find($request->universe_id) : new Universe;
                         $universe->universe_name = $request->universe_name;
                         $universe->universe_description = $request->universe_description;
                         $universe->universe_audience = $request->universe_audience;
@@ -70,8 +73,15 @@ class UniverseController extends Controller
                 
      
                 $step = $request->step += 1;
-            
-                return redirect()->route('universe.create', ['universe_id' => $universe->id, 'step' => $step]);
+                
+                // if($universe->universe_image_url){
+                    
+                //     $image = $universe->universe_image_url;
+                //     return view('universe.create', compact('universe', 'step', 'image'));
+                // } else {
+                    return redirect()->route('universe.create', ['universe_id' => $universe->id, 'step' => $step]);
+                // }
+               
 
             }
           ;
@@ -94,8 +104,9 @@ class UniverseController extends Controller
     public function edit(string $id)
     {
         //
+        $step=1;
         $universe = Universe::find($id);
-        return view('universe/create', compact('universe'));
+        return view('universe/edit', compact('universe', 'step'));
     }
 
      /**
@@ -127,7 +138,7 @@ class UniverseController extends Controller
         ]);
         //save info
             //save universe
-                $universe = new Universe;
+                $universe = isset($request->universe_id) ? Universe::find($request->universe_id) : new Universe;
                     $universe->universe_name = $request->universe_name;
                 $universe->save();
 
@@ -140,10 +151,19 @@ class UniverseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         //
-        $universe = Universe::find($id)->destroy();
-        return view('universe/index');
+        $request->validate([
+            'universe_id' => ['required']
+            // 'book_genres' => ['required'],
+            
+        ]);
+        $universe = Universe::find($request->universe_id);
+        $universe->deleted_at = now();
+        $universe->save();
+        $universes = Universe::where('universe_user_id', auth()->user()->id)
+        ->whereNull('deleted_at')->get();
+        return view('universe/index', compact('universes'));
     }
 }
