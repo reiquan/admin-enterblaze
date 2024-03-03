@@ -1,7 +1,7 @@
 <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
     <x-application-logo class="block h-12 w-auto" />
 
-    <h1 class="mt-8 text-2xl font-medium text-gray-900">
+    <!-- <h1 class="mt-8 text-2xl font-medium text-gray-900">
         Welcome to your Jetstream application!
     </h1>
 
@@ -10,7 +10,7 @@
         to help you build your application using a development environment that is simple, powerful, and enjoyable. We believe
         you should love expressing your creativity through programming, so we have spent time carefully crafting the Laravel
         ecosystem to be a breath of fresh air. We hope you love it.
-    </p>
+    </p> -->
 </div>
 <a type="button" href="{{ route('universe.create') }}" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
     <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
@@ -108,7 +108,7 @@
                                 <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
                         </button>
                     @else
-                        <button id="publish" onclick="publishAction('publish', '{{ $universe->universe_slug_name }}')" class="text-white rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-green-700 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
+                        <button id="publish" onclick="publishAction('publish', '{{ $universe->universe_slug_name }}')" class="text-white rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-gradient-to-r from-red-700 shadow py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
                             <span>Publish</span>
                             <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
                         </button>
