@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('issues', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('volume_id')->unsigned()->nullable();
-            $table->string('title');
-            $table->string('image_cover');
-            $table->longText('description')->nullable();
-            $table->boolean('is_adult');
-            $table->boolean('is_locked');
+            $table->string('issue_title');
+            $table->string('issue_image_cover')->nullable();
+            $table->longText('issue_description')->nullable();
+            $table->boolean('issue_is_adult');
+            $table->boolean('issue_is_locked')->nullable();
             $table->integer('issue_number');
-            $table->string('slug_name');
+            $table->string('issue_slug_name');
             $table->timestamps();
             $table->foreign('volume_id')->references('id')->on('volumes');
         });

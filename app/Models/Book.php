@@ -34,19 +34,11 @@ class Book extends Model
         return $this->hasMany(Volume::class);
     }
 
+    public function issues(){
+        return $this->hasMany(Issue::class, 'issue_book_id');
+    }
+
     public function universe(){
-        return $this->belongsTo(Universe::class, 'universe_id');
-    }
-
-    public function images(){
-        return $this->hasMany(Image::class);
-    }
-
-    public function products(){
-        return $this->hasMany(Product::class);
-    }
-
-    public function blogs(){
-        return $this->hasMany(Blog::class);
+        return $this->belongsTo(Universe::class, 'book_universe_id');
     }
 }

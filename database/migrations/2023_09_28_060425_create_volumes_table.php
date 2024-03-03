@@ -15,17 +15,17 @@ return new class extends Migration
             $table->id();
             $table->string('volume_name');
             $table->integer('volume_number');
-            $table->bigInteger('book_id')->unsigned()->nullable();
-            $table->mediumText('description');
-            $table->boolean('is_locked');
-            $table->boolean('is_adult');
-            $table->string('image_cover');
-            $table->integer('votes');
+            $table->bigInteger('volume_book_id')->unsigned()->nullable();
+            $table->mediumText('volume_description');
+            $table->boolean('volume_is_locked');
+            $table->boolean('volume_is_adult');
+            $table->string('volume_image_cover');
+            $table->integer('volume_votes');
 
 
             $table->timestamps();
 
-            $table->foreign('book_id')->references('id')->on('books');
+            $table->foreign('volume_book_id')->references('id')->on('books');
         });
     }
 

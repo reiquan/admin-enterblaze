@@ -25,4 +25,44 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    //Universe
+        Route::get('/universe', 'App\Http\Controllers\UniverseController@index')->name('universe.index');
+        Route::get('/universe/create', 'App\Http\Controllers\UniverseController@create')->name('universe.create');
+        Route::post('/universe/{universe_id}/update', 'App\Http\Controllers\UniverseController@update')->name('universe.update');
+        Route::get('/universe/{universe_id}/show', 'App\Http\Controllers\UniverseController@show')->name('universe.show');
+        Route::post('/universe/{universe_id}/publish', 'App\Http\Controllers\UniverseController@publish')->name('universe.publish');
+        Route::get('/universe/{universe_id}/edit', 'App\Http\Controllers\UniverseController@edit')->name('universe.edit');
+        Route::post('/universe/{universe_id}/delete', 'App\Http\Controllers\UniverseController@destroy')->name('universe.delete');
+        Route::post('/universe/store', 'App\Http\Controllers\UniverseController@store')->name('universe.store');
+   //Book
+        Route::get('/universe/{universe_id}/books', 'App\Http\Controllers\BookController@index')->name('books.index');
+        Route::get('/universe/{universe_id}/books/create', 'App\Http\Controllers\BookController@create')->name('books.create');
+        Route::get('/universe/{universe_id}/books/{book_id}/edit', 'App\Http\Controllers\BookController@edit')->name('books.edit');
+        Route::post('/universe/{universe_id}/books/{book_id}/update', 'App\Http\Controllers\BookController@update')->name('books.update');
+        Route::get('/universe/{universe_id}/books/{book_id}/show', 'App\Http\Controllers\BookController@show')->name('books.show');
+        Route::post('/universe/{universe_id}/books/{book_id}/publish', 'App\Http\Controllers\BookController@publish')->name('books.publish');
+        Route::post('/universe/{universe_id}/books/{book_id}/delete', 'App\Http\Controllers\BookController@destroy')->name('books.delete');
+        Route::post('/universe/{universe_id}/books/store', 'App\Http\Controllers\BookController@store')->name('books.store');
+    //Issues
+        Route::get('/universe/{universe_id}/books/{book_id}/issues', 'App\Http\Controllers\IssuesController@index')->name('issues.index');
+        Route::get('/universe/{universe_id}/books/{book_id}/issues/create', 'App\Http\Controllers\IssuesController@create')->name('issues.create');
+        Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/edit', 'App\Http\Controllers\IssuesController@edit')->name('issues.edit');
+        Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/update', 'App\Http\Controllers\IssuesController@update')->name('issues.update');
+        Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/show', 'App\Http\Controllers\IssuesController@show')->name('issues.show');
+        Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/publish', 'App\Http\Controllers\IssuesController@publish')->name('issues.publish');
+        Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/delete', 'App\Http\Controllers\IssuesController@destroy')->name('issues.delete');
+        Route::post('/universe/{universe_id}/books/{book_id}/issues/store', 'App\Http\Controllers\IssuesController@store')->name('issues.store');
+
+    //Issue Page
+    Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/pages/{page_id}/pageIsVisible', 'App\Http\Controllers\IssuePagesController@pageIsVisible')->name('issue_pages.pageIsVisible');
+    Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/pages/{page_id}/update', 'App\Http\Controllers\IssuePagesController@update')->name('issue_pages.update');
+    Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/pages/{page_id}/delete', 'App\Http\Controllers\IssuePagesController@destroy')->name('issue_pages.delete');
+    Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/pages/{page_id}/swapPageNumber', 'App\Http\Controllers\IssuePagesController@swapPageNumber')->name('issue_pages.swapPageNumber');
+    Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/pages/{page_id?}/editPage', 'App\Http\Controllers\IssuePagesController@editPage')->name('issue_pages.editPage');
+    Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/addPage', 'App\Http\Controllers\IssuePagesController@addPage')->name('issue_pages.addPage');
+
+        //Uploader
+            Route::get('/uploader', 'App\Http\Controllers\BookController@index')->name('admin.uploader');
+
 });
