@@ -23,10 +23,6 @@ return new class extends Migration
             $table->unsignedBigInteger('universe_id')->nullable();
             $table->timestamps();
             
-            $table->foreign('universe_id')->references('id')->on('universes');
-            $table->foreign('book_id')->references('id')->on('books');
-            $table->foreign('volume_id')->references('id')->on('volumes');
-            $table->foreign('issue_id')->references('id')->on('issues');
         });
     }
 

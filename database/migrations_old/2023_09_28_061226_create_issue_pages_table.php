@@ -19,7 +19,7 @@ return new class extends Migration
             $table->boolean('issue_page_is_locked')->nullable();
             $table->timestamps();
 
-            $table->foreign('issue_id')->references('id')->on('issues');
+
         });
     }
 
