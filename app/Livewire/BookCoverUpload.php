@@ -24,7 +24,7 @@ class BookCoverUpload extends Component
     public function saveBookCover()
     {
         $this->validate([
-            'photo' => 'image|max:1024', // 1MB Max
+            'photo' => 'image|max:10024', // 1MB Max
         ]);
  
         

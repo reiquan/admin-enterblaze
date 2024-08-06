@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('issue_id')->unsigned();
             $table->string('issue_page_url')->nullable();
-            $table->integer('issue_page_number');
+            $table->integer('issue_page_number')->nullable();
             $table->boolean('issue_page_is_adult')->nullable();
             $table->boolean('issue_page_is_locked')->nullable();
             $table->timestamps();

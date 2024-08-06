@@ -20,42 +20,25 @@
     
     <span class="mt-2 block text-sm font-semibold text-gray-900">Create a new Universe</span>
 </a>
-<div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
+
     
-    <!--
-    This example requires some changes to your config:
-    
-    ```
-    // tailwind.config.js
-    module.exports = {
-        // ...
-        plugins: [
-        // ...
-        require('@tailwindcss/aspect-ratio'),
-        ],
-    }
-    ```
-    -->
-    
-    @foreach($universes as $universe)
-        <!--
-        This example requires some changes to your config:
-        
-        ```
-        // tailwind.config.js
-        module.exports = {
-            // ...
-            plugins: [
-            // ...
-            require('@tailwindcss/aspect-ratio'),
-            ],
-        }
-        ```
-        -->
-        <div class="bg-white">
-        <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-            <h2 class="text-2xl font-bold tracking-tight text-gray-900">{{ $universe->universe_name }}</h2>
-           @if($universe->is_active)
+<ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+@foreach($universes as $universe)
+  <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
+    <div class="flex flex-1 flex-col p-8">
+        @if($universe->universe_logo)
+            <a href="{{ route('universe.show', $universe->id ) }}">
+                <img src="{{ Storage::disk('s3-public')->url($universe->universe_logo) }}" alt="Image" class="h-full w-full object-cover object-center lg:h-full lg:w-full">
+            </a>
+        @else
+        <img src="https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg" alt="Front of men&#039;s Basic Tee in black." class="h-full w-full object-cover object-center lg:h-full lg:w-full">
+        @endif
+      <!-- <img class="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60" alt=""> -->
+      <h2 class="text-2xl font-bold tracking-tight text-gray-900">{{ $universe->universe_name }}</h2>
+      <dl class="mt-1 flex flex-grow flex-col justify-between">
+        <dt class="sr-only">Role</dt>
+        <dd class="mt-3">
+            @if($universe->universe_is_active)
             <div class="mt-2 text-sm text-green-700">
                 <p>Active</p>
             </div>
@@ -64,78 +47,51 @@
                 <p>Inactive</p>
             </div>
            @endif
-            <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-            <div class="group relative">
-                <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                    @if($universe->universe_logo)
-                        <a href="{{ route('universe.show', $universe->id ) }}" target="_blank">
-                            <img src="{{ Storage::disk('s3-public')->url($universe->universe_logo) }}" alt="Image" class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                        </a>
-                    @else
-                    <img src="https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg" alt="Front of men&#039;s Basic Tee in black." class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                    @endif
-                </div>
-                <div class="mt-4 flex justify-between">
-                    <div>
-                        <h3 class="text-sm text-gray-700">
-                        <a href="{{ route('universe.show', $universe->id ) }}">
-                            <span aria-hidden="true" class="absolute inset-0"></span>
-                        </a>
-                        </h3>
-                        <div>
-                            <div class="sm:hidden">
-                                <label for="tabs" class="sr-only">Select a tab</label>
-                                <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
-                                <select id="tabs" name="tabs" class="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
-                                <option selected>My Account</option>
-                                <option>Company</option>
-                                <option>Team Members</option>
-                                <option>Billing</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="hidden sm:block">
-                <nav class="isolate flex divide-x divide-gray-200 rounded-lg shadow" aria-label="Tabs">
-                        <!-- Current: "text-gray-900", Default: "text-gray-500 hover:text-gray-700" -->
-                        <input type="hidden" id="{{ $universe->universe_slug_name }}" value="{{ $universe->id }}">
-                    @if($universe->is_active)
-                        <button id="unpublish" onclick="publishAction('unpublish', '{{ $universe->universe_slug_name }}')" class="text-gray-900 rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
+        </dd>
+      </dl>
+    </div>
+    <div>
+      <div class="-mt-px flex divide-x divide-gray-200">
+        <div class="flex w-0 flex-1">
+          <div class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+            @if($universe->universe_is_active)
+                <button id="unpublish" onclick="publishAction('unpublish', '{{ $universe->universe_slug_name }}')"  aria-current="page">
 
-                                <span>Un-publish</span>
-                                <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
-                        </button>
-                    @else
-                        <button id="publish" onclick="publishAction('publish', '{{ $universe->universe_slug_name }}')" class="text-white rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-gradient-to-r from-red-700 shadow py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
-                            <span>Publish</span>
-                            <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
-                        </button>
-                    @endif
-
-                </nav>
-                <nav class="isolate flex divide-x divide-gray-200 rounded-lg shadow" aria-label="Tabs">
-                    <button id="publish" onclick="editAction('{{ $universe->id }}')" class="text-gray-600 rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-gray-300 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
-                        <span>Edit</span>
+                        <span>Un-publish</span>
                         <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
-                    </button>
-                    <button id="publish" onclick="confirmDelete('{{ $universe->id }}')" class=" text-white bg-red-700 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
-                        <span>Delete</span>
-                        <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
-                    </button>
-                </nav>
-                
-            </div>
-
-            <!-- More products... -->
-            </div>
-        </div>
+                </button>
+            @else
+                <button id="publish" onclick="publishAction('publish', '{{ $universe->universe_slug_name }}')"  aria-current="page">
+                    <span>Publish</span>
+                    <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+                </button>
+            @endif
         </div>
 
-    @endforeach
+            <!-- Current: "text-gray-900", Default: "text-gray-500 hover:text-gray-700" -->
+            <input type="hidden" id="{{ $universe->universe_slug_name }}" value="{{ $universe->id }}">
 
-</div>
+        </div>
+        <div class="-ml-px flex w-0 flex-1">
+          <div href="tel:+1-202-555-0170" class="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+            <button id="publish" onclick="editAction('{{ $universe->id }}')"  aria-current="page">
+            <span>Edit</span>
+            <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+            </button>
+          </div>
+          <!-- <div href="tel:+1-202-555-0170" class="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+            <button id="publish" onclick="confirmDelete('{{ $universe->id }}')" aria-current="page">
+                <span>Delete</span>
+                <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+            </button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </li>
+  @endforeach
+  <!-- More people... -->
+</ul>
 
 
 

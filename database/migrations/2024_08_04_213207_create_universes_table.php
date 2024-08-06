@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('universes', function (Blueprint $table) {
             $table->id();
-            $table->string('universe_name');
-            $table->string('universe_description');
-            $table->string('universe_audience');
+            $table->string('universe_name')->nullable();
+            $table->string('universe_description')->nullable();
+            $table->string('universe_audience')->nullable();
             $table->string('universe_image_url')->nullable();
             $table->string('universe_logo')->nullable();
             $table->string('universe_slug_name')->nullable();

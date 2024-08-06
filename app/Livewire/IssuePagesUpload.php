@@ -30,7 +30,7 @@ class IssuePagesUpload extends Component
     {
       
         $this->validate([
-            'photos.*' => 'image|max:1024', // 1MB Max
+            'photos.*' => 'image|max:10024', // 1MB Max
         ]);
  
         foreach ($photos as $photo) {

@@ -27,7 +27,7 @@ class IssueCoversUpload extends Component
     public function saveIssueCover()
     {
         $this->validate([
-            'photo' => 'image|max:1024', // 1MB Max
+            'photo' => 'image|max:10024', // 1MB Max
         ]);
  
         

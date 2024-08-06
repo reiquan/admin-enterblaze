@@ -40,8 +40,9 @@ class IssuesController extends Controller
         $universe = Universe::find($request->universe_id);
         $universe_id = isset($request->universe_id) ? $request->universe_id : '';
         $book_id = isset($request->book_id) ? $request->book_id : '';
+        $issue = new Issue;
 
-        return view('universe/books/issues/create', compact('step', 'universe', 'universe_id', 'book_id'));
+        return view('universe/books/issues/create', compact('step', 'universe', 'universe_id', 'book_id', 'issue'));
  
     }
 
