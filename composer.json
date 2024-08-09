@@ -10,7 +10,7 @@
         "intervention/image": "^3.3",
         "laravel/fortify": "^1.21",
         "laravel/framework": "^10.10",
-        "laravel/jetstream": "^4.0",
+        "laravel/jetstream": "^4.3",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "^3.28",
