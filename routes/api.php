@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\AuthApiController;
+use App\Http\Controllers\API\ApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('user', function (Request $request) {
     return $request->user();
+});
+
+// Public routes
+Route::post('loginSubscriber', [AuthApiController::class, 'loginSubscriber']);
+Route::post('registerSubscriber', [AuthApiController::class, 'registerSubscriber']);
+Route::post('getUniverses', [ApiController::class, 'getUniverses']);
+Route::post('logoutSubscriber', [AuthApiController::class, 'logoutSubscriber']);
+
+// Protected routes
+Route::middleware(['auth:sanctum', 'checkTokenExpiration'])->group(function () {
+    // Route::get('/profile', 'UserProfileController@show');
+
 });
