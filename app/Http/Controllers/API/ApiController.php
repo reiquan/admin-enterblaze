@@ -16,7 +16,14 @@ class ApiController extends Controller
     
     public function getUniverses()
     {
-        return response()->json(Universe::all(), 200);
+        return response()->json(Universe::all()->makeHidden(
+[
+                'deleted_at',
+                'created_at',
+                'universe_is_active',
+                'universe_user_id']
+           
+        ), 200);
     }
 
 }

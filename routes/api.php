@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('user', function (Request $request) {
 // Public routes
 Route::post('loginSubscriber', [AuthApiController::class, 'loginSubscriber']);
 Route::post('registerSubscriber', [AuthApiController::class, 'registerSubscriber']);
-Route::post('getUniverses', [ApiController::class, 'getUniverses']);
+Route::get('getUniverses', [ApiController::class, 'getUniverses']);
 Route::post('logoutSubscriber', [AuthApiController::class, 'logoutSubscriber']);
 
 // Protected routes
