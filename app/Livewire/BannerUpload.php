@@ -23,7 +23,7 @@ class BannerUpload extends Component
     public function save()
     {
         $this->validate([
-            'photo' => 'image|max:10024', // 1MB Max
+            'photo' => 'image|max:10000000', // 1MB Max
         ]);
  
         $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/images/banner', 's3-public');

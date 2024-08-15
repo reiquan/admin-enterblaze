@@ -26,7 +26,18 @@ class ApiController extends Controller
                         'universe_is_active',
                         'universe_user_id'
                     ]
-                ), 200);
+                )->toArray(), 200);
+    }
+
+    public function getBooks()
+    {
+        return response()
+                ->json(Book::all()
+                ->makeHidden(
+                    [
+                        'created_at',
+                    ]
+                )->toArray(), 200);
     }
 
 }

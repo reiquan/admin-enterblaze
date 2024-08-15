@@ -179,9 +179,9 @@ function addFile(target, file) {
   objectURL = URL.createObjectURL(file);
 
     //make surre the size isnt too big
-  if(file.size > 856589){
+  if(file.size > 15000000){
     
-    uploadError.innerHTML = "Make sure size is less than 200 GB";
+    uploadError.innerHTML = "Make sure size is less than 15 GB";
 
     console.log(file.size);
     return;

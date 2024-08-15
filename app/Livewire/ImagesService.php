@@ -16,7 +16,7 @@ class ImagesService extends Component
     public function saveMultiple()
     {
         $this->validate([
-            'photos.*' => 'image|max:10024', // 1MB Max
+            'photos.*' => 'image|max:10000000', // 1MB Max
         ]);
  
         foreach ($this->photos as $photo) {
@@ -26,9 +26,9 @@ class ImagesService extends Component
 
     public function uploadMultiple()
     {
-        dd('hi');
+       
         $this->validate([
-            'photos.*' => 'image|max:10024', // 1MB Max
+            'photos.*' => 'image|max:10000000', // 1MB Max
         ]);
  
         foreach ($this->photos as $photo) {
