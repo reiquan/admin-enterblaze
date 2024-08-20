@@ -72,8 +72,9 @@ class IssuesController extends Controller
                         $issue->issue_is_adult = $request->issue_is_adult ? 1 : 0;
                         $issue->issue_is_locked = 1;
                         $issue->issue_book_id = $request->book_id;
-                        $issue->issue_slug_name = strtolower(str_replace(" ","_", $request->issue_title));
-          
+                        $new_slug_name = preg_replace('/[^a-zA-Z0-9\s]/', '', $request->issue_title);
+                        $issue->issue_slug_name = strtolower(str_replace(" ","_",  $new_slug_name));
+
                         // $issue->issue_genres = $request->issue_genres;
                         // if(isset($request->issue_number)){
                         //     $issue
