@@ -7,6 +7,7 @@ use App\Models\Universe;
 use App\Models\Book;
 use App\Http\Controllers\UploadController;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class IssuePagesUpload extends Component
 {
@@ -35,8 +36,21 @@ class IssuePagesUpload extends Component
  
         foreach ($photos as $photo) {
             $issue =Issue::find($this->issue_id);
+
+            $duplicate_file = 'universe/'. $this->universe_id .'/'.'books/'.$this->book_id.'issues/'.$this->issue_id.'/pages';
+            
+            $s3 = Storage::disk('s3-public');
+             //check if filename like that already exists
+             if (Storage::disk('s3-public')->exists($duplicate_file)) {
+                 Storage::disk('s3-public')->delete($duplicate_file);
+                 //Delete file in DB
+                 
+             }
+
+
              $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/'.'books/'.$this->book_id.'issues/'.$this->issue_id.'/pages', 's3-public');
-          
+            
+             
              //save in DB
             $issue_page = new IssuePage;
                 if($issue) {

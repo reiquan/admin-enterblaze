@@ -15,7 +15,7 @@ class UploadController extends Controller
     public function save()
     {
         $this->validate([
-            'photo' => 'image|max:1024', // 1MB Max
+            'photo' => 'image|max:1000000', // 1MB Max
         ]);
  
         $this->photo->store('photos');
@@ -24,7 +24,7 @@ class UploadController extends Controller
     public function saveMultiple()
     {
         $this->validate([
-            'photos.*' => 'image|max:1024', // 1MB Max
+            'photos.*' => 'image|max:1000000', // 1MB Max
         ]);
  
         foreach ($this->photos as $photo) {

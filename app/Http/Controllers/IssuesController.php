@@ -176,15 +176,20 @@ class IssuesController extends Controller
             $issue = Issue::find($request->issue_id);
 
             if($issue){
-                $issue_page->issue_id = $request->issue_id;
-                $issue_page->issue_page_url = $path.$fileName;
-                $issue_page->save();
-                $count = 0;
-                foreach($issue->pages as $page){
-                    $p = IssuePage::find($page->id);
-                
-                    $p->issue_page_number = $count += 1;
-                    $p->save();
+                if (IssuePage::where('issue_page_url', $path.$fileName)->get()->toArray()) {
+                    //do nothing
+                } else {
+                    $issue_page->issue_id = $request->issue_id;
+                    $issue_page->issue_page_url = $path.$fileName;
+                    $issue_page->save();
+                    $count = 0;
+                    foreach($issue->pages as $page){
+                        $p = IssuePage::find($page->id);
+                    
+                        $p->issue_page_number = $count += 1;
+                        $p->save();
+
+                    }
 
                 }
             }
