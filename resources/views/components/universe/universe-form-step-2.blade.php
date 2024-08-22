@@ -43,9 +43,9 @@
         <div class="sm:col-span-3">
           <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Profile Picture</label>
           <div class="mt-2">
-            <p>{{ $_REQUEST['universe_id'] }}</p>
+        
 
-            @livewire('profile-upload', ['universe_id' => $_REQUEST['universe_id']])
+            @livewire('profile-upload', ['universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id])
           </div>
         </div>
       </div>
