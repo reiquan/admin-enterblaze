@@ -33,7 +33,7 @@ class UniverseController extends Controller
     
         $universe = Universe::create();
         $universe_id = isset($request->universe_id) ? $request->universe_id : $universe->id;
-        $step = 1;
+        $step=isset($request->step) ? $request->step : 1;
        
         
         return view('universe/create', compact('step', 'universe', 'universe_id'));

@@ -13,10 +13,14 @@ class BannerUpload extends Component
  
     public $photo;
     public $universe_id;
+    public $logo;
+    public $type;
 
-    public function mount($universe_id)
+    public function mount($universe_id, $logo, $type)
     {
         $this->universe_id = $universe_id;
+        $this->logo = $logo;
+        $this->type = $type;
     }
   
 

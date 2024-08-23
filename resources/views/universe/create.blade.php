@@ -11,7 +11,7 @@
 
             @if(isset($_REQUEST['step']))
           
-                <x-universe.universe-form :step="$_REQUEST['step']"/>
+            <x-universe.universe-form :step="$step" :universe="$universe"/>
             @else
         
                 <x-universe.universe-form :step="$step" :universe="$universe"/>

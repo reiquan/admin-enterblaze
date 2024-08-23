@@ -31,15 +31,38 @@
       <br>
       <div class="border-b border-gray-900/10 pb-12">
 
-        <h2 class="text-base font-semibold leading-7 text-gray-900">Profile 3</h2>
-        <p class="mt-1 text-sm leading-6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
-
         <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"></div>
-        <div class="col-span-full"></div>
-        <div class="sm:col-span-3">
-          <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Banner Upload</label>
-          <div class="mt-2">
-          @livewire('banner-upload', ['universe_id' => $_REQUEST['universe_id']])
+          <div class="sm:col-span-3">
+            <div class="overflow-hidden bg-white py-24 sm:py-32">
+              <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+                  <div class="lg:pr-8 lg:pt-4">
+                    <div class="lg:max-w-lg">
+                      <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Upload Your Banner Picture</p>
+                      <p class="mt-6 my-16 text-lg leading-8 text-gray-600">TASK : Update Dimensions here</p>
+                      @if( Route::is('universe.edit') )
+                            @livewire('banner-upload', ['universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id, 'logo' => $universe->universe_image_url ?? '', 'type' => 'edit'])
+                      @else
+                        @livewire('banner-upload', ['universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id, 'logo' => $universe->universe_image_url ?? '', 'type' => ''])
+                      @endif
+                    </div>
+                  </div>
+                  <div>
+                    @if(isset($universe->universe_logo))
+                        <h2 class="text-base my-6 font-semibold leading-7 text-indigo-600">Current Photo</h2>
+                        <img src="{{ Storage::disk('s3-public')->url($universe->universe_image_url) }}" alt="Image" class="h-full w-full object-cover object-center lg:h-full lg:w-full"></div>
+                    @else
+                      <img src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png" alt="Product screenshot" class="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442">
+                    @endif
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-2">
+
+
+            
+            </div>
           </div>
         </div>
       </div>

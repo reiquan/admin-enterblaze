@@ -6,21 +6,27 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Universe;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class ProfileUpload extends Component
 {
     use WithFileUploads;
     public $photo;
     public $universe_id;
+    public $logo;
+    public $type;
 
 
-    public function mount($universe_id)
+    public function mount($universe_id, $logo, $type)
     {
         $this->universe_id = $universe_id;
+        $this->logo = $logo;
+        $this->type = $type;
     }
 
-    public function saveProfile()
+    public function saveProfile(Request $request)
     {
+
         if($this->photo){
             $this->validate([
                 'photo' => 'image|max:1024', // 1MB Max
@@ -39,8 +45,17 @@ class ProfileUpload extends Component
                 } else {
                     abort(500, 'Something went wrong. Our developers are on it!');
                 }
-                return redirect()->route('universe.create', ['step' => 3, 'universe_id' => $this->universe_id]);
+                if(isset($this->type) && $this->type == 'edit'){
+                    return redirect()->route('universe.edit', ['step' => 3, 'universe_id' => $this->universe_id]);
+                } else {
+                    return redirect()->route('universe.create', ['step' => 3, 'universe_id' => $this->universe_id]);
+                }
+               
         }
-        return redirect()->route('universe.create', ['step' => 3, 'universe_id' => $this->universe_id]);
+        if(isset($this->type) && $this->type == 'edit'){
+            return redirect()->route('universe.edit', ['step' => 3, 'universe_id' => $this->universe_id]);
+        } else {
+            return redirect()->route('universe.create', ['step' => 3, 'universe_id' => $this->universe_id]);
+        }
     }
 }
