@@ -35,13 +35,18 @@ class IssuesController extends Controller
     public function create(REQUEST $request)
     {
         //
-      
+    
         $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
         $universe = Universe::find($request->universe_id);
         $universe_id = isset($request->universe_id) ? $request->universe_id : '';
         $book_id = isset($request->book_id) ? $request->book_id : '';
-        $issue = new Issue;
+        $issue = isset($_REQUEST['issue']) ? $_REQUEST['issue'] : new Issue;
 
+        if(intval($step) > 1){
+           
+            $issue = Issue::find($request->issue_id);
+        }
+        // dd($step, $universe->toArray(), $universe_id, $book_id, $issue->toArray());
         return view('universe/books/issues/create', compact('step', 'universe', 'universe_id', 'book_id', 'issue'));
  
     }
@@ -102,7 +107,7 @@ class IssuesController extends Controller
                 $book_id = $request->book_id;
                 $issue_id = $issue->id ?? '';
               
-                return view('universe.books.issues.create', compact('step', 'universe_id', 'book_id', 'issue_id'));
+                return view('universe.books.issues.create', compact('step', 'universe_id', 'book_id', 'issue_id', 'issue'));
 
             }
           ;
@@ -132,10 +137,10 @@ class IssuesController extends Controller
     {
         //
 
-        $step = 1;
-        $issue = Issue::find($request->i_id);
-        $book_id = $request->b_id;
-        $universe_id = $request->u_id;
+        $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
+        $issue = Issue::find($request->i_id ?? $request->issue_id);
+        $book_id = $request->b_id ?? $request->book_id;
+        $universe_id = $request->u_id ?? $request->universe_id;
 
         return view('universe/books/issues/create', compact('issue', 'step', 'book_id', 'universe_id'));
     }

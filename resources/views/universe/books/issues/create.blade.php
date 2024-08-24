@@ -17,50 +17,100 @@
 <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
 
 <nav class="flex" aria-label="Breadcrumb">
-  <ol role="list" class="flex space-x-4 rounded-md bg-white px-6 shadow">
+<ol role="list" class="flex space-x-4 rounded-md bg-white px-6 shadow">
 
-    <li class="flex">
-      <div class="flex items-center">
-        <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-          <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-        </svg>
-        <a href="#" class="ml-4 text-lg font-medium text-gray-500 hover:text-gray-700">Create a Chapter</a>
-      </div>
-    </li>
-    <li class="flex">
-      <div class="flex items-center">
-        <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-          <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-        </svg>
-        <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 1 - Chapter Info</a>
-      </div>
-    </li>
+<li class="flex">
+  <div class="flex items-center">
+    <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+      <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+    </svg>
+    <a class="ml-4 text-lg font-medium text-gray-500 hover:text-gray-700">Create a Chapter</a>
+  </div>
+</li>
+<li class="flex">
+  <div class="flex items-center">
+    <svg class="{{ $step == 1 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+      <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+    </svg>
+   @if($issue->id)
+      <form method="GET" action="{{ route('issues.edit',  [$issue->book->universe->id ?? $universe->id, $issue->book->id, $issue->id] ) }}" >
+      <input type="hidden" name="universe_id" value="{{ $issue->book->universe->id }}" >
+      <input type="hidden" name="step" value="1" >
+    @else
+    <form method="GET" action="" >
+    <input type="hidden" name="step" value="1" >
+    @endif
+      @csrf
     
-    <li class="flex">
-      <div class="flex items-center">
-        <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-          <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-        </svg>
-        <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 2 - Chapter Cover</a>
-      </div>
-    </li>
-    <li class="flex">
-      <div class="flex items-center">
-        <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-          <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-        </svg>
-        <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 3 - Upload Story</a>
-      </div>
-    </li>
-    <li class="flex">
-      <div class="flex items-center">
-        <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-          <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-        </svg>
-        <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 4 - Submit</a>
-      </div>
-    </li>
-  </ol>
+
+      <button class="{{ $step == 1 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 1 - Chapter Info</button>
+    </form>
+
+  </div>
+</li>
+
+<li class="flex">
+  <div class="flex items-center">
+    <svg class="{{ $step == 2 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+      <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+    </svg>
+    @if($issue->id)
+    <form method="GET"action="{{ route('issues.edit',  [$issue->book->universe->id, $issue->book->id, $issue->id] ) }}" >
+      <input type="hidden" name="universe_id" value="{{ $issue->book->universe->id }}" >
+      <input type="hidden" name="issue_id" value="{{ $issue->id }}" >
+      <input type="hidden" name="step" value="2" >
+    @else
+    <form method="GET" action="" >
+    <input type="hidden" name="step" value="1" >
+    @endif
+      @csrf
+      
+
+      <button class="{{ $step == 2 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 2 - Chapter Cover</button>
+    </form>
+  </div>
+</li>
+<li class="flex">
+  <div class="flex items-center">
+    <svg class="{{ $step == 4 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+      <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+    </svg>
+    @if($issue->id)
+    <form method="GET" action="{{ route('issues.edit', ['universe_id' => $issue->book->universe->id, 'book_id' => $issue->book->id, 'issue_id' => $issue->id]) }}" >
+      <input type="hidden" name="universe_id" value="{{ $issue->book->universe->id }}" >
+      <input type="hidden" name="step" value="3" >
+    @else
+    <form method="GET" action="" >
+    <input type="hidden" name="step" value="1" >
+    @endif
+      @csrf
+     
+      <button class="{{ $step == 3 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 3 - Upload Your Story</button>
+    </form>
+  </div>
+</li>
+<li class="flex">
+  <div class="flex items-center">
+    <svg class="{{ $step == 4 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+      <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+    </svg>
+
+    @if($issue->id)
+    <form method="GET" action="{{ route('issues.index', ['universe_id' => $issue->book->universe->id, 'book_id' => $issue->book->id]) }}" >
+      <input type="hidden" name="universe_id" value="{{ $issue->book->universe->id }}" >
+      <input type="hidden" name="step" value="4" >
+    @else
+      <form method="GET" action="" >
+      <input type="hidden" name="step" value="1" >
+    @endif
+      @csrf
+     
+   
+      <button class="{{ $step == 4 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 4 - Submit</button>
+    </form>
+  </div>
+</li>
+</ol>
 </nav>
 
 </div>
@@ -80,7 +130,7 @@ plugins: [
 }
 ```
 -->
-@if($step !== 1)
+@if($step > 1)
 
 @include('components.universe.books.issues.issue-uploader.issue-form-step-'.$step)
 
