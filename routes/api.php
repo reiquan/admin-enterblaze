@@ -26,6 +26,7 @@ Route::post('registerSubscriber', [AuthApiController::class, 'registerSubscriber
 Route::get('getUniverses', [ApiController::class, 'getUniverses']);
 Route::get('getBooks', [ApiController::class, 'getBooks']);
 Route::post('logoutSubscriber', [AuthApiController::class, 'logoutSubscriber']);
+Route::post('getChapters', [ApiController::class, 'getChapters']);
 
 // Protected routes
 Route::middleware(['auth:sanctum', 'checkTokenExpiration'])->group(function () {
