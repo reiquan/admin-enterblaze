@@ -14,8 +14,23 @@ class ApiController extends Controller
 {
  
     
-    public function getUniverses()
+    public function getUniverses(Request $request)
     {
+        if(isset($request->universe_id)) {
+            return response()
+                ->json(Universe::where('universe_is_active', 1)
+                ->where('id', $request->universe_id)
+                ->with('books.issues')
+                ->get()
+                ->makeHidden(
+                    [
+                        'deleted_at',
+                        'created_at',
+                        'universe_is_active',
+                        'universe_user_id'
+                    ]
+                )->toArray(), 200);
+        }
         return response()
                 ->json(Universe::where('universe_is_active', 1)
                 ->get()
@@ -29,8 +44,24 @@ class ApiController extends Controller
                 )->toArray(), 200);
     }
 
-    public function getBooks()
+    public function getBooks(Request $request)
     {
+       
+        if(isset($request->universe_id)) {
+            return response()
+                ->json(Book::where('is_active', 1)
+                ->where('book_universe_id', $request->universe_id)
+                ->with('issues')
+                ->get()
+                ->makeHidden(
+                    [
+                        'deleted_at',
+                        'created_at',
+                        'is_active',
+                      
+                    ]
+                )->toArray(), 200);
+        }
         return response()
                 ->json(Book::all()
                 ->load('issues')
