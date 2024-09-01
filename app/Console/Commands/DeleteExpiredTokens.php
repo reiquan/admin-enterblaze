@@ -32,7 +32,11 @@ class DeleteExpiredTokens extends Command
     {
         //
         DB::table('personal_access_tokens')->where('expires_at', '<', now())->delete();
-
+        $subs = DB::table('subscribers')->whereNotNull('remember_token')->get();
+        foreach($subs as $sub) {
+            $sub->remember_token = '';
+            $sub->save();
+        }
         $this->info('Expired tokens have been deleted.');
     }
 }
