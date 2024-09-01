@@ -16,6 +16,7 @@ class ApiController extends Controller
     
     public function getUniverses(Request $request)
     {
+       
         if(isset($request->universe_id)) {
             return response()
                 ->json(Universe::where('universe_is_active', 1)
