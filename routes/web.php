@@ -65,4 +65,12 @@ Route::middleware([
         //Uploader
             Route::get('/uploader', 'App\Http\Controllers\BookController@index')->name('admin.uploader');
 
+    //Events
+    Route::get('/events', 'App\Http\Controllers\EventsController@index')->name('events.index');
+    Route::get('/events/create', 'App\Http\Controllers\EventsController@create')->name('events.create');
+    Route::get('/events/edit', 'App\Http\Controllers\EventsController@edit')->name('events.edit');
+    Route::get('/events/store', 'App\Http\Controllers\EventsController@store')->name('events.store');
+    Route::post('/events/update', 'App\Http\Controllers\EventsController@update')->name('events.update');
+    Route::get('/events/show', 'App\Http\Controllers\EventsController@show')->name('events.show');
+
 });
