@@ -26,6 +26,7 @@ class EventsController extends Controller
     
         //     return view('events/index', compact('events', 'candidates'));
         // }
+        
         $events = Event::all();
 
 
@@ -43,29 +44,46 @@ class EventsController extends Controller
         return view('events/show', compact('event', 'is_host'));
     }
     public function create(Request $request){
+        // dd($request->all());
         $event = null;
-        
-      if($request->step){
-        $event= Event::find($request->event);
-      }
 
         $attendees = null;
         $step=isset($request->step) ? $request->step : 1;
         $event_id = null;
+
+  
+
+
         // $candidates = Candidate::all();
 
         if($request->event_id){
             $event = Event::find($request->event_id);
             // $attendees = $this->getCandidates($event, 'single');
             // return view('events/create', compact('candidates', 'event', 'attendees'));
-            return view('events/create', compact( 'event'));
+            return view('events/create', compact( 'event', 'step'));
         }
 
         return view('events/create', compact('step','event', 'attendees', 'event_id'));
     }
+
+       /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Request $request, string $id)
+    {
+        //
+        $step=isset($request->step) ? $request->step : 1;
+        $event = Event::find($id);
+        $event_id = $event->id;
+    //    if(!empty($request->all())){
+    //     dd($request->all());
+    //    }
+        return view('events/edit', compact('event', 'step','event_id'));
+    } 
+
     public function update(Request $request){
         
-      
+    //   dd($request->all());
        if($request->event_id){
             $event = Event::find($request->event_id);
                 $event->event_name = $request->event_name;
@@ -78,13 +96,10 @@ class EventsController extends Controller
                 $event->event_zip = $request->event_zip;
                 $event->event_start_date = $request->event_start_date;
                 $event->event_end_date = $request->event_end_date;
-                $event->attendees = json_encode($request->attendees);
                 $event->is_active = 1;
                 // $event->tags = json_encode($request->tags);
             $event->save();
-            foreach($request->attendees as $attendee){
-                $this->candidateSubmit($attendee, $event->id);
-            }
+        
        } else {
             $event = new Event;
                 $event->event_name = $request->event_name;
@@ -125,7 +140,7 @@ class EventsController extends Controller
             $step = $request->step += 1;
 
             if(isset($request->type) && $request->type == 'edit'){
-                return redirect()->route('events.edit', ['event' => $event, 'step' => $step]);
+                return redirect()->route('events.edit', ['event_id' => $event->id, 'step' => $step]);
             } else {
                 return redirect()->route('events.create', ['event' => $event, 'step' => $step]);
             }
@@ -134,6 +149,24 @@ class EventsController extends Controller
            
 
         }
+    }
+
+         /**
+     * Show the form for publishing the specified resource.
+     */
+    public function publish(Request $request, string $id)
+    {
+        //
+        $event = Event::find($id);
+        if($request->action == 'publish'){
+            $event->is_active = 1;
+            $event->save();
+        } else {
+            $event->is_active = 0;
+            $event->save();
+        }
+       
+        return redirect()->route('universe.index');
     }
     // public function attendeeSubmit(Request $request, $event_id){
     
@@ -194,12 +227,12 @@ class EventsController extends Controller
     //     return redirect()->route('home');
     // }
     
-    // public function destroy(Request $request, $event_id){
-    //     $event = Event::find($event_id);
-    //     $event->deleted_at = now();
-    //     $event->save();
-    //     return redirect()->route('home');
-    // }
+    public function destroy(Request $request){
+        $event = Event::find($request->event_id);
+        $event->deleted_at = now();
+        $event->save();
+        return redirect()->route('events.index');
+    }
     // public function getCandidates($events, $single = null){
     //     $attendees = collect();
     //     if($single){

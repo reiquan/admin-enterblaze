@@ -12,87 +12,96 @@
         ecosystem to be a breath of fresh air. We hope you love it.
     </p> -->
 </div>
-<a type="button" href="{{ route('events.create') }}" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6" />
-    </svg>
-    
-    
-    <span class="mt-2 block text-sm font-semibold text-gray-900">Create a new Event</span>
-</a>
+  <a type="button" href="{{ route('events.create') }}" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+      <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6" />
+      </svg>
+      
+      
+      <span class="mt-2 block text-sm font-semibold text-gray-900">Create a new Event</span>
+  </a>
+  <div class="px-4 sm:px-6 lg:px-8">
+    <!-- <div class="sm:flex sm:items-center">
+      <div class="sm:flex-auto">
+        <h1 class="text-base font-semibold leading-6 text-gray-900">Users</h1>
+        <p class="mt-2 text-sm text-gray-700">A list of all the users in your account including their name, title, email and role.</p>
+      </div>
+      <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        <button type="button" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add user</button>
+      </div>
+    </div> -->
+    <div class="mt-8 flow-root w-full overflow-x-auto">
+      <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        @if(!empty($events->toArray()))
+        <table class="min-w-full divide-y divide-gray-300">
+            <thead>
+              <tr>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Event Name</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Date</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Location</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                  <span class="sr-only">Edit</span>
+                </th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                  <span class="sr-only">Delete</span>
+                </th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                  <span class="sr-only">View</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              @foreach($events as $event)
+                <tr>
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{{ $event->event_name }}</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $event->event_start_date }} - {{ $event->event_end_date }}</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $event->event_city }}, {{ $event->event_zip }}</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  <input type="hidden" id="{{ $event->id }}" value="{{ $event->id }}">
+                      @if($event->is_active)
+                          <button id="unpublish{{ $event->id }}" onclick="publishAction('unpublish', '{{ $event->id }}')" class="text-gray-900 rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-yellow-600 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
 
-    
-<ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-@foreach($events as $event)
-  <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
-    <div class="flex flex-1 flex-col p-8">
-        @if($event->event_promo_image)
-            <a href="{{ route('events.show', $event->id ) }}">
-                <img src="{{ Storage::disk('s3-public')->url($event->event_promo_image) }}" alt="Image" class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-            </a>
+                                  <span>Unpublish</span>
+                                  <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+                          </button>
+                      @else
+                          <button id="publish{{ $event->id }}" onclick="publishAction('publish', '{{ $event->id }}')" class="text-white rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-green-700 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
+                              <span>Publish</span>
+                              <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+                          </button>
+                      @endif
+                  </td>
+                  <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    <form action="{{ route('events.edit', ['event_id' => $event->id]) }}" method="GET">
+                        <input type="hidden" id ="event_id{{ $event->id }}" name="event_id" value="{{ $event->id }}">
+                        <button class="text-green-600 hover:text-green-900">Edit<span class="sr-only">, Lindsay Walton</span></button>
+                    </form>
+                  </td>
+                  <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    <button onclick="confirmDelete('{{ $event->id }}')" class="text-red-600 hover:text-red-900">Delete<span class="sr-only">, Lindsay Walton</span></button>
+                  </td>
+                  <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    <a href="#" class="text-indigo-600 hover:text-indigo-900">View<span class="sr-only">, Lindsay Walton</span></a>
+                  </td>
+                </tr>
+              @endforeach
+
+              <!-- More people... -->
+            </tbody>
+          </table>
         @else
-        <img src="https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg" alt="Front of men&#039;s Basic Tee in black." class="h-full w-full object-cover object-center lg:h-full lg:w-full">
+          <h1> No events scheduled</h1>
         @endif
-      <!-- <img class="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60" alt=""> -->
-      <h2 class="text-2xl font-bold tracking-tight text-gray-900">{{ $event->event_title }}</h2>
-      <dl class="mt-1 flex flex-grow flex-col justify-between">
-        <dt class="sr-only">Role</dt>
-        <dd class="mt-3">
-            @if($event->event_is_active)
-            <div class="mt-2 text-sm text-green-700">
-                <p>Active</p>
-            </div>
-            @else
-            <div class="mt-2 text-sm text-red-700">
-                <p>Inactive</p>
-            </div>
-           @endif
-        </dd>
-      </dl>
-    </div>
-    <div>
-      <div class="-mt-px flex divide-x divide-gray-200">
-        <div class="flex w-0 flex-1">
-          <div class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-            @if($event->event_is_active)
-                <button id="unpublish" onclick="publishAction('unpublish', '{{ $event->event_slug_name }}')"  aria-current="page">
-
-                        <span>Un-publish</span>
-                        <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
-                </button>
-            @else
-                <button id="publish" onclick="publishAction('publish', '{{ $event->event_slug_name }}')"  aria-current="page">
-                    <span>Publish</span>
-                    <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
-                </button>
-            @endif
-        </div>
-
-            <!-- Current: "text-gray-900", Default: "text-gray-500 hover:text-gray-700" -->
-            <input type="hidden" id="{{ $event->event_slug_name }}" value="{{ $event->id }}">
-
-        </div>
-        <div class="-ml-px flex w-0 flex-1">
-          <div href="tel:+1-202-555-0170" class="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-            <button id="publish" onclick="editAction('{{ $event->id }}')"  aria-current="page">
-            <span>Edit</span>
-            <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
-            </button>
-          </div>
-          <!-- <div href="tel:+1-202-555-0170" class="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-            <button id="publish" onclick="confirmDelete('{{ $event->id }}')" aria-current="page">
-                <span>Delete</span>
-                <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
-            </button>
-          </div> -->
         </div>
       </div>
     </div>
-  </li>
-  @endforeach
-  <!-- More people... -->
-</ul>
-
-
-
 </div>
+
+
+    
+
+
+
+

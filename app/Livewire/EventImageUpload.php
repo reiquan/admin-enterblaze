@@ -46,16 +46,16 @@ class EventImageUpload extends Component
                     abort(500, 'Something went wrong. Our developers are on it!');
                 }
                 if(isset($this->type) && $this->type == 'edit'){
-                    return redirect()->route('events.show', ['event' => $this->event_id]);
+                    return redirect()->route('events.index', ['event' => $this->event_id]);
                 } else {
-                    return redirect()->route('events.show', ['event' => $this->event_id]);
+                    return redirect()->route('events.index', ['event' => $this->event_id]);
                 }
                
         }
         if(isset($this->type) && $this->type == 'edit'){
-            return redirect()->route('events.show', ['event' => $this->event_id]);
+            return redirect()->route('events.index', ['event' => $this->event_id]);
         } else {
-            return redirect()->route('events.show', ['event' => $this->event_id]);
+            return redirect()->route('events.index', ['event' => $this->event_id]);
         }
     }
 }
