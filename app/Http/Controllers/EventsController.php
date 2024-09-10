@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\EventAttendance;
 use App\Models\User;
+use Carbon\Carbon;
 
 class EventsController extends Controller
 {
@@ -36,9 +37,9 @@ class EventsController extends Controller
     public function show(Request $request){
         // dd($event_id);
    
-        $events = Event::where('host_user_id', auth()->user()->id)->get();
+        $event = Event::find($request->event_id);
       
-        $is_host = auth()->user()->id == $event[0]['host_user_id'];
+        $is_host = auth()->user()->id == $event['host_user_id'];
         
         // dd($old_candidates->toArray(), $candidates->toArray());
         return view('events/show', compact('event', 'is_host'));
@@ -58,6 +59,10 @@ class EventsController extends Controller
 
         if($request->event_id){
             $event = Event::find($request->event_id);
+            $format_start_date = Carbon::parse($event->event_start_date);
+            $event->event_start_date = $format_start_date->format('Y-m-d\TH:i');
+            $format_end_date = Carbon::parse($event->event_end_date);
+            $event->event_end_date = $format_end_date->format('Y-m-d\TH:i');
             // $attendees = $this->getCandidates($event, 'single');
             // return view('events/create', compact('candidates', 'event', 'attendees'));
             return view('events/create', compact( 'event', 'step'));
@@ -75,6 +80,10 @@ class EventsController extends Controller
         $step=isset($request->step) ? $request->step : 1;
         $event = Event::find($id);
         $event_id = $event->id;
+    
+            $event->event_start_date = Carbon::parse($event->event_start_date)->toDateTime();
+           
+            $event->event_end_date = Carbon::parse($event->event_end_date)->toDateTime();
     //    if(!empty($request->all())){
     //     dd($request->all());
     //    }

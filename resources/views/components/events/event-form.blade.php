@@ -139,13 +139,13 @@
 
       <div date-rangepicker class="block text-sm font-medium text-gray-700">
         <div class="relative">
-         <label for="event_start_date" class="block text-sm font-medium text-gray-700"> Start Date </label>
+         <label for="event_start_date" class="block text-sm font-medium text-gray-700"> Start Date: <span class="text-xs text-green-700">{{ $event->event_start_date ?? '' }}</span></label>
 
             <input name="event_start_date" type="datetime-local" value="{{ $event->event_start_date ?? '' }}" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start" required>
         </div>
         <span class="mx-4 text-gray-500">to</span>
         <div class="relative">
-        <label for="event_end_date" class="block text-sm font-medium text-gray-700"> End Date </label>
+        <label for="event_end_date" class="block text-sm font-medium text-gray-700"> End Date: <span class="text-xs text-green-700">{{ $event->event_end_date ?? '' }}</span> </label>
 
           <input name="event_end_date" type="datetime-local" value="{{ $event->event_end_date ?? '' }}" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end" required>
       </div>
@@ -185,8 +185,8 @@
       </div> -->
 
       <div class="flex justify-end">
-        <!-- <button type="button" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">Cancel</button> -->
-        <button type="submit" name="type" value ="{{ Route::is('events.edit') ? 'edit' : '' }}" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+        <a href="{{ route('events.index') }}" type="button" class="bg-white m-2 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">Cancel</a>
+        <button type="submit" name="type" value ="{{ Route::is('events.edit') ? 'edit' : '' }}" class="bg-green-500 m-2 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">{{ !empty($event->toArray()) ? 'Update Event' : 'Save Event'}} </button>
       </div>
     </div>
 

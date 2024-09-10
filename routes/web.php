@@ -75,4 +75,7 @@ Route::middleware([
     Route::post('/events/{event_id}/publish', 'App\Http\Controllers\EventsController@publish')->name('events.publish');
     Route::post('/events/{event_id}/delete', 'App\Http\Controllers\EventsController@destroy')->name('events.delete');
 
+        // Event Registrations
+        Route::get('/events/{event_id}/registrations/create', 'App\Http\Controllers\EventRegistrationsController@create')->name('events.registrations.create');
+
 });

@@ -61,14 +61,16 @@
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                   <input type="hidden" id="{{ $event->id }}" value="{{ $event->id }}">
                       @if($event->is_active)
-                          <button id="unpublish{{ $event->id }}" onclick="publishAction('unpublish', '{{ $event->id }}')" class="text-gray-900 rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-yellow-600 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
+                          <button id="unpublish{{ $event->id }}" onclick="publishAction('unpublish', '{{ $event->id }}')" class="block w-full rounded-md bg-green-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" aria-current="page">
 
-                                  <span>Unpublish</span>
+                                  <span>Published</span>
+                                  <p class="text-xs">Click to unpublish</p>
                                   <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
                           </button>
                       @else
-                          <button id="publish{{ $event->id }}" onclick="publishAction('publish', '{{ $event->id }}')" class="text-white rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-green-700 py-4 px-4 text-center text-sm font-medium hover:bg-gray-50 focus:z-10" aria-current="page">
-                              <span>Publish</span>
+                          <button id="publish{{ $event->id }}" onclick="publishAction('publish', '{{ $event->id }}')"class="block w-full rounded-md bg-orange-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" aria-current="page">
+                              <span>Un-published</span>
+                              <p class="text-xs">Click to publish</p>
                               <span aria-hidden="true" class="bg-indigo-500 absolute inset-x-0 bottom-0 h-0.5"></span>
                           </button>
                       @endif
@@ -83,7 +85,7 @@
                     <button onclick="confirmDelete('{{ $event->id }}')" class="text-red-600 hover:text-red-900">Delete<span class="sr-only">, Lindsay Walton</span></button>
                   </td>
                   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                    <a href="#" class="text-indigo-600 hover:text-indigo-900">View<span class="sr-only">, Lindsay Walton</span></a>
+                    <a href="{{ route('events.show', ['event_id' => $event->id]) }}" class="text-indigo-600 hover:text-indigo-900">View<span class="sr-only">, Lindsay Walton</span></a>
                   </td>
                 </tr>
               @endforeach

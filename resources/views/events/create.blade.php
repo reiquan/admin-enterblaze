@@ -11,7 +11,7 @@
 
             @if(isset($_REQUEST['step']))
           
-                <x-events.event-form :step="$step" :event="$event"/>
+                <x-events.event-form :step="$step" :event="$event" />
             @else
         
                 <x-events.event-form :step="$step" :event="$event"/>
