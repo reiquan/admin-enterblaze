@@ -40,7 +40,7 @@ return new class extends Migration
 
             $table->timestamps();
             //deleted_at
-            $table->date('deleted_at');
+            $table->date('deleted_at')->nullable();
             $table->foreign('event_registration_id')->references('id')->on('event_registrations');
         });
     }

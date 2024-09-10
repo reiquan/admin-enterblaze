@@ -35,14 +35,14 @@ class EventsController extends Controller
         return view('events/index', compact('events'));
     }
     public function show(Request $request){
-        // dd($event_id);
+    
    
         $event = Event::find($request->event_id);
       
-        $is_host = auth()->user()->id == $event['host_user_id'];
+        // $is_host = auth()->user()->id == $event['host_user_id'];
         
         // dd($old_candidates->toArray(), $candidates->toArray());
-        return view('events/show', compact('event', 'is_host'));
+        return view('events/show', compact('event'));
     }
     public function create(Request $request){
         // dd($request->all());
@@ -177,64 +177,6 @@ class EventsController extends Controller
        
         return redirect()->route('universe.index');
     }
-    // public function attendeeSubmit(Request $request, $event_id){
-    
-    //    if($request->is_not_attending){
-    //         $user = User::find($request->user_id);
-    //         $event = Event::find($event_id);
-    //         $attendee =EventAttendance::where('user_id', $request->user_id)
-    //                                     ->where('event_id', $event->id)
-    //                                     ->first();
-    //         if(!$attendee){
-    //             $attendee =EventAttendance::where('candidate_id', $request->user_id)
-    //                                         ->where('event_id', $event->id)
-    //                                         ->first();
-    //         }
-    //         if($attendee){
-    //             $new = [];
-    //             $old = json_decode($event->attendees);
-              
-    //             foreach($old as $o){
-    //                 if($o == $request->user_id){
-    //                     continue;
-    //                 } else {
-    //                     array_push($new, $o);
-    //                 }
-    //             }
-    //             $event->attendees = json_encode($new);
-    //             $event->save();
-    //             $attendee->deleted_at = now();
-    //             $attendee->save();
-    //         }
-    //                     // dd( $attendee->toArray(), $event_id);
-    //    } else {
-    //         $user = User::find($request->user_id);
-    //         $event = Event::find($event_id);
-    //         $attendee = new EventAttendance;
-    //             $attendee->event_id = $request->event_id;
-    //             $attendee->user_id = $request->user_id;
-    //         $attendee->save();
-    //    }
-        
-            
-    //     // send to users dashboard where they can then email the governor as a way to filter the BS
-    //     return redirect()->route('home');
-    // }
-
-    // public function candidateSubmit($att, $event_id){
-    //     // dd($att, $event_id);
-    //         //Automatically add host candidate
-    //         $candidate = Candidate::find($att);
-    //         $event = Event::find($event_id);
-    //         $attendee = new EventAttendance;
-    //             $attendee->event_id = $event_id;
-    //             $attendee->candidate_id = $att;
-    //         $attendee->save();
-        
-            
-    //     // send to users dashboard where they can then email the governor as a way to filter the BS
-    //     return redirect()->route('home');
-    // }
     
     public function destroy(Request $request){
         $event = Event::find($request->event_id);
@@ -242,37 +184,4 @@ class EventsController extends Controller
         $event->save();
         return redirect()->route('events.index');
     }
-    // public function getCandidates($events, $single = null){
-    //     $attendees = collect();
-    //     if($single){
-           
-    //         $candidates = json_decode($events->attendees);
-            
-    //         if($candidates){
-    //             foreach($candidates as $candidate){
-    //                 $c = Candidate::find(intval($candidate));
-    //                 if(isset($c)) {
-                    
-    //                     $attendees->push($c);
-    //                 }
-    //             }
-    //         }
-    //         return $attendees;
-    //     }
-    //     foreach($events as $event){
-    //         $candidates = json_decode($event->attendees);
-            
-    //         if($candidates){
-    //             foreach($candidates as $candidate){
-    //                 $c = Candidate::find(intval($candidate));
-    //                 if(isset($c) and $c){
-    //                     $c->event_id = $event->id;
-    //                     $attendees->push($c);
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     return $attendees;
-    // }
 }

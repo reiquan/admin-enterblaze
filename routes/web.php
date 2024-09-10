@@ -76,6 +76,13 @@ Route::middleware([
     Route::post('/events/{event_id}/delete', 'App\Http\Controllers\EventsController@destroy')->name('events.delete');
 
         // Event Registrations
+        Route::get('/events/{event_id}/registrations/index', 'App\Http\Controllers\EventRegistrationsController@index')->name('events.registrations.index');
+        Route::get('/events/{event_id}/registrations/{registration_id}/show', 'App\Http\Controllers\EventRegistrationsController@show')->name('events.registrations.show');
         Route::get('/events/{event_id}/registrations/create', 'App\Http\Controllers\EventRegistrationsController@create')->name('events.registrations.create');
+        Route::get('/events/{event_id}/registrations/{registration_id}/edit', 'App\Http\Controllers\EventRegistrationsController@edit')->name('events.registrations.edit');
+        Route::post('/events/{event_id}/registrations/{registration_id}/update', 'App\Http\Controllers\EventRegistrationsController@update')->name('events.registrations.update');
+        Route::post('/events/{event_id}/registrations/store', 'App\Http\Controllers\EventRegistrationsController@store')->name('events.registrations.store');
+        Route::post('/events/{event_id}/registrations/{registration_id}/delete', 'App\Http\Controllers\EventRegistrationsController@destroy')->name('events.registrations.delete');
+        Route::post('/events/{event_id}/registrations/{registration_id}/publish', 'App\Http\Controllers\EventRegistrationsController@publish')->name('events.registrations.publish');
 
 });

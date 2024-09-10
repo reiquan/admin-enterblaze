@@ -53,24 +53,9 @@ class Event extends Model
      * @param  string  $value
      * @return string
      */
-    public function hostUser()
+    public function registrations()
     {
-        return $this->belongsTo(User::Class, 'host_user_id');
-    }
-
-       /**
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getEventEndDateAttribute($value)
-    {
-        return Carbon::parse($value)->isoFormat('lll');
-    }
-    
-
-    public function volunteers(){
-        return $this->hasMany(EventVolunteer::class);
+        return $this->hasMany(EventRegistration::Class, 'registration_event_id');
     }
     
 }

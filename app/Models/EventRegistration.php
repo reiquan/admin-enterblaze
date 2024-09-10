@@ -11,7 +11,7 @@ class EventRegistration extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'events';
+    protected $table = 'event_registrations';
 
     protected $fillable = [
         'registration_name',
@@ -22,6 +22,7 @@ class EventRegistration extends Model
         'registration_end_date',
         'registration_fee',
         'registration_event_id',
+        'registration_is_active'
 
     ];
     protected $dates = [
