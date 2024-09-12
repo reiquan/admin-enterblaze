@@ -9,11 +9,17 @@ use App\Models\Issue;
 use App\Services\BookService;
 use App\Models\IssuePage;
 use App\Models\Book;
+use App\Models\EventRegistration;
+use App\Models\EventRegistrationAttendance;
 
 class ApiController extends Controller
 {
  
     
+    public function __construct(ValidationService $validationService){
+        $this->validationService = $validationService;
+        $this->stripeService = $stripeService;
+    }
     public function getUniverses(Request $request)
     {
        
@@ -85,6 +91,67 @@ class ApiController extends Controller
                 ->json($pages, 
                 200
                );
+    }
+
+    public function getOpenRegistrations(Request $request){
+        
+       $registrations = EventRegistration::where('registration_is_active', 1)
+       ->where('registration_event_id', $request->registration_event_id)
+       ->get();
+       $data = $request->all();
+
+        if(isset($request->registration_event_id) && !empty($registrations->toArray())) {
+            return response()
+                ->json([
+                    'status' => 'success',
+                    'data' => $registrations,
+                ], 
+                200
+            );
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'message' => 'Could Not Find Any Events',
+                    'data' => $data,
+                ], 
+                400
+            );
+        }
+
+    }
+
+    public function submitOpenRegistrationAttendance(Request $request){
+
+        $validation = $this->validationService()->validateInput($request);
+
+        if(!$validation){
+            $payment_verified = $this->stripeService->verifyPayment($request->attendee_receipt_number);
+            if($payment_verified['status'] == 'success'){
+                $attendance = EventRegistrationAttendance::create[
+                    $request->all()
+                ];
+            }
+            return response()
+                ->json([
+                    'status' => 'success',
+                    'message' => 'Guest is Added!',
+                ], 
+                200
+            );
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'message' => 'Invalid Data',
+                ], 
+                400
+            );
+        }
+       
+            //once validated 
+            //if receipt number is verified 
+            //add them as an attendee to given event
     }
 
 }

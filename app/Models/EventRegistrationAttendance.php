@@ -24,6 +24,7 @@ class EventRegistrationAttendance extends Model
         'attendee_company_url',
         'attendee_number_of_employees_attending',
         'acknowledgement_of_no_refunds',
+        'attendee_receipt_number',
         'attendees',
         'is_active',
 
