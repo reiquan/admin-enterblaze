@@ -1,12 +1,27 @@
 <?php
-namespace App\Http\Controllers;
+namespace App\Services;
 
 use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
+use Stripe\Exception\CardException;
+use Stripe\Exception\RateLimitException;
+use Stripe\Exception\InvalidRequestException;
+use Stripe\Exception\AuthenticationException;
+use Stripe\Exception\ApiConnectionException;
+use Stripe\Exception\ApiErrorException;
 
-class StripeController extends Controller
+class StripeService
 {
+
+    // need to hide this in include creds;
+
+    public function __construct() { 
+    
+        $this->secret_key = env('TEST_STRIPE_SECRET');
+
+    }
+
     public function createPaymentIntent(Request $request)
     {
         Stripe::setApiKey(env('TEST_STRIPE_SECRET'));
@@ -123,7 +138,7 @@ class StripeController extends Controller
     {
         try {
             // Set the Stripe API key
-            Stripe::setApiKey(env('STRIPE_SECRET'));
+            Stripe::setApiKey($this->secret_key);
 
             // Retrieve the PaymentIntent by ID
             $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
@@ -144,12 +159,9 @@ class StripeController extends Controller
                     'payment_intent' => $paymentIntent,
                 ]);
             }
-        } catch (Exception $e) {
-            // Handle error
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+        } catch (ApiErrorException $e) {
+            // Handle generic API errors
+            return ['error' => $e->getMessage()];
         }
     }
 }

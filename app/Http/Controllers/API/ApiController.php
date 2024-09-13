@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Universe;
 use App\Models\Issue;
 use App\Services\BookService;
+use App\Services\StripeService;
+use App\Services\ValidationService;
 use App\Models\IssuePage;
 use App\Models\Book;
 use App\Models\EventRegistration;
@@ -16,7 +18,7 @@ class ApiController extends Controller
 {
  
     
-    public function __construct(ValidationService $validationService){
+    public function __construct(ValidationService $validationService, StripeService $stripeService){
         $this->validationService = $validationService;
         $this->stripeService = $stripeService;
     }
@@ -123,35 +125,48 @@ class ApiController extends Controller
 
     public function submitOpenRegistrationAttendance(Request $request){
 
-        $validation = $this->validationService()->validateInput($request);
+    //     return response()
+    //     ->json([
+    //         'status' => 'test',
+    //         'message' => $request->all(),
+    //     ], 
+    //     200
+    // );
+        $validation = $this->validationService->validateInput($request->toArray());
 
         if(!$validation){
             $payment_verified = $this->stripeService->verifyPayment($request->attendee_receipt_number);
-            if($payment_verified['status'] == 'success'){
-                $attendance = EventRegistrationAttendance::create[
+
+            if(!$payment_verified['error']){
+                $attendance = EventRegistrationAttendance::create([
                     $request->all()
-                ];
+                ]);
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'message' => 'Guest is Added!',
+                    ], 
+                    200
+                );
+            } else {
+                return response()
+                    ->json([
+                        'status' => 'failure',
+                        'message' => $payment_verified['error'],
+                    ], 
+                    400
+                );
             }
-            return response()
-                ->json([
-                    'status' => 'success',
-                    'message' => 'Guest is Added!',
-                ], 
-                200
-            );
         } else {
             return response()
                 ->json([
                     'status' => 'error',
-                    'message' => 'Invalid Data',
+                    'message' => $validation,
                 ], 
                 400
             );
         }
        
-            //once validated 
-            //if receipt number is verified 
-            //add them as an attendee to given event
     }
 
 }

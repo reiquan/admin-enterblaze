@@ -32,7 +32,8 @@ class ValidationService
 
     public function getRequiredRegistrationFields($array)
     {
-      if($registration_id == '1' || $registration_id == '2' || $registration_id == '3') {
+
+      if($array['event_registration_id'] == '1' || $array['event_registration_id'] == '2' || $array['event_registration_id'] == '3') {
         $required = [
         'attendee_first_name',
         'attendee_last_name',
@@ -44,6 +45,7 @@ class ValidationService
         'attendee_company_url',
         'attendee_number_of_employees_attending',
         'attendee_receipt_number',
+        'attendee_charge',
         'acknowledgement_of_no_refunds'
         ];
         foreach($array as $key => $value){
@@ -55,7 +57,7 @@ class ValidationService
         }
         return $required;
 
-      } else if($registration_id == '4') {
+      } else if($array['event_registration_id'] == '4') {
         $required = [
             'attendee_first_name',
             'attendee_last_name',
@@ -63,6 +65,7 @@ class ValidationService
             'attendee_phone_number',
             'attendee_receipt_number',
             'event_registration_id',
+            'attendee_charge',
             'acknowledgement_of_no_refunds'
         ];
         foreach($array as $key => $value){
@@ -73,6 +76,8 @@ class ValidationService
             }
          }
          return $required;
+      } else {
+        return 'No details found for this event';
       }
     }
 
