@@ -11,6 +11,7 @@ use App\Services\StripeService;
 use App\Services\ValidationService;
 use App\Models\IssuePage;
 use App\Models\Book;
+use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\EventRegistrationAttendance;
 
@@ -95,11 +96,29 @@ class ApiController extends Controller
                );
     }
 
+    public function getEvents(Request $request){
+        
+        $events = Event::where('is_active', 1)
+        ->first();
+        $data = $request->all();
+ 
+        return response()
+            ->json([
+                'status' => 'success',
+                'data' => $events,
+            ], 
+            200
+        );
+ 
+     }
+
     public function getOpenRegistrations(Request $request){
         
        $registrations = EventRegistration::where('registration_is_active', 1)
+       ->where('id', $request->registration_id)
        ->where('registration_event_id', $request->registration_event_id)
-       ->get();
+       ->with('event')
+       ->first();
        $data = $request->all();
 
         if(isset($request->registration_event_id) && !empty($registrations->toArray())) {
@@ -134,12 +153,24 @@ class ApiController extends Controller
     // );
         $validation = $this->validationService->validateInput($request->toArray());
 
-        if(!$validation){
+        // if(!$validation){
             $payment_verified = $this->stripeService->verifyPayment($request->attendee_receipt_number);
-
-            if(!$payment_verified['error']){
+            // dd($payment_verified);
+            if($payment_verified->original['status'] == 'success'){
+                // dd($request->all());
                 $attendance = EventRegistrationAttendance::create([
-                    $request->all()
+                    'attendee_first_name' => $request->attendee_first_name,
+                    'attendee_last_name' => $request->attendee_last_name,
+                    'attendee_email' => $request->attendee_email,
+                    'attendee_phone_number' => $request->attendee_phone_number,
+                    'event_registration_id' => $request->event_registration_id,
+                    'attendee_company_name' => $request->attendee_company_name ?? null,
+                    'attendee_company_description' => $request->attendee_company_description ?? null,
+                    'attendee_company_url' => $request->attendee_company_url ?? null,
+                    'attendee_number_of_employees_attending' => $request->attendee_number_of_employees_attending ?? null,
+                    'acknowledgement_of_no_refunds' => $request->acknowledgement_of_no_refunds,
+                    'attendee_receipt_number' => $request->attendee_receipt_number,
+                    'attendee_charge' => $request->attendee_charge,        
                 ]);
                 return response()
                     ->json([
@@ -152,20 +183,20 @@ class ApiController extends Controller
                 return response()
                     ->json([
                         'status' => 'failure',
-                        'message' => $payment_verified['error'],
+                        'message' => $payment_verified->original['message'],
                     ], 
                     400
                 );
             }
-        } else {
-            return response()
-                ->json([
-                    'status' => 'error',
-                    'message' => $validation,
-                ], 
-                400
-            );
-        }
+        // } else {
+        //     return response()
+        //         ->json([
+        //             'status' => 'error',
+        //             'message' => $validation,
+        //         ], 
+        //         400
+        //     );
+        // }
        
     }
 

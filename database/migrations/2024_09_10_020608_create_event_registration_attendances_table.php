@@ -20,7 +20,7 @@ return new class extends Migration
             //attendee_email
             $table->string('attendee_email');
             //attendee_phone_number
-            $table->integer('attendee_phone_number');
+            $table->string('attendee_phone_number');
             //attendee_event_registration_id
             $table->unsignedBigInteger('event_registration_id');
 

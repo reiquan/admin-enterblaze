@@ -28,6 +28,7 @@ Route::get('getBooks', [ApiController::class, 'getBooks']);
 Route::post('logoutSubscriber', [AuthApiController::class, 'logoutSubscriber']);
 Route::post('getChapters', [ApiController::class, 'getChapters']);
 Route::get('getOpenRegistrations', [ApiController::class, 'getOpenRegistrations']);
+Route::get('getEvents', [ApiController::class, 'getEvents']);
 Route::post('submitOpenRegistrationAttendance', [ApiController::class, 'submitOpenRegistrationAttendance']);
 // Protected routes
 Route::middleware(['auth:sanctum', 'checkTokenExpiration'])->group(function () {

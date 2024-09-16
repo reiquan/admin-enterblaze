@@ -136,6 +136,7 @@ class StripeService
     }
     public function verifyPayment($paymentIntentId)
     {
+        
         try {
             // Set the Stripe API key
             Stripe::setApiKey($this->secret_key);
@@ -146,6 +147,7 @@ class StripeService
             // Check the payment status
             if ($paymentIntent->status == 'succeeded') {
                 // Payment succeeded, handle your logic here
+               
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Payment was successful.',
@@ -161,7 +163,32 @@ class StripeService
             }
         } catch (ApiErrorException $e) {
             // Handle generic API errors
+            
             return ['error' => $e->getMessage()];
+        }
+    }
+    public function confirmPaymentIntent($intent_id, $method_id)
+    {
+        // Set your Stripe API key
+        Stripe::setApiKey($this->secret_key);
+
+        // Confirm the PaymentIntent with payment method
+        try {
+            $paymentIntent = PaymentIntent::retrieve($intent_id);
+
+            $paymentIntent->confirm([
+                'payment_method' => $method_id,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'paymentIntent' => $paymentIntent,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
 }

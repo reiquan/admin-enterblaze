@@ -32,8 +32,9 @@ class ValidationService
 
     public function getRequiredRegistrationFields($array)
     {
-
+      $required;
       if($array['event_registration_id'] == '1' || $array['event_registration_id'] == '2' || $array['event_registration_id'] == '3') {
+        return $array['event_registration_id'];
         $required = [
         'attendee_first_name',
         'attendee_last_name',
@@ -49,7 +50,7 @@ class ValidationService
         'acknowledgement_of_no_refunds'
         ];
         foreach($array as $key => $value){
-           if(in_array($key, $required)){
+           if(!in_array($key, $required)){
             continue;
            } else {
             return 'missing '. $key . ' field';
@@ -69,7 +70,7 @@ class ValidationService
             'acknowledgement_of_no_refunds'
         ];
         foreach($array as $key => $value){
-            if(in_array($key, $required)){
+            if(!in_array($key, $required)){
              continue;
             } else {
              return 'missing '. $key . ' field';
