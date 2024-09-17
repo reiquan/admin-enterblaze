@@ -35,6 +35,7 @@ return new class extends Migration
             $table->string('attendee_number_of_employees_attending')->nulable();
             //acknowledgement_of_no_refunds
             $table->string('acknowledgement_of_no_refunds')->nulable();
+            $table->string('attendee_charge')->nulable();
              //attendee_receipt_number
              $table->string('attendee_receipt_number');
 

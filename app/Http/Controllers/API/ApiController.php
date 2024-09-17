@@ -9,6 +9,7 @@ use App\Models\Issue;
 use App\Services\BookService;
 use App\Services\StripeService;
 use App\Services\ValidationService;
+use App\Services\SubscriptionService;
 use App\Models\IssuePage;
 use App\Models\Book;
 use App\Models\Event;
@@ -19,9 +20,10 @@ class ApiController extends Controller
 {
  
     
-    public function __construct(ValidationService $validationService, StripeService $stripeService){
+    public function __construct(ValidationService $validationService, StripeService $stripeService, SubscriptionService $alertService){
         $this->validationService = $validationService;
         $this->stripeService = $stripeService;
+        $this->alertService = $alertService;
     }
     public function getUniverses(Request $request)
     {
@@ -172,6 +174,25 @@ class ApiController extends Controller
                     'attendee_receipt_number' => $request->attendee_receipt_number,
                     'attendee_charge' => $request->attendee_charge,        
                 ]);
+
+                $userNumber = $this->alertService->formatPhoneNumber($request['attendee_phone_number']);
+                $userName = $request->attendee_first_name. ' '.$request->attendee_last_name;
+           
+                //add number to user 
+                $attendance->attendee_phone_number = $userNumber;
+                //save 
+                $attendance->save();
+    
+                //send alert
+                // $this->alertService->sendAdminAlert($userName, $userNumber, 'Thank You For Your Purchase');
+
+                //send email
+                $alertInfo =[ 
+                    'alert_title' => 'testing',
+                    'alert_body' => 'testing',
+                    'alert_type' => 'testing',
+                ];
+                $this->alertService->processAlert($alertInfo);
                 return response()
                     ->json([
                         'status' => 'success',
