@@ -27,11 +27,11 @@ class SubscriptionService
 
     }
 
-    public function processAlert($request){
-        // dd($request->toArray());
+    public function processAlert($request, $email){
+        // dd($request);
         //get Candidate Subsribers
             // $candidate_subscribers = $this->getCandidateSubscribers(auth()->user()->candidate->id);
-            $this->scheduleEmail($request, 'reiquang@yahoo.com');
+            $this->scheduleEmail($request, $email);
             // dd($candidate_subscribers->toArray());
         //if $alert_type is email
             // if($request->alert_type == 'email'){                                //if $alert_type is email
@@ -43,23 +43,6 @@ class SubscriptionService
             //     $this->scheduleTextMessage($request, $candidate_subscribers); 
             //     $this->scheduleEmail($request, $candidate_subscribers);   //Send both email and text
             // }
-    }
-
-    public function test($request){
-        // dd(now()->toIso8601ZuluString(), Carbon::create($request['post_date'])->toIso8601ZuluString());
-        // $message = $this->twilioClient->messages
-        // ->create(
-        //        '+16023868778', // to
-        //         [
-        //             "messagingServiceSid" => 'MG2d83fa6b983c40b07ae915db947035d7',
-        //             'from' => $this->phone_number,
-        //             "body" => $request->alert_title . ': '. $request->alert_body,
-        //             "sendAt" => Carbon::create($request['post_date'])->toIso8601ZuluString(),
-        //             "scheduleType" => "fixed",
-        //             // "statusCallback" => "https://webhook.site/xxxxx"
-        //         ]
-        // );
-        dd('done');
     }
 
     public function saveAlert($request, $candidate_id){
@@ -180,8 +163,19 @@ class SubscriptionService
            
     }
 
-    public function scheduleEmail($alertInfo, $candidate_subscribers){
-        Mail::to('enterblazecomics@gmail.com')->send(new SendAlert($alertInfo));
+    public function createBody($body, $type){
+        if($type == 'event_receipt'){
+           $alert_body =  [ 
+                'alert_title' => 'Badge Purchased! ',
+                'alert_body' => 'Confirmation #:'. $body['attendee_receipt_number'],
+            ];
+
+            return $alert_body;
+        }
+    }
+
+    public function scheduleEmail($alertInfo, $email){
+        Mail::to($email)->send(new SendAlert($alertInfo));
         // foreach($candidate_subscribers as $subscriber){
         //     if($alertInfo->send_now){
         //          //OR

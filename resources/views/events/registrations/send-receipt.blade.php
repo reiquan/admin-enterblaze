@@ -1,10 +1,10 @@
 @component('mail::message')
-See You There!!
+
+Thank You for Your Purchase. We will see you there!!
+
+{{ $alertInfo['alert_body'] }}
 
 
- Testing
-
-Confirmation number: Test
 
 
 <!-- @component('mail::button', ['url' => ''])

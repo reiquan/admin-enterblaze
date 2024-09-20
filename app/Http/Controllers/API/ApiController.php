@@ -156,68 +156,68 @@ class ApiController extends Controller
         $validation = $this->validationService->validateInput($request->toArray());
 
         // if(!$validation){
-            $payment_verified = $this->stripeService->verifyPayment($request->attendee_receipt_number);
-            // dd($payment_verified);
-            if($payment_verified->original['status'] == 'success'){
-                // dd($request->all());
-                $attendance = EventRegistrationAttendance::create([
-                    'attendee_first_name' => $request->attendee_first_name,
-                    'attendee_last_name' => $request->attendee_last_name,
-                    'attendee_email' => $request->attendee_email,
-                    'attendee_phone_number' => $request->attendee_phone_number,
-                    'event_registration_id' => $request->event_registration_id,
-                    'attendee_company_name' => $request->attendee_company_name ?? null,
-                    'attendee_company_description' => $request->attendee_company_description ?? null,
-                    'attendee_company_url' => $request->attendee_company_url ?? null,
-                    'attendee_number_of_employees_attending' => $request->attendee_number_of_employees_attending ?? null,
-                    'acknowledgement_of_no_refunds' => $request->acknowledgement_of_no_refunds,
-                    'attendee_receipt_number' => $request->attendee_receipt_number,
-                    'attendee_charge' => $request->attendee_charge,        
-                ]);
-
-                $userNumber = $this->alertService->formatPhoneNumber($request['attendee_phone_number']);
-                $userName = $request->attendee_first_name. ' '.$request->attendee_last_name;
-           
-                //add number to user 
-                $attendance->attendee_phone_number = $userNumber;
-                //save 
-                $attendance->save();
+            $receipt_already_verified = EventRegistrationAttendance::where('attendee_receipt_number', $request->attendee_receipt_number)->first();
+            if(empty($receipt_already_verified->toArray())){
+                $payment_verified = $this->stripeService->verifyPayment($request->attendee_receipt_number);
+                // dd($payment_verified);
     
-                //send alert
-                // $this->alertService->sendAdminAlert($userName, $userNumber, 'Thank You For Your Purchase');
+                if($payment_verified->original['status'] == 'success'){
+                    // dd($request->all());
+                    $attendance = EventRegistrationAttendance::create([
+                        'attendee_first_name' => $request->attendee_first_name,
+                        'attendee_last_name' => $request->attendee_last_name,
+                        'attendee_email' => $request->attendee_email,
+                        'attendee_phone_number' => $request->attendee_phone_number,
+                        'event_registration_id' => $request->event_registration_id,
+                        'attendee_company_name' => $request->attendee_company_name ?? null,
+                        'attendee_company_description' => $request->attendee_company_description ?? null,
+                        'attendee_company_url' => $request->attendee_company_url ?? null,
+                        'attendee_number_of_employees_attending' => $request->attendee_number_of_employees_attending ?? null,
+                        'acknowledgement_of_no_refunds' => $request->acknowledgement_of_no_refunds,
+                        'attendee_receipt_number' => $request->attendee_receipt_number,
+                        'attendee_charge' => $request->attendee_charge,        
+                    ]);
+    
+                    $userNumber = $this->alertService->formatPhoneNumber($request['attendee_phone_number']);
+                    $userName = $request->attendee_first_name. ' '.$request->attendee_last_name;
+               
+                    //add number to user 
+                    $attendance->attendee_phone_number = $userNumber;
+                    //save 
+                    $attendance->save();
+        
+                    //send alert
+                    // $this->alertService->sendAdminAlert($userName, $userNumber, 'Thank You For Your Purchase');
+    
+                    //send email
+                    $alertInfo = $this->alertService->createBody($request, 'event_receipt');
+                    $this->alertService->processAlert($alertInfo, $request['attendee_email']);
+                    return response()
+                        ->json([
+                            'status' => 'success',
+                            'message' => 'Guest is Added!',
+                        ], 
+                        200
+                    );
+                } else {
+                    return response()
+                        ->json([
+                            'status' => 'failure',
+                            'message' => $payment_verified->original['message'],
+                        ], 
+                        400
+                    );
+                }
 
-                //send email
-                $alertInfo =[ 
-                    'alert_title' => 'testing',
-                    'alert_body' => 'testing',
-                    'alert_type' => 'testing',
-                ];
-                $this->alertService->processAlert($alertInfo);
-                return response()
-                    ->json([
-                        'status' => 'success',
-                        'message' => 'Guest is Added!',
-                    ], 
-                    200
-                );
             } else {
                 return response()
                     ->json([
-                        'status' => 'failure',
-                        'message' => $payment_verified->original['message'],
+                        'status' => 'error',
+                        'message' => 'This receipt number has already been verified',
                     ], 
                     400
                 );
             }
-        // } else {
-        //     return response()
-        //         ->json([
-        //             'status' => 'error',
-        //             'message' => $validation,
-        //         ], 
-        //         400
-        //     );
-        // }
        
     }
 
