@@ -26,7 +26,7 @@
           <dl class="mt-16 grid max-w-xl grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 xl:mt-16">
             <div class="flex flex-col gap-y-3 border-l border-gray-900/10 pl-6">
               <dt class="text-sm leading-6 text-gray-600">Registered Guests</dt>
-              <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900">8,000+</dd>
+              <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900">{{ $event->registered }}</dd>
             </div>
 
             <div class="flex flex-col gap-y-3 border-l border-gray-900/10 pl-6">
@@ -35,7 +35,7 @@
             </div>
             <div class="flex flex-col gap-y-3 border-l border-gray-900/10 pl-6">
               <dt class="text-sm leading-6 text-gray-600">Total Revenue</dt>
-              <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900">$70M</dd>
+              <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900">${{ $event->revenue }}</dd>
             </div>
           </dl>
         </div>

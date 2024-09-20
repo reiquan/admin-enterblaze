@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
-use App\Models\EventAttendance;
+use App\Models\EventRegistrationAttendance;
+use App\Models\EventRegistration;
+
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -14,7 +16,7 @@ class EventsController extends Controller
     public function index(Request $request){
    
         // if(isset($request['candidate']) and $request['candidate']) {
-        //     $events = EventAttendance::leftJoin('events', 'events.id', 'event_attendances.event_id')
+        //     $events = RegistrationEventAttendance::leftJoin('events', 'events.id', 'event_attendances.event_id')
         //     ->where('event_attendances.candidate_id', $request['candidate'])
         //     ->where('events.deleted_at', NULL)
         //     ->get()
@@ -36,9 +38,19 @@ class EventsController extends Controller
     }
     public function show(Request $request){
     
-   
+       
         $event = Event::find($request->event_id);
-      
+        $registration = EventRegistration::where('registration_event_id', $event->id)->get();
+        // dd($registration[0]['registration_event_id']);
+        $attendances = EventRegistrationAttendance::
+                                leftJoin('event_registrations', 'event_registration_attendances.event_registration_id','event_registrations.id' )
+                                 ->where('event_registrations.registration_event_id', $event->id)->get();
+        // dd($attendances->toArray());
+        $event->revenue = 0;
+        foreach($attendances as $attendance){
+            $event->revenue += intval($attendance->attendee_charge);
+        }
+        $event->registered = count($attendances->toArray());
         // $is_host = auth()->user()->id == $event['host_user_id'];
         
         // dd($old_candidates->toArray(), $candidates->toArray());
