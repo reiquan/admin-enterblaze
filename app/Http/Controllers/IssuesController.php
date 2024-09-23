@@ -79,7 +79,7 @@ class IssuesController extends Controller
                         $issue->issue_book_id = $request->book_id;
                         $new_slug_name = preg_replace('/[^a-zA-Z0-9\s]/', '', $request->issue_title);
                         $issue->issue_slug_name = strtolower(str_replace(" ","_",  $new_slug_name));
-
+                        $issue->issue_price = $request->issue_price;
                         // $issue->issue_genres = $request->issue_genres;
                         // if(isset($request->issue_number)){
                         //     $issue

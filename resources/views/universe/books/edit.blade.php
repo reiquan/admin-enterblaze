@@ -135,6 +135,15 @@ plugins: [
       </div>
 
       <div class="sm:col-span-4">
+        <label for="book_price" class="block text-sm font-medium leading-6 text-gray-900">Book Reservation Price  <p class="mt-1 text-sm leading-6 text-gray-400">Set future Price for your book once it drops.</p></label>
+        <div class="mt-2">
+          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+            <input type="number" name="book_price" id="book_price" autocomplete="book_price" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" min="5.00" placeholder="25.00">
+          </div>
+        </div>
+      </div>
+
+      <div class="sm:col-span-4">
         <label for="book_creator" class="block text-sm font-medium leading-6 text-gray-900">Creator</label>
         <div class="mt-2">
           <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">

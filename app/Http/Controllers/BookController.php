@@ -73,6 +73,7 @@ class BookController extends Controller
                         $book->book_published_at = $request->book_published_at;
                         $book->book_universe_id = $request->universe_id;
                         $book->book_type = $request->book_type;
+                        $book->book_price = $request->book_price;
                         if(isset($request->book_subtitle)){
                             $book->book_subtitle = $request->book_subtitle;
                         }

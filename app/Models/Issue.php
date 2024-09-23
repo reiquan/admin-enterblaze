@@ -31,7 +31,8 @@ class Issue extends Model
       'issue_description',
       'issue_is_adult',
       'issue_is_locked',
-      'issue_number'
+      'issue_number',
+      'issue_price'
     ];
 
     public function pages(){

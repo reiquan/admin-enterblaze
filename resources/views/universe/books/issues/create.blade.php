@@ -157,7 +157,7 @@ plugins: [
   <div class="border-b border-gray-900/10 pb-12">
 
     <h2 class="text-base font-semibold leading-7 text-gray-900">Publish Your Chapter</h2>
-    <p class="mt-1 text-sm leading-6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
+    <p class="mt-1 text-sm leading-6 text-gray-600"></p>
 
     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
       <div class="sm:col-span-4">
@@ -178,6 +178,15 @@ plugins: [
         </div>
       </div>
 
+      <div class="sm:col-span-4">
+        <label for="issue_price" class="block text-sm font-medium leading-6 text-gray-900">issue Reservation Price  <p class="mt-1 text-sm leading-6 text-gray-400">Set future price of your issue once it drops.</p></label>
+        <div class="mt-2">
+          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+            <input type="number" name="issue_price" id="issue_price" autocomplete="issue_price" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" min="5.00" placeholder="25.00">
+          </div>
+        </div>
+      </div>
+
       <fieldset>
             <legend class="sr-only">Notifications</legend>
             <div class="space-y-5">
@@ -188,7 +197,7 @@ plugins: [
                     </div>
                     <div class="ml-3 text-sm leading-6">
                         <label for="offers" class="font-medium text-gray-900">Adults Only</label>
-                        <p id="offers-description" class="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p>
+                        <p id="offers-description" class="text-gray-500"></p>
                     </div>
                 </div>
             </div>

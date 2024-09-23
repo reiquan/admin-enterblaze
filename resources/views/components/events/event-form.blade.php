@@ -141,13 +141,14 @@
         <div class="relative">
          <label for="event_start_date" class="block text-sm font-medium text-gray-700"> Start Date: <span class="text-xs text-green-700">{{ $event->event_start_date ?? '' }}</span></label>
 
-            <input name="event_start_date" type="datetime-local" value="{{ $event->event_start_date ?? '' }}" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start" required>
+            <input name="event_start_date" type="datetime-local" value="" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start" required>
         </div>
         <span class="mx-4 text-gray-500">to</span>
         <div class="relative">
-        <label for="event_end_date" class="block text-sm font-medium text-gray-700"> End Date: <span class="text-xs text-green-700">{{ $event->event_end_date ?? '' }}</span> </label>
+           <label for="event_start_date" class="block text-sm font-medium text-gray-700"> Start Date: <span class="text-xs text-green-700">{{ $event->event_start_date ?? '' }}</span></label>
 
-          <input name="event_end_date" type="datetime-local" value="{{ $event->event_end_date ?? '' }}" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end" required>
+            <input name="event_end_date" type="datetime-local" value="" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end" required>
+        </div>
       </div>
 
 

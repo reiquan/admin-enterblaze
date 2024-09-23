@@ -34,7 +34,8 @@ class Book extends Model
         'book_subtitle',
         'book_image_path',
         'book_slug_name',
-        'book_type'
+        'book_type',
+        'book_price'
 
     ];
 
