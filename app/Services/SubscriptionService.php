@@ -171,7 +171,15 @@ class SubscriptionService
             ];
 
             return $alert_body;
-        }
+
+        } else  if($type == 'reservation'){
+            $alert_body =  [ 
+                 'alert_title' => 'Reservation made! ',
+                 'alert_body' => 'Reservation #:'. $body['reservation_number'],
+             ];
+ 
+             return $alert_body;
+         }
     }
 
     public function scheduleEmail($alertInfo, $email){

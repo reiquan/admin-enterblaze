@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Universe;
 use App\Models\Issue;
+use App\Models\Reservation;
 use App\Services\BookService;
 use App\Services\StripeService;
 use App\Services\ValidationService;
@@ -219,6 +220,53 @@ class ApiController extends Controller
                 );
             }
        
+    }
+    public function reserveItem(Request $request){
+        //
+        $reservation = new Reservation;
+        if(!empty($request->book_id)){
+             $reservation->book_id = intval($request->book_id) ?? '';
+        }
+        if(!empty($request->issue_id)) {
+            $reservation->issue_id = intval($request->issue_id) ?? '';
+        }
+        $reservation->price = $request->price;
+      
+        $reservation->email = $request->email;
+        $reservation->reservation_number = $request->reservation_number;
+        $reservation->save();
+        $book;
+        $issue;
+       
+        if(isset($request->book_id) && !empty($request->book_id)){
+
+            $book = Book::find($reservation->book_id);
+            $alertInfo = $this->alertService->createBody($book, 'reservation');
+            $this->alertService->processAlert($alertInfo, $request['email']);
+
+        } else if(isset($request->issue_id) && !empty($request->issue_id)) {
+
+            $issue = Issue::find($reservation->issue_id);
+            $alertInfo = $this->alertService->createBody($issue, 'reservation');
+            $this->alertService->processAlert($alertInfo, $request['email']);
+
+        } else {
+            return response()
+                    ->json([
+                        'status' => 'error',
+                        'message' => 'There was an unexpected error',
+                    ], 
+                    400
+                );
+        }
+
+        return response()
+        ->json([
+            'status' => 'success',
+            'message' => 'Reservation Set',
+        ], 
+        200
+    );
     }
 
 }
