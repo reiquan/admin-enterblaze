@@ -30,7 +30,7 @@ Route::post('getChapters', [ApiController::class, 'getChapters']);
 Route::get('getOpenRegistrations', [ApiController::class, 'getOpenRegistrations']);
 Route::get('getEvents', [ApiController::class, 'getEvents']);
 Route::post('submitOpenRegistrationAttendance', [ApiController::class, 'submitOpenRegistrationAttendance']);
-Route::post('reserveItem', [ApiController::class, 'reserveItem']);
+Route::post('submitReservation', [ApiController::class, 'submitReservation']);
 // Protected routes
 Route::middleware(['auth:sanctum', 'checkTokenExpiration'])->group(function () {
     // Route::get('/profile', 'UserProfileController@show');

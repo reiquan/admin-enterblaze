@@ -221,8 +221,15 @@ class ApiController extends Controller
             }
        
     }
-    public function reserveItem(Request $request){
+    public function submitReservation(Request $request){
         //
+    //     return response()
+    //     ->json([
+    //         'status' => 'success',
+    //         'message' => $request->all(),
+    //     ], 
+    //     200
+    // );
         $reservation = new Reservation;
         if(!empty($request->book_id)){
              $reservation->book_id = intval($request->book_id) ?? '';
@@ -230,14 +237,15 @@ class ApiController extends Controller
         if(!empty($request->issue_id)) {
             $reservation->issue_id = intval($request->issue_id) ?? '';
         }
+
         $reservation->price = $request->price;
-      
+        // $reservation->user_id = $request->user_id;
         $reservation->email = $request->email;
         $reservation->reservation_number = $request->reservation_number;
         $reservation->save();
         $book;
         $issue;
-       
+
         if(isset($request->book_id) && !empty($request->book_id)){
 
             $book = Book::find($reservation->book_id);
@@ -248,6 +256,9 @@ class ApiController extends Controller
 
             $issue = Issue::find($reservation->issue_id);
             $alertInfo = $this->alertService->createBody($issue, 'reservation');
+           
+            //IMPORTANT: this method will fail when testing IN sandbox
+                // TO DO: VERIFY TASKS WITH MAILGUN TO SEND EMAILS OUT 
             $this->alertService->processAlert($alertInfo, $request['email']);
 
         } else {
