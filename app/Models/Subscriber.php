@@ -16,6 +16,7 @@ class Subscriber extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $table = 'subscribers';
     protected $fillable = [
         'name', 'email', 'password', 'is_creator'
     ];

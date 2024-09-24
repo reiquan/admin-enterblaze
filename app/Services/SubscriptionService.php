@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Twilio\Rest\Client;
 use Mailgun\Mailgun;
 use App\Mail\SendAlert;
+use App\Mail\SendNewArtistAlert;
 use App\Models\CandidateSubscriberAlert;
 use App\Models\CandidateSubscriber;
 use Carbon\Carbon;
@@ -27,11 +28,16 @@ class SubscriptionService
 
     }
 
-    public function processAlert($request, $email){
+    public function processAlert($request, $email, $alert_type = null){
         // dd($request);
         //get Candidate Subsribers
             // $candidate_subscribers = $this->getCandidateSubscribers(auth()->user()->candidate->id);
-            $this->scheduleEmail($request, $email);
+            if($alert_type == 'new_artist'){
+                $this->scheduleEmail($request, $email, 'new_artist');
+            } else {
+                $this->scheduleEmail($request, $email);
+            }
+
             // dd($candidate_subscribers->toArray());
         //if $alert_type is email
             // if($request->alert_type == 'email'){                                //if $alert_type is email
@@ -179,11 +185,25 @@ class SubscriptionService
              ];
  
              return $alert_body;
+
+         } else if('artist_request'){
+            $alert_body =  [ 
+                'alert_title' => 'You Have a New Artist Request!',
+                'alert_body' =>  $body['name']. ' wants to join the artist platform',
+                'alert_portfolio_url' => $body['portfolio_url']
+            ];
+
+            return $alert_body;
          }
     }
 
-    public function scheduleEmail($alertInfo, $email){
-        Mail::to($email)->send(new SendAlert($alertInfo));
+    public function scheduleEmail($alertInfo, $email, $type = null){
+
+       if(isset($type) && $type == 'new_artist') {
+             Mail::to($email)->send(new SendNewArtistAlert($alertInfo));
+       } else {
+            Mail::to($email)->send(new SendAlert($alertInfo));
+       }
         // foreach($candidate_subscribers as $subscriber){
         //     if($alertInfo->send_now){
         //          //OR
