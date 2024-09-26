@@ -27,7 +27,16 @@ class Book extends Model
      * @var array
      */
     protected $fillable = [
-      
+        'book_title',
+        'book_genres',
+        'book_description',
+        'book_audience',
+        'book_subtitle',
+        'book_image_path',
+        'book_slug_name',
+        'book_type',
+        'book_price'
+
     ];
 
     public function volumes(){

@@ -17,50 +17,100 @@
 <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
 
 <nav class="flex" aria-label="Breadcrumb">
-  <ol role="list" class="flex space-x-4 rounded-md bg-white px-6 shadow">
+<ol role="list" class="flex space-x-4 rounded-md bg-white px-6 shadow">
 
-    <li class="flex">
-      <div class="flex items-center">
-        <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-          <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-        </svg>
-        <a href="#" class="ml-4 text-lg font-medium text-gray-500 hover:text-gray-700">Create a Chapter</a>
-      </div>
-    </li>
-    <li class="flex">
-      <div class="flex items-center">
-        <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-          <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-        </svg>
-        <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 1 - Chapter Info</a>
-      </div>
-    </li>
+<li class="flex">
+  <div class="flex items-center">
+    <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+      <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+    </svg>
+    <a class="ml-4 text-lg font-medium text-gray-500 hover:text-gray-700">Create a Chapter</a>
+  </div>
+</li>
+<li class="flex">
+  <div class="flex items-center">
+    <svg class="{{ $step == 1 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+      <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+    </svg>
+   @if($issue->id)
+      <form method="GET" action="{{ route('issues.edit',  [$issue->book->universe->id ?? $universe->id, $issue->book->id, $issue->id] ) }}" >
+      <input type="hidden" name="universe_id" value="{{ $issue->book->universe->id }}" >
+      <input type="hidden" name="step" value="1" >
+    @else
+    <form method="GET" action="" >
+    <input type="hidden" name="step" value="1" >
+    @endif
+      @csrf
     
-    <li class="flex">
-      <div class="flex items-center">
-        <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-          <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-        </svg>
-        <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 2 - Chapter Cover</a>
-      </div>
-    </li>
-    <li class="flex">
-      <div class="flex items-center">
-        <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-          <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-        </svg>
-        <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 3 - Upload Story</a>
-      </div>
-    </li>
-    <li class="flex">
-      <div class="flex items-center">
-        <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-          <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-        </svg>
-        <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 4 - Submit</a>
-      </div>
-    </li>
-  </ol>
+
+      <button class="{{ $step == 1 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 1 - Chapter Info</button>
+    </form>
+
+  </div>
+</li>
+
+<li class="flex">
+  <div class="flex items-center">
+    <svg class="{{ $step == 2 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+      <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+    </svg>
+    @if($issue->id)
+    <form method="GET"action="{{ route('issues.edit',  [$issue->book->universe->id, $issue->book->id, $issue->id] ) }}" >
+      <input type="hidden" name="universe_id" value="{{ $issue->book->universe->id }}" >
+      <input type="hidden" name="issue_id" value="{{ $issue->id }}" >
+      <input type="hidden" name="step" value="2" >
+    @else
+    <form method="GET" action="" >
+    <input type="hidden" name="step" value="1" >
+    @endif
+      @csrf
+      
+
+      <button class="{{ $step == 2 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 2 - Chapter Cover</button>
+    </form>
+  </div>
+</li>
+<li class="flex">
+  <div class="flex items-center">
+    <svg class="{{ $step == 4 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+      <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+    </svg>
+    @if($issue->id)
+    <form method="GET" action="{{ route('issues.edit', ['universe_id' => $issue->book->universe->id, 'book_id' => $issue->book->id, 'issue_id' => $issue->id]) }}" >
+      <input type="hidden" name="universe_id" value="{{ $issue->book->universe->id }}" >
+      <input type="hidden" name="step" value="3" >
+    @else
+    <form method="GET" action="" >
+    <input type="hidden" name="step" value="1" >
+    @endif
+      @csrf
+     
+      <button class="{{ $step == 3 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 3 - Upload Your Story</button>
+    </form>
+  </div>
+</li>
+<li class="flex">
+  <div class="flex items-center">
+    <svg class="{{ $step == 4 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+      <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+    </svg>
+
+    @if($issue->id)
+    <form method="GET" action="{{ route('issues.index', ['universe_id' => $issue->book->universe->id, 'book_id' => $issue->book->id]) }}" >
+      <input type="hidden" name="universe_id" value="{{ $issue->book->universe->id }}" >
+      <input type="hidden" name="step" value="4" >
+    @else
+      <form method="GET" action="" >
+      <input type="hidden" name="step" value="1" >
+    @endif
+      @csrf
+     
+   
+      <button class="{{ $step == 4 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 4 - Submit</button>
+    </form>
+  </div>
+</li>
+</ol>
 </nav>
 
 </div>
@@ -80,7 +130,7 @@ plugins: [
 }
 ```
 -->
-@if($step !== 1)
+@if($step > 1)
 
 @include('components.universe.books.issues.issue-uploader.issue-form-step-'.$step)
 
@@ -107,7 +157,7 @@ plugins: [
   <div class="border-b border-gray-900/10 pb-12">
 
     <h2 class="text-base font-semibold leading-7 text-gray-900">Publish Your Chapter</h2>
-    <p class="mt-1 text-sm leading-6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
+    <p class="mt-1 text-sm leading-6 text-gray-600"></p>
 
     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
       <div class="sm:col-span-4">
@@ -128,6 +178,15 @@ plugins: [
         </div>
       </div>
 
+      <div class="sm:col-span-4">
+        <label for="issue_price" class="block text-sm font-medium leading-6 text-gray-900">issue Reservation Price  <p class="mt-1 text-sm leading-6 text-gray-400">Set future price of your issue once it drops.</p></label>
+        <div class="mt-2">
+          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+            <input type="number" name="issue_price" id="issue_price" autocomplete="issue_price" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" min="5.00" placeholder="25.00">
+          </div>
+        </div>
+      </div>
+
       <fieldset>
             <legend class="sr-only">Notifications</legend>
             <div class="space-y-5">
@@ -138,7 +197,7 @@ plugins: [
                     </div>
                     <div class="ml-3 text-sm leading-6">
                         <label for="offers" class="font-medium text-gray-900">Adults Only</label>
-                        <p id="offers-description" class="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p>
+                        <p id="offers-description" class="text-gray-500"></p>
                     </div>
                 </div>
             </div>

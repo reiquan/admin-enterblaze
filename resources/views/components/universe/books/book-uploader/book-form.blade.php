@@ -4,54 +4,6 @@
 
 <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
 
-    <nav class="flex" aria-label="Breadcrumb">
-      <ol role="list" class="flex space-x-4 rounded-md bg-white px-6 shadow">
-
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <a href="#" class="ml-4 text-lg font-medium text-gray-500 hover:text-gray-700">Create a Book</a>
-          </div>
-        </li>
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 1 - Book Info</a>
-          </div>
-        </li>
-        
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 2 - Book Cover</a>
-          </div>
-        </li>
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 3 - Upload Story</a>
-          </div>
-        </li>
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 4 - Submit</a>
-          </div>
-        </li>
-      </ol>
-    </nav>
-
-</div>
 
 <div class="bg-gray-200 bg-opacity-25  gap-6 lg:gap-4 p-6 lg:p-8">
 <!--
@@ -68,7 +20,7 @@
   }
   ```
 -->
-@if($step !== 1)
+@if($step > 1)
 
     @include('components.universe.books.book-form-step-'.$step)
 
@@ -106,6 +58,15 @@
             <div class="mt-2">
               <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                 <input type="text" name="book_subtitle" id="book_subtitle" autocomplete="book_subtitle" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
+              </div>
+            </div>
+          </div>
+
+          <div class="sm:col-span-4">
+            <label for="book_price" class="block text-sm font-medium leading-6 text-gray-900">Book Reservation Price  <p class="mt-1 text-sm leading-6 text-gray-600">Set future Price for your book once it drops.</p></label>
+            <div class="mt-2">
+              <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                <input type="number" name="book_price" id="book_price" autocomplete="book_price" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" min="5.00" placeholder="25.00">
               </div>
             </div>
           </div>
@@ -171,7 +132,7 @@
 
     <div class="mt-6 flex items-center justify-end gap-x-6">
       <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
-      <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+      <button type="submit" name="type" value ="{{ Route::is('books.edit') ? 'edit' : '' }}" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
     </div>
 
   </form>

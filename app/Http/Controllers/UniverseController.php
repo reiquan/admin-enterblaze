@@ -27,14 +27,16 @@ class UniverseController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         //
-      
-        $step = 1;
+    
+        $universe = Universe::create();
+        $universe_id = isset($request->universe_id) ? $request->universe_id : $universe->id;
+        $step=isset($request->step) ? $request->step : 1;
        
         
-        return view('universe/create', compact('step'));
+        return view('universe/create', compact('step', 'universe', 'universe_id'));
  
     }
 
@@ -57,7 +59,7 @@ class UniverseController extends Controller
                         $universe->universe_name = $request->universe_name;
                         $universe->universe_description = $request->universe_description;
                         $universe->universe_audience = $request->universe_audience;
-                        $universe->is_active = 0;
+                        $universe->universe_is_active = 0;
                         $universe->universe_user_id = auth()->user()->id;
                         $universe->universe_slug_name = strtolower(str_replace(" ","_", $request->universe_name));
                     $universe->save();
@@ -73,13 +75,18 @@ class UniverseController extends Controller
                 
      
                 $step = $request->step += 1;
-                
+                // dd($universe->toArray());
                 // if($universe->universe_image_url){
                     
                 //     $image = $universe->universe_image_url;
                 //     return view('universe.create', compact('universe', 'step', 'image'));
                 // } else {
+                if(isset($request->type) && $request->type == 'edit'){
+                    return redirect()->route('universe.edit', ['universe_id' => $universe->id, 'step' => $step]);
+                } else {
                     return redirect()->route('universe.create', ['universe_id' => $universe->id, 'step' => $step]);
+                }
+                   
                 // }
                
 
@@ -101,12 +108,16 @@ class UniverseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
         //
-        $step=1;
+        $step=isset($request->step) ? $request->step : 1;
         $universe = Universe::find($id);
-        return view('universe/edit', compact('universe', 'step'));
+        $universe_id = $universe->id;
+    //    if(!empty($request->all())){
+    //     dd($request->all());
+    //    }
+        return view('universe/edit', compact('universe', 'step','universe_id'));
     }
 
      /**
@@ -117,10 +128,10 @@ class UniverseController extends Controller
         //
         $universe = Universe::find($id);
         if($request->action == 'publish'){
-            $universe->is_active = 1;
+            $universe->universe_is_active = 1;
             $universe->save();
         } else {
-            $universe->is_active = 0;
+            $universe->universe_is_active = 0;
             $universe->save();
         }
        

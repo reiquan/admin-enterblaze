@@ -128,9 +128,9 @@ function addFile(target, file) {
   objectURL = URL.createObjectURL(file);
 
     //make surre the size isnt too big
-  if(file.size > 50000){
+  if(file.size > 15000000){
     
-    uploadError.innerHTML = "Make sure size is less than 50 GB";
+    uploadError.innerHTML = "Make sure size is less than 15 GB";
 
     console.log(file.size);
     return;
@@ -232,9 +232,9 @@ function sendImage(objURL, file, dname) {
     // Create FormData and append the Blob
     var formData = new FormData();
     formData.append("file", blob, file.name);
-    var u_id = "<?php echo $universe->id; ?>";
+    var u_id = "<?php echo $universe->id ?? $universe_id; ?>";
     var b_id = "<?php echo $book_id; ?>";
-    var i_id = "<?php echo $_REQUEST['issue_id']; ?>";
+    var i_id = "<?php echo $_REQUEST['issue_id'] ?? $issue->id; ?>";
     formData.append("universe_id",u_id);
     formData.append("book_id",b_id);
     formData.append("issue_id",i_id);
@@ -296,9 +296,9 @@ gallery.onclick = ({ target }) => {
 
     // Create FormData and append the Blob
     var formData = new FormData();
-    var u_id = "<?php echo $universe->id; ?>";
+    var u_id = "<?php echo $universe->id ?? $universe_id; ?>";
     var b_id = "<?php echo $book_id; ?>";
-    var i_id = "<?php echo $_REQUEST['issue_id']; ?>";
+    var i_id = "<?php echo $_REQUEST['issue_id'] ?? $issue->id; ?>";
     formData.append("universe_id",u_id);
     formData.append("book_id",b_id);
     formData.append("issue_id",i_id);
@@ -347,9 +347,9 @@ document.getElementById("submit").onclick = (e) => {
 
   var formData = new FormData();
   var fileInput = document.getElementById('hidden-input');
-  var u_id = "<?php echo $universe->id; ?>";
+  var u_id = "<?php echo $universe->id ?? $universe_id; ?>";
   var b_id = "<?php echo $book_id; ?>";
-  var i_id = "<?php echo $_REQUEST['issue_id']; ?>";
+  var i_id = "<?php echo $_REQUEST['issue_id'] ?? $issue->id; ?>";
   window.location.assign('/universe/' + u_id + '/books/' + b_id  + '/show?b_id=' + b_id +'&u_id=' + u_id);
 
 };

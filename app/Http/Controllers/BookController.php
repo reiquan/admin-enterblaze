@@ -25,7 +25,7 @@ class BookController extends Controller
         $books = Book::where('book_universe_id', $request->universe_id)->get();
        
         $universe = Universe::find($request->universe_id);
-      
+
         return view('universe/books/index', compact('books', 'universe'));
     }
 
@@ -40,8 +40,8 @@ class BookController extends Controller
         $universe = Universe::find($universe_id);
         $universe_id = isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : '';
         $book_id = isset($_REQUEST['book_id']) ? $_REQUEST['book_id'] : '';
-
-        return view('universe/books/create', compact('step', 'universe', 'universe_id', 'book_id'));
+        $book = isset($_REQUEST['book']) ? $_REQUEST['book'] : '';
+        return view('universe/books/create', compact('step', 'universe', 'universe_id', 'book_id', 'book'));
  
     }
 
@@ -70,8 +70,10 @@ class BookController extends Controller
                         $book->book_creator = $request->book_creator;
                         $book->book_audience = $request->book_audience;
                         $book->book_description = $request->book_description;
+                        $book->book_published_at = $request->book_published_at;
                         $book->book_universe_id = $request->universe_id;
                         $book->book_type = $request->book_type;
+                        $book->book_price = $request->book_price;
                         if(isset($request->book_subtitle)){
                             $book->book_subtitle = $request->book_subtitle;
                         }
@@ -89,7 +91,7 @@ class BookController extends Controller
 
            
             //if request->step == 4
-            if($request->step == 4){
+            if($request->step == 3){
         
                 return view('books.index');
                
@@ -100,8 +102,14 @@ class BookController extends Controller
                 $step = $request->step += 1;
                 $universe_id = $request->universe_id;
                 $book_id = $book->id;
+                
 
-                return view('universe.books.create', compact('step', 'universe_id', 'book_id'));
+                
+                if(isset($request->type) && $request->type == 'edit'){
+                    return view('universe.books.edit', compact('step', 'universe_id', 'book'));
+                } else {
+                    return view('universe.books.create', compact('step', 'universe_id', 'book_id', 'book'));
+                }
 
             }
           ;
@@ -127,7 +135,7 @@ class BookController extends Controller
     {
         //
         $book = Book::find($request->book_id);
-        $step = 1;
+        $step=isset($request->step) ? $request->step : 1;;
         return view('universe/books/edit', compact('book', 'step'));
     }
 

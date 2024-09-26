@@ -43,10 +43,10 @@
                     <tr>
                         <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                             <div class="flex items-center">
-                                <div class="h-11 w-11 flex-shrink-0">
+                                <div class="flex-shrink-0">
                                     @if($book->book_image_path)
                                     
-                                        <img src="{{ Storage::disk('s3-public')->url($book->book_image_path) }}" alt="Image" class="rounded-full h-48 w-48 object-cover object-center lg:h-full lg:w-full">
+                                    <a href="{{ Storage::disk('s3-public')->url($book->book_image_path) }}" target="_blank"><img src="{{ Storage::disk('s3-public')->url($book->book_image_path) }}" alt="Image" class="aspect-[4/5] w-52 flex-none rounded-2xl object-cover"></a>
                     
                                     @else
                                         <img class="h-11 w-11 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">

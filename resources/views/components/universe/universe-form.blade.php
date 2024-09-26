@@ -12,40 +12,62 @@
             <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
               <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
             </svg>
-            <a href="#" class="ml-4 text-lg font-medium text-gray-500 hover:text-gray-700">Create a Universe</a>
+            <a class="ml-4 text-lg font-medium text-gray-500 hover:text-gray-700">Create a Universe</a>
           </div>
         </li>
         <li class="flex">
           <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+            <svg class="{{ $step == 1 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
               <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
             </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 1 - Universe Info</a>
+            <form method="GET" action="{{ route('universe.edit', isset($universe->id) ? $universe->id : $universe_id) }}" >
+              @csrf
+              <input type="hidden" name="step" value="1" >
+              <input type="hidden" name="universe_id" value="{{ isset($universe->id) ? $universe->id : $universe_id }}" >
+              <button class="{{ $step == 1 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 1 - Universe Info</button>
+            </form>
+            
           </div>
         </li>
         
         <li class="flex">
           <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+            <svg class="{{ $step == 2 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
               <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
             </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 2 - Profile Picture</a>
+            <form method="GET" action="{{ route('universe.edit', isset($universe->id) ? $universe->id : $universe_id) }}" >
+              @csrf
+              <input type="hidden" name="step" value="2" >
+              <input type="hidden" name="universe_id" value="{{ isset($universe->id) ? $universe->id : $universe_id }}" >
+              <button class="{{ $step == 2 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 2 - Profile Picture</button>
+            </form>
           </div>
         </li>
         <li class="flex">
           <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+            <svg class="{{ $step == 3 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
               <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
             </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 3 - Banner Upload</a>
+            <form method="GET" action="{{ route('universe.edit', isset($universe->id) ? $universe->id : $universe_id) }}" >
+              @csrf
+              <input type="hidden" name="step" value="3" >
+              <input type="hidden" name="universe_id" value="{{ isset($universe->id) ? $universe->id : $universe_id }}" >
+              <button class="{{ $step == 3 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 3 - Banner Upload</button>
+            </form>
+
           </div>
         </li>
         <li class="flex">
           <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+            <svg class="{{ $step == 4 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
               <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
             </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Step 4 - Submit</a>
+            <form method="GET" action="{{ route('universe.index', isset($universe->id) ? $universe->id : $universe_id) }}" >
+              @csrf
+              <input type="hidden" name="step" value="4" >
+              <input type="hidden" name="universe_id" value="{{ isset($universe->id) ? $universe->id : $universe_id }}" >
+              <button class="{{ $step == 4 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 4 - Submit</button>
+            </form>
           </div>
         </li>
       </ol>
@@ -68,7 +90,7 @@
   }
   ```
 -->
-@if($step !== 1)
+@if($step > 1)
 
     @include('components.universe.universe-form-step-'.$step)
 
@@ -159,8 +181,8 @@
     </div>
 
     <div class="mt-6 flex items-center justify-end gap-x-6">
-      <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
-      <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+      <a href="{{ route('universe.index') }}" class="text-sm font-semibold leading-6 text-gray-900">Cancel</a>
+      <button type="submit" name="type" value ="{{ Route::is('universe.edit') ? 'edit' : '' }}" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
     </div>
 
   </form>

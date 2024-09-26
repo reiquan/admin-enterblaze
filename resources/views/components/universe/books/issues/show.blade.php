@@ -2,14 +2,11 @@
     <x-application-logo class="block h-12 w-auto" />
 
     <h1 class="mt-8 text-2xl font-medium text-gray-900">
-        Welcome to your Jetstream application!
+     <strong>{{ $pages[0]->issue->issue_number }}</strong> {{ $pages[0]->issue->issue_title }}
     </h1>
 
     <p class="mt-6 text-gray-500 leading-relaxed">
-        Laravel Jetstream provides a beautiful, robust starting point for your next Laravel application. Laravel is designed
-        to help you build your application using a development environment that is simple, powerful, and enjoyable. We believe
-        you should love expressing your creativity through programming, so we have spent time carefully crafting the Laravel
-        ecosystem to be a breath of fresh air. We hope you love it.
+    {{ $pages[0]->issue->issue_description }}
     </p>
 </div>
 <div class="relative block w-full h-full rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -51,7 +48,7 @@
             <table class="min-w-full divide-y divide-gray-300">
                     <thead>
                     <tr>
-                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">{{ $page->issue_page_number }}</th>
+                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"></th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Page #</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
 
@@ -65,10 +62,10 @@
                     <tr>
                         <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                         <div class="flex items-center">
-                            <div class="h-11 w-11 flex-shrink-0">
+                            <div class="flex-shrink-0">
                                 @if($page->issue_page_url)
                                 
-                                    <img src="{{ Storage::disk('s3-public')->url($page->issue_page_url) }}" alt="Image" class="rounded-full h-48 w-48 object-cover object-center lg:h-full lg:w-full">
+                                  <a href="{{ Storage::disk('s3-public')->url($page->issue_page_url) }}" target="_blank"> <img src="{{ Storage::disk('s3-public')->url($page->issue_page_url) }}" alt="Image" class="aspect-[4/5] w-52 flex-none rounded-2xl object-cover"></a> 
                 
                                 @else
                                     <img class="h-11 w-11 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">

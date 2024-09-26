@@ -13,17 +13,21 @@ class BannerUpload extends Component
  
     public $photo;
     public $universe_id;
+    public $logo;
+    public $type;
 
-    public function mount($universe_id)
+    public function mount($universe_id, $logo, $type)
     {
         $this->universe_id = $universe_id;
+        $this->logo = $logo;
+        $this->type = $type;
     }
   
 
     public function save()
     {
         $this->validate([
-            'photo' => 'image|max:1024', // 1MB Max
+            'photo' => 'image|max:10000000', // 1MB Max
         ]);
  
         $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/images/banner', 's3-public');

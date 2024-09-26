@@ -35,13 +35,19 @@ class IssuesController extends Controller
     public function create(REQUEST $request)
     {
         //
-      
+    
         $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
         $universe = Universe::find($request->universe_id);
         $universe_id = isset($request->universe_id) ? $request->universe_id : '';
         $book_id = isset($request->book_id) ? $request->book_id : '';
+        $issue = isset($_REQUEST['issue']) ? $_REQUEST['issue'] : new Issue;
 
-        return view('universe/books/issues/create', compact('step', 'universe', 'universe_id', 'book_id'));
+        if(intval($step) > 1){
+           
+            $issue = Issue::find($request->issue_id);
+        }
+        // dd($step, $universe->toArray(), $universe_id, $book_id, $issue->toArray());
+        return view('universe/books/issues/create', compact('step', 'universe', 'universe_id', 'book_id', 'issue'));
  
     }
 
@@ -71,8 +77,9 @@ class IssuesController extends Controller
                         $issue->issue_is_adult = $request->issue_is_adult ? 1 : 0;
                         $issue->issue_is_locked = 1;
                         $issue->issue_book_id = $request->book_id;
-                        $issue->issue_slug_name = strtolower(str_replace(" ","_", $request->issue_title));
-          
+                        $new_slug_name = preg_replace('/[^a-zA-Z0-9\s]/', '', $request->issue_title);
+                        $issue->issue_slug_name = strtolower(str_replace(" ","_",  $new_slug_name));
+                        $issue->issue_price = $request->issue_price;
                         // $issue->issue_genres = $request->issue_genres;
                         // if(isset($request->issue_number)){
                         //     $issue
@@ -100,7 +107,7 @@ class IssuesController extends Controller
                 $book_id = $request->book_id;
                 $issue_id = $issue->id ?? '';
               
-                return view('universe.books.issues.create', compact('step', 'universe_id', 'book_id', 'issue_id'));
+                return view('universe.books.issues.create', compact('step', 'universe_id', 'book_id', 'issue_id', 'issue'));
 
             }
           ;
@@ -130,10 +137,10 @@ class IssuesController extends Controller
     {
         //
 
-        $step = 1;
-        $issue = Issue::find($request->i_id);
-        $book_id = $request->b_id;
-        $universe_id = $request->u_id;
+        $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
+        $issue = Issue::find($request->i_id ?? $request->issue_id);
+        $book_id = $request->b_id ?? $request->book_id;
+        $universe_id = $request->u_id ?? $request->universe_id;
 
         return view('universe/books/issues/create', compact('issue', 'step', 'book_id', 'universe_id'));
     }
@@ -174,15 +181,20 @@ class IssuesController extends Controller
             $issue = Issue::find($request->issue_id);
 
             if($issue){
-                $issue_page->issue_id = $request->issue_id;
-                $issue_page->issue_page_url = $path.$fileName;
-                $issue_page->save();
-                $count = 0;
-                foreach($issue->pages as $page){
-                    $p = IssuePage::find($page->id);
-                
-                    $p->issue_page_number = $count += 1;
-                    $p->save();
+                if (IssuePage::where('issue_page_url', $path.$fileName)->get()->toArray()) {
+                    //do nothing
+                } else {
+                    $issue_page->issue_id = $request->issue_id;
+                    $issue_page->issue_page_url = $path.$fileName;
+                    $issue_page->save();
+                    $count = 0;
+                    foreach($issue->pages as $page){
+                        $p = IssuePage::find($page->id);
+                    
+                        $p->issue_page_number = $count += 1;
+                        $p->save();
+
+                    }
 
                 }
             }

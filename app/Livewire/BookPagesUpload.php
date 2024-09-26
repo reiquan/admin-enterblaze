@@ -27,7 +27,7 @@ class BookPagesUpload extends Component
     public function uploadMultiple()
     {
         $this->validate([
-            'photos.*' => 'image|max:1024', // 1MB Max
+            'photos.*' => 'image|max:10000000', // 1MB Max
         ]);
  
         foreach ($photos as $photo) {

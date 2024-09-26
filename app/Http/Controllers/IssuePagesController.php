@@ -68,6 +68,10 @@ class IssuePagesController extends Controller
                 $file = $request->file('file');
             
                 $s3 = Storage::disk('s3-public');
+                //check if filename like that already exists
+                if (Storage::disk('s3-public')->exists($path.$fileName)) {
+                    Storage::disk('s3-public')->delete($path.$fileName);
+                }
                 $s3->putFileAs($path.$request->issue_number, $file, $fileName);
             }
            

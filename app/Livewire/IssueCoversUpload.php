@@ -15,19 +15,23 @@ class IssueCoversUpload extends Component
     public $universe_id;
     public $book_id;
     public $issue_id;
+    public $logo;
+    public $type;
 
 
-    public function mount($universe_id, $book_id, $issue_id)
+    public function mount($universe_id, $book_id, $issue_id, $logo, $type)
     {
         $this->universe_id = $universe_id;
         $this->book_id = $book_id;
         $this->issue_id = $issue_id;
+        $this->logo = $logo;
+        $this->type = $type;
     }
 
     public function saveIssueCover()
     {
         $this->validate([
-            'photo' => 'image|max:1024', // 1MB Max
+            'photo' => 'image|max:10000000', // 1MB Max
         ]);
  
         
@@ -40,6 +44,7 @@ class IssueCoversUpload extends Component
             } else {
                 abort(500, 'Something went wrong!');
             }
+            
         return redirect()->route('issues.create', ['step' => 3, 'universe_id' => $this->universe_id, 'book_id' => $this->book_id, 'issue_id' => $this->issue_id]);
     }
     public function render()
