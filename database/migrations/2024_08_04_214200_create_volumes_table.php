@@ -24,7 +24,7 @@ return new class extends Migration
             $table->boolean('volume_is_active');
 
             $table->timestamps();
-            $table->softDeletes($column = 'deleted_at', $precision = 0)->after('updated_at');
+            // $table->softDeletes($column = 'deleted_at', $precision = 0)->after('updated_at');
             $table->foreign('volume_book_id')->references('id')->on('books');
         });
     }
