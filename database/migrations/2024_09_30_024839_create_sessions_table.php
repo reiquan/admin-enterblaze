@@ -18,6 +18,8 @@ return new class extends Migration
             $table->longText('payload');
             $table->string('last_activity');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
