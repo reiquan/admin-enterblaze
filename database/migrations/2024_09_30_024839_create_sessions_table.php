@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('sessions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInt('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('ip_address');
             $table->longText('payload');
+            $table->string('last_activity');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
