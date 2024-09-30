@@ -1,4 +1,5 @@
 {
+  "type": "module", 
   "devDependencies": {
     "tailwindcss": "^3.4.7",
     "vite": "^5.0.0"
