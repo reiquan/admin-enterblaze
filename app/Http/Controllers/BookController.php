@@ -77,6 +77,8 @@ class BookController extends Controller
                         if(isset($request->book_subtitle)){
                             $book->book_subtitle = $request->book_subtitle;
                         }
+                        $new_slug_name = preg_replace('/[^a-zA-Z0-9\s]/', '', $request->book_title);
+                        $book->book_slug_name = $new_slug_name;
                         // $book->book_genres = $request->book_genres;
                         // if(isset($request->issue_number)){
                         //     $issue
