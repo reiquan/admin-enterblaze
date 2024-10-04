@@ -65,16 +65,47 @@ class AuthApiController extends Controller
 
            }
         }
-        $subscriber = new Subscriber;
 
-        $subscriber->name = $request->name;
-        $subscriber->email = $request->email;
-        $subscriber->password = Hash::make($request->password);
-        $subscriber->save();
-        $subscriber->remember_token = $subscriber->createToken('API Token')->plain_text_token;
-        $subscriber->save();
+        $subscriber = Subscriber::where('email', $request->email)
+                                    ->first();
+        // dd($subscriber);
+        if(!$subscriber){
+            $subscriber_u_name= Subscriber::where('name', 'like',  '%'.$request->name.'%')
+            ->get();
+           $counter = 0;
+           $name = '';
+            if($subscriber_u_name) {
+                // dd($subscriber_u_name->toArray());
+                foreach($subscriber_u_name as $match){
+                    preg_match_all('/\d+/', $match->name, $matches);
+                    if(isset($matches) && $matches){
+                        $m_number = isset($matches[0][0]) ?? '';
+                        if($m_number == $counter){
+                            $counter ++;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                $name = $name = $request->name.$counter;
+            }
+        
 
-        return response()->json(['token' => $subscriber->remember_token], 200);
+            $subscriber = new Subscriber;
+
+            $subscriber->name = $name ? $name : $request->name;
+            $subscriber->email = $request->email;
+            $subscriber->password = Hash::make($request->password);
+            $subscriber->save();
+            $subscriber->remember_token = $subscriber->createToken('API Token')->plain_text_token;
+            $subscriber->save();
+    
+            return response()->json(['token' => $subscriber->remember_token], 200);
+
+        } else {
+
+            return response()->json(['status' => 'email already taken'], 200);
+        }
     }
 
     public function logoutSubscriber(Request $request)
