@@ -33,6 +33,7 @@ class CreateNewUser implements CreatesNewUsers
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
+                'creator_community_opt_in' => $input['creator_community_opt_in'] ? 1 : 0,
             ]), function (User $user) {
                 $this->createTeam($user);
             });

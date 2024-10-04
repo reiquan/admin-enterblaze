@@ -94,7 +94,7 @@
       <div>
         <label for="event_name" class="block text-sm font-medium text-gray-700"> Event Name </label>
         <div class="mt-1">
-          <input type="text" name="event_name" value="{{ $event->event_name ?? '' }}" id="event_name" class="block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
+          <input type="text" name="event_name" value="{{ $event->event_name ?? '' }}" id="event_name" class="px-2 py-2 block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
         </div>
       </div>
 
@@ -108,32 +108,32 @@
       <div>
         <label for="event_address_line_1" class="block text-sm font-medium text-gray-700"> Event Address Line 1 </label>
         <div class="mt-1">
-          <input type="text" name="event_address_line_1" value="{{ $event->event_address_line_1 ?? '' }}" id="event_address_line_1" class="block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
+          <input type="text" name="event_address_line_1" value="{{ $event->event_address_line_1 ?? '' }}" id="event_address_line_1" class="px-2 py-2 block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
         </div>
       </div>
 
       <div>
         <label for="event_address_line_2" class="block text-sm font-medium text-gray-700"> Event Address Line 2 </label>
         <div class="mt-1">
-          <input type="text" name="event_address_line_2" value="{{ $event->event_address_line_2 ?? '' }}" id="event_address_line_2" class="block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
+          <input type="text" name="event_address_line_2" value="{{ $event->event_address_line_2 ?? '' }}" id="event_address_line_2" class="px-2 py-2 block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md">
         </div>
       </div>
       <div>
         <label for="event_city" class="block text-sm font-medium text-gray-700"> Event City </label>
         <div class="mt-1">
-          <input type="text" name="event_city" id="event_city" value="{{ $event->event_city ?? '' }}" class="block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
+          <input type="text" name="event_city" id="event_city" value="{{ $event->event_city ?? '' }}" class="px-2 py-2 block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
         </div>
       </div>
       <div>
         <label for="event_state"  class="block text-sm font-medium text-gray-700"> Event State </label>
         <div class="mt-1">
-          <input type="text" name="event_state" id="event_state" value="{{ $event->event_state ?? '' }}" class="block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
+          <input type="text" name="event_state" id="event_state" value="{{ $event->event_state ?? '' }}" class="px-2 py-2 block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
         </div>
       </div>
       <div>
         <label for="event_zip" class="block text-sm font-medium text-gray-700"> Event Zip </label>
         <div class="mt-1">
-          <input type="text" name="event_zip" value="{{ $event->event_zip ?? '' }}" id="event_zip" class="block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
+          <input type="text" name="event_zip" value="{{ $event->event_zip ?? '' }}" id="event_zip" class="px-2 py-2 block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
         </div>
       </div>
 
@@ -187,7 +187,7 @@
 
       <div class="flex justify-end">
         <a href="{{ route('events.index') }}" type="button" class="bg-white m-2 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">Cancel</a>
-        <button type="submit" name="type" value ="{{ Route::is('events.edit') ? 'edit' : '' }}" class="bg-green-500 m-2 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">{{ !empty($event->toArray()) ? 'Update Event' : 'Save Event'}} </button>
+        <button type="submit" name="type" value ="{{ Route::is('events.edit') ? 'edit' : '' }}" class="bg-green-500 m-2 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">{{ isset($event) && !empty($event->toArray()) ? 'Update Event' : 'Save Event'}} </button>
       </div>
     </div>
 

@@ -79,7 +79,13 @@
     <div>
         <label for="registration_name" class="block text-sm font-medium text-gray-700"> Registration Name </label>
         <div class="mt-1">
-        <input type="text" name="registration_name" value="{{ $event_registration->registration_name ?? '' }}" id="registration_name" class="block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
+        <input type="text" name="registration_name" value="{{ $event_registration->registration_name ?? '' }}" id="registration_name" class="px-2 py-2 block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
+        </div>
+    </div>
+    <div class="py-8">
+        <label for="registration_limit" class="block text-sm font-medium text-gray-700"> Registration Limit </label>
+        <div class="mt-1">
+        <input type="number" name="registration_limit" id="registration_limit" value="{{ $event_registration->registration_limit ?? '' }}" class="px-2 py-2 block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"   min="0" required>
         </div>
     </div>
 
@@ -131,18 +137,18 @@
         <div class="relative">
         <label for="registration_start_date" class="block text-sm font-medium text-gray-700"> Start Date: <span class="text-xs text-green-700">{{ $event_registration->registration_start_date ?? '' }}</span></label>
 
-            <input name="registration_start_date" type="datetime-local" value="{{ $event_registration->registration_start_date ?? '' }}" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start" required>
+            <input name="registration_start_date" type="datetime-local" value="{{ $event_registration->registration_start_date ?? '' }}" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-2 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start" required>
         </div>
         <span class="mx-4 text-gray-500">to</span>
         <div class="relative">
         <label for="registration_end_date" class="block text-sm font-medium text-gray-700"> End Date: <span class="text-xs text-green-700">{{ $event_registration->registration_end_date ?? '' }}</span> </label>
 
-        <input name="registration_end_date" type="datetime-local" value="{{ $event_registration->registration_end_date ?? '' }}" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end" required>
+        <input name="registration_end_date" type="datetime-local" value="{{ $event_registration->registration_end_date ?? '' }}" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-2 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end" required>
     </div>
-    <div>
+    <div class="py-8">
         <label for="registration_fee" class="block text-sm font-medium text-gray-700"> Registration Fee </label>
         <div class="mt-1">
-        <input type="number" name="registration_fee" id="registration_fee" value="{{ $event_registration->registration_fee ?? '' }}" class="block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
+        <input type="number" name="registration_fee" id="registration_fee" value="{{ $event_registration->registration_fee ?? '' }}" class="px-2 py-2 block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
         </div>
     </div>
 
