@@ -17,6 +17,7 @@
         "league/flysystem-aws-s3-v3": "^3.28",
         "livewire/livewire": "^3.3",
         "mailgun/mailgun-php": "^4.3",
+        "sentry/sentry-laravel": "^4.9",
         "stripe/stripe-php": "^15.8",
         "symfony/http-client": "^7.1",
         "symfony/mailgun-mailer": "^7.1",
