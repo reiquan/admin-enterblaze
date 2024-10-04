@@ -84,6 +84,7 @@ class EventRegistrationsController extends Controller
                         $event_registration->registration_start_date = $request->registration_start_date;
                         $event_registration->registration_end_date = $request->registration_end_date;
                         $event_registration->registration_fee = $request->registration_fee;
+                        $event_registration->registration_limit = $request->registration_limit;
                         $event_registration->registration_is_active = 0;
                         $event_registration->registration_event_id = $request->event_id;
                     $event_registration->save();
@@ -110,13 +111,14 @@ class EventRegistrationsController extends Controller
 
     public function update(Request $request){
         
-        $event_registration = isset($request->event_registration_id) ? EventRegistration::find($request->registration_id) : new EventRegistration;
+        $event_registration = isset($request->registration_id) ? EventRegistration::find($request->registration_id) : new EventRegistration;
             $event_registration->registration_name = $request->registration_name;
             $event_registration->registration_description = $request->registration_description;
             $event_registration->registration_type = $request->registration_type;
             $event_registration->registration_start_date = $request->registration_start_date;
             $event_registration->registration_end_date = $request->registration_end_date;
             $event_registration->registration_fee = $request->registration_fee;
+            $event_registration->registration_limit = $request->registration_limit;
             $event_registration->registration_is_active = 0;
             $event_registration->registration_event_id = $request->event_id;
         $event_registration->save();

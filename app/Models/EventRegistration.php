@@ -21,6 +21,7 @@ class EventRegistration extends Model
         'registration_start_date',
         'registration_end_date',
         'registration_fee',
+        'registration_limit',
         'registration_event_id',
         'registration_is_active'
 
