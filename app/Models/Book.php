@@ -27,26 +27,27 @@ class Book extends Model
      * @var array
      */
     protected $fillable = [
-      
+        'book_title',
+        'book_genres',
+        'book_description',
+        'book_audience',
+        'book_subtitle',
+        'book_image_path',
+        'book_slug_name',
+        'book_type',
+        'book_price'
+
     ];
 
     public function volumes(){
         return $this->hasMany(Volume::class);
     }
 
+    public function issues(){
+        return $this->hasMany(Issue::class, 'issue_book_id');
+    }
+
     public function universe(){
-        return $this->belongsTo(Universe::class, 'universe_id');
-    }
-
-    public function images(){
-        return $this->hasMany(Image::class);
-    }
-
-    public function products(){
-        return $this->hasMany(Product::class);
-    }
-
-    public function blogs(){
-        return $this->hasMany(Blog::class);
+        return $this->belongsTo(Universe::class, 'book_universe_id');
     }
 }

@@ -26,13 +26,19 @@ class Issue extends Model
      * @var array
      */
     protected $fillable = [
-    
+      'issue_title',
+      'issue_image_cover',
+      'issue_description',
+      'issue_is_adult',
+      'issue_is_locked',
+      'issue_number',
+      'issue_price'
     ];
 
-    public function volume(){
-        return $this->belongsTo(Volume::class);
+    public function pages(){
+        return $this->hasMany(IssuePage::class);
     }
-    public function product(){
-        return $this->hasOne(Product::class);
+    public function book(){
+        return $this->belongsTo(Book::class, 'issue_book_id');
     }
 }
