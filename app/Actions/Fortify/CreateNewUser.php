@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
+use Illuminate\Validation\ValidationException;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -21,6 +22,16 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
+        if(isset($input['beta_code']) && $input['beta_code'] == config('services.beta.token')){
+
+        } else {
+ 
+            throw ValidationException::withMessages([
+                'errors' => 'Incorrect Access Code.',
+            ]);
+        }
+
+
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -33,7 +44,7 @@ class CreateNewUser implements CreatesNewUsers
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
-                'creator_community_opt_in' => $input['creator_community_opt_in'] ? 1 : 0,
+                'creator_community_opt_in' => isset($input['creator_community_opt_in']) && $input['creator_community_opt_in'] ? 1 : 0,
             ]), function (User $user) {
                 $this->createTeam($user);
             });
