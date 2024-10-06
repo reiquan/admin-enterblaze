@@ -8,7 +8,15 @@
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
-
+            @if (app()->environment('beta'))
+                <div class="ml-3 mb-4 text-sm leading-6">
+                    <label for="creator_community_opt_in" class="font-medium text-orange-700 ml-24">Early Access Users Only</label>
+                    <p id="creator_community_opt_in" class="text-gray-500">Only users with the <strong>access code</strong> may sign up currently.
+                        <br>
+                         Try again later.
+                    </p>
+                </div>
+            @endif
             <div>
                 <x-label for="name" value="{{ __('Name') }}" />
                 <x-input id="name" class="block py-2 px-2 mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
@@ -28,6 +36,12 @@
                 <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
                 <x-input id="password_confirmation" class="block py-2 px-2 mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
             </div>
+            @if (app()->environment('beta'))
+                <div class="mt-4 mb-4">
+                    <x-label for="beta_code" value="{{ __('Early Access Code') }}" class="text-orange-700" />
+                    <x-input id="beta_code" class="block py-2 px-2 mt-1 w-full" type="text" name="beta_code" />
+                </div>
+            @endif
             <!--
   This example requires some changes to your config:
   
