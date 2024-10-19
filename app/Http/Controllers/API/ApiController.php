@@ -16,6 +16,7 @@ use App\Models\Book;
 use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\EventRegistrationAttendance;
+use App\Models\BlazeTokenTier;
 
 class ApiController extends Controller
 {
@@ -279,5 +280,48 @@ class ApiController extends Controller
         200
     );
     }
+
+    public function getBlazeTokenTiers(Request $request){
+        
+        $tier = null;
+        $tiers = null;
+// dd($request->all());
+        if(isset($request->token_tier_id)){
+
+            $tier = BlazeTokenTier::find($request->token_tier_id);
+        } else {
+            $tiers = BlazeTokenTier::whereNull('deleted_at')->get();
+        }
+
+        $data = $request->all();
+ 
+         if($tier && $tier->toArray()) {
+             return response()
+                 ->json([
+                     'status' => 'success',
+                     'data' => $tier,
+                 ], 
+                 200
+             );
+         } else if($tiers && $tiers->toArray()) {
+            return response()
+                 ->json([
+                     'status' => 'success',
+                     'data' => $tiers,
+                 ], 
+                 200
+             );
+         } else {
+             return response()
+                 ->json([
+                     'status' => 'error',
+                     'message' => 'Could Not Find Any Tiers',
+                     'data' => $data,
+                 ], 
+                 400
+             );
+         }
+ 
+     }
 
 }

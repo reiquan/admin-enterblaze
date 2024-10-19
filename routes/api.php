@@ -31,6 +31,7 @@ Route::get('getOpenRegistrations', [ApiController::class, 'getOpenRegistrations'
 Route::get('getEvents', [ApiController::class, 'getEvents']);
 Route::post('submitOpenRegistrationAttendance', [ApiController::class, 'submitOpenRegistrationAttendance']);
 Route::post('submitReservation', [ApiController::class, 'submitReservation']);
+Route::get('getBlazeTokenTiers', [ApiController::class, 'getBlazeTokenTiers']);
 // Protected routes
 Route::middleware(['auth:sanctum', 'checkTokenExpiration'])->group(function () {
     // Route::get('/profile', 'UserProfileController@show');
