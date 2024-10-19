@@ -84,5 +84,16 @@ Route::middleware([
         Route::post('/events/{event_id}/registrations/store', 'App\Http\Controllers\EventRegistrationsController@store')->name('events.registrations.store');
         Route::post('/events/{event_id}/registrations/{registration_id}/delete', 'App\Http\Controllers\EventRegistrationsController@destroy')->name('events.registrations.delete');
         Route::post('/events/{event_id}/registrations/{registration_id}/publish', 'App\Http\Controllers\EventRegistrationsController@publish')->name('events.registrations.publish');
+        
+    //Blaze Tokens
+    Route::get('/tokens/dashboard', 'App\Http\Controllers\BlazeTokensController@dashboard')->name('tokens.dashboard');
+    Route::get('/tokens/tiers/index', 'App\Http\Controllers\BlazeTokensController@index')->name('tokens.tiers.index');
+    Route::get('/tokens/tiers/create', 'App\Http\Controllers\BlazeTokensController@create')->name('tokens.tiers.create');
+    Route::get('/tokens/tiers/edit', 'App\Http\Controllers\BlazeTokensController@edit')->name('tokens.tiers.edit');
+    Route::get('/tokens/tiers/{token_tier_id}/show', 'App\Http\Controllers\BlazeTokensController@show')->name('tokens.tiers.show');
+    Route::post('/tokens/tiers/submit', 'App\Http\Controllers\BlazeTokensController@submit')->name('tokens.tiers.submit');
+    Route::post('/tokens/tiers/{token_tier_id}/update', 'App\Http\Controllers\BlazeTokensController@update')->name('tokens.tiers.update');
+    Route::post('/tokens/tiers/{token_tier_id}/delete', 'App\Http\Controllers\BlazeTokensController@destroy')->name('tokens.tiers.delete');
+    Route::post('/tokens/tiers/{token_tier_id}/publish', 'App\Http\Controllers\BlazeTokensController@publish')->name('tokens.tiers.publish');
 
 });
