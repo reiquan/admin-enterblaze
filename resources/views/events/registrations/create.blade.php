@@ -127,6 +127,7 @@
              <option>Vendor</option>
              <option >Artist</option>
              <option >Food Vendor</option>
+             <option >Participant</option>
              @endif
             
             </select>

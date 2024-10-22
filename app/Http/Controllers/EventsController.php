@@ -163,7 +163,8 @@ class EventsController extends Controller
             if(isset($request->type) && $request->type == 'edit'){
                 return redirect()->route('events.edit', ['event_id' => $event->id, 'step' => $step]);
             } else {
-                return redirect()->route('events.create', ['event' => $event, 'step' => $step]);
+                // dd($event->toArray());
+                return redirect()->route('events.create', ['event_id' => $event, 'step' => $step]);
             }
                
             

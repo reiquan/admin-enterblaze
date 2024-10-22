@@ -33,7 +33,7 @@
                     @if( Route::is('events.edit') )
                           @livewire('event-image-upload', ['event_id' => isset($_REQUEST['event_id']) ? $_REQUEST['event_id'] : $event->id, 'logo' => $event->event_promo_image ?? '', 'type' => 'edit'])
                     @else
-                      @livewire('event-image-upload', ['event_id' => isset($_REQUEST['event_id']) ? $_REQUEST['event_id'] : $event->id, 'logo' => $event->event_promo_image ?? '', 'type' => ''])
+                      @livewire('event-image-upload', ['event_id' => isset($_REQUEST['event_id']) ? $_REQUEST['event_id'] : $event, 'logo' => $event->event_promo_image ?? '', 'type' => ''])
                     @endif
                   </div>
                 </div>
