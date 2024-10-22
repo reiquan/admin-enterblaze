@@ -99,6 +99,18 @@
       </div>
 
       <div>
+        <label for="event_type" class="block text-sm font-medium text-gray-700"> Event Type </label>
+        <div class="mt-2">
+            <select id="event_type" name="event_type" autocomplete="event_type" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+            <option>--Select Option--</option>
+            <option >Tradeshow</option>
+            <option>Online Tournament</option>
+            </select>
+        </div>
+      </div> 
+
+
+      <div>
         <label for="description" class="block text-sm font-medium text-gray-700"> Event Description </label>
         <div class="mt-1">
         <textarea rows="3" name="event_about" id="comment" class="block w-full py-3 border-0 resize-none focus:ring-0 sm:text-sm" placeholder="What is your event about?..."> {{ $event->event_about ?? '' }}</textarea>
@@ -150,7 +162,6 @@
             <input name="event_end_date" type="datetime-local" value="" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end" required>
         </div>
       </div>
-
 
     @if(auth()->user()->current_team_id == 1)
       <fieldset>

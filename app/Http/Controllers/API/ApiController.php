@@ -159,15 +159,18 @@ class ApiController extends Controller
 
         // if(!$validation){
             $receipt_already_verified = EventRegistrationAttendance::where('attendee_receipt_number', $request->attendee_receipt_number)->first();
-            if(empty($receipt_already_verified->toArray())){
+         
+            if(isset($receipt_already_verified) && empty($receipt_already_verified->toArray())){
                 $payment_verified = $this->stripeService->verifyPayment($request->attendee_receipt_number);
                 // dd($payment_verified);
     
                 if($payment_verified->original['status'] == 'success'){
-                    // dd($request->all());
+                
                     $attendance = EventRegistrationAttendance::create([
                         'attendee_first_name' => $request->attendee_first_name,
                         'attendee_last_name' => $request->attendee_last_name,
+                        'attendee_handle_type' => $request->attendee_handle_type,
+                        'attendee_handle_name' => $request->attendee_handle_name,
                         'attendee_email' => $request->attendee_email,
                         'attendee_phone_number' => $request->attendee_phone_number,
                         'event_registration_id' => $request->event_registration_id,

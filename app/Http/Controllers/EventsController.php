@@ -108,6 +108,7 @@ class EventsController extends Controller
        if($request->event_id){
             $event = Event::find($request->event_id);
                 $event->event_name = $request->event_name;
+                $event->event_type = $request->event_type;
                 $event->event_about = $request->event_about;
                 $event->host_user_id = auth()->user()->id;
                 $event->event_address_line_1 = $request->event_address_line_1;
@@ -124,6 +125,7 @@ class EventsController extends Controller
        } else {
             $event = new Event;
                 $event->event_name = $request->event_name;
+                $event->event_type = $request->event_type;
                 $event->event_about = $request->event_about;
                 $event->host_user_id = auth()->user()->id;
                 $event->event_address_line_1 = $request->event_address_line_1;
