@@ -17,6 +17,8 @@ class EventRegistrationAttendance extends Model
         'attendee_first_name',
         'attendee_last_name',
         'attendee_email',
+        'attendee_handle_type',
+        'attendee_handle_name',
         'attendee_phone_number',
         'event_registration_id',
         'attendee_company_name',
@@ -27,6 +29,7 @@ class EventRegistrationAttendance extends Model
         'attendee_receipt_number',
         'attendee_charge',
         'is_active',
+
 
     ];
 
