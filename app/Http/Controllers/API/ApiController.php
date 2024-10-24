@@ -102,28 +102,52 @@ class ApiController extends Controller
 
     public function getEvents(Request $request){
         
-        $events = Event::where('is_active', 1)
-        ->first();
-        $data = $request->all();
- 
-        return response()
-            ->json([
-                'status' => 'success',
-                'data' => $events,
-            ], 
-            200
-        );
+       if(isset($request->event_id) && $request->event_id){
+        $event = Event::find($request->event_id);
+            $data = $request->all();
+
+            return response()
+                ->json([
+                    'status' => 'success',
+                    'data' => $event,
+                ], 
+                200
+            );
+       } else {
+            $events = Event::where('is_active', 1)
+            ->get();
+            $data = $request->all();
+    
+            return response()
+                ->json([
+                    'status' => 'success',
+                    'data' => $events,
+                ], 
+                200
+            );
+       }
  
      }
 
     public function getOpenRegistrations(Request $request){
+ 
+       if(isset($request->registration_event_id) && !isset($request->registration_id)){
+
+        $registrations = EventRegistration::where('registration_is_active', 1)
+        ->where('registration_event_id', $request->registration_event_id)
+        ->with('event')
+        ->get();
+           
+       } else {
+
+        $registrations = EventRegistration::where('registration_is_active', 1)
+        ->where('id', $request->registration_id)
+        ->where('registration_event_id', $request->registration_event_id)
+        ->with('event')
+        ->get();
+      
         
-       $registrations = EventRegistration::where('registration_is_active', 1)
-       ->where('id', $request->registration_id)
-       ->where('registration_event_id', $request->registration_event_id)
-       ->with('event')
-       ->first();
-       $data = $request->all();
+       }
 
         if(isset($request->registration_event_id) && !empty($registrations->toArray())) {
             return response()
@@ -138,7 +162,6 @@ class ApiController extends Controller
                 ->json([
                     'status' => 'error',
                     'message' => 'Could Not Find Any Events',
-                    'data' => $data,
                 ], 
                 400
             );
