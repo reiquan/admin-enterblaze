@@ -130,19 +130,23 @@ class ApiController extends Controller
      }
 
     public function getOpenRegistrations(Request $request){
-        
-       if(isset($request->registration_event_id) && !isset($registration_id)){
-            $registrations = EventRegistration::where('registration_is_active', 1)
-            ->where('registration_event_id', $request->registration_event_id)
-            ->with('event')
-            ->get();
+ 
+       if(isset($request->registration_event_id) && !isset($request->registration_id)){
+
+        $registrations = EventRegistration::where('registration_is_active', 1)
+        ->where('registration_event_id', $request->registration_event_id)
+        ->with('event')
+        ->get();
+           
        } else {
-            $registrations = EventRegistration::where('registration_is_active', 1)
-            ->where('id', $request->registration_id)
-            ->where('registration_event_id', $request->registration_event_id)
-            ->with('event')
-            ->get();
-            $data = $request->all();
+
+        $registrations = EventRegistration::where('registration_is_active', 1)
+        ->where('id', $request->registration_id)
+        ->where('registration_event_id', $request->registration_event_id)
+        ->with('event')
+        ->get();
+      
+        
        }
 
         if(isset($request->registration_event_id) && !empty($registrations->toArray())) {
@@ -158,7 +162,6 @@ class ApiController extends Controller
                 ->json([
                     'status' => 'error',
                     'message' => 'Could Not Find Any Events',
-                    'data' => $data,
                 ], 
                 400
             );
