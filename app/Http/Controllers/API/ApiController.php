@@ -350,4 +350,21 @@ class ApiController extends Controller
  
      }
 
+     public function checkRegistrationLimit(Request $request){
+        
+       
+         $registration = EventRegistration::find($request->registration_id);
+         $attendances = EventRegistrationAttendance::where('event_registration_id', $registration->id)->get();
+            // dd($attendances->toArray());
+         $atLimit = count($attendances->toArray()) == $registration->registration_limit;
+       
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $atLimit,
+                    ], 
+                    200
+                );
+    }
+
 }
