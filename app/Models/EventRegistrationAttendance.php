@@ -28,6 +28,7 @@ class EventRegistrationAttendance extends Model
         'acknowledgement_of_no_refunds',
         'attendee_receipt_number',
         'attendee_charge',
+        'is_winner',
         'is_active',
 
 
