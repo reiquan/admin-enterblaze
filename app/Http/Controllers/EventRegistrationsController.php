@@ -36,10 +36,10 @@ class EventRegistrationsController extends Controller
     }
     public function show(Request $request){
     
-        dd($request->all());
+     
         $event_registration = EventRegistration::find($request->event_registration_id);
-      
-        return view('events/show', compact('event_registration'));
+       
+        return view('events/registrations/show', compact('event_registration'));
     }
     public function create(Request $request){
         $event_registration = null;

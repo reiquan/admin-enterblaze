@@ -106,7 +106,7 @@
                         <button onclick="confirmDelete('{{ $registration->id }}', '{{ $event->id }}')" class="text-red-600 hover:text-red-900">Delete<span class="sr-only">, Lindsay Walton</span></button>
                       </td>
                       <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                        <a href="{{ route('events.registrations.show', ['event_id' => $event->id, 'registration_id' => $registration->id]) }}" class="text-indigo-600 hover:text-indigo-900">View<span class="sr-only">, Lindsay Walton</span></a>
+                        <a href="{{ route('events.registrations.show', ['event_id' => $event->id, 'registration_id' => $registration->id, 'event_registration_id' => $registration->id]) }}" class="text-indigo-600 hover:text-indigo-900">View<span class="sr-only">, Lindsay Walton</span></a>
                       </td>
                     </tr>
                   @endforeach

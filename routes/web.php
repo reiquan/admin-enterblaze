@@ -84,6 +84,14 @@ Route::middleware([
         Route::post('/events/{event_id}/registrations/store', 'App\Http\Controllers\EventRegistrationsController@store')->name('events.registrations.store');
         Route::post('/events/{event_id}/registrations/{registration_id}/delete', 'App\Http\Controllers\EventRegistrationsController@destroy')->name('events.registrations.delete');
         Route::post('/events/{event_id}/registrations/{registration_id}/publish', 'App\Http\Controllers\EventRegistrationsController@publish')->name('events.registrations.publish');
+
+        // Event Registration Attendances
+        Route::get('/events/{event_id}/registrations/attendances/create', 'App\Http\Controllers\EventRegistrationsAttendancesController@create')->name('events.registrations.attendances.create');
+        Route::get('/events/{event_id}/registrations/{registration_id}/attendances/edit', 'App\Http\Controllers\EventRegistrationsAttendancesController@edit')->name('events.registrations.attendances.edit');
+        Route::post('/events/{event_id}/registrations/{registration_id}/attendances/update', 'App\Http\Controllers\EventRegistrationsAttendancesController@update')->name('events.registrations.attendances.update');
+        Route::post('/events/{event_id}/registrations/attendances/store', 'App\Http\Controllers\EventRegistrationsAttendancesController@store')->name('events.registrations.attendances.store');
+        Route::post('/events/{event_id}/registrations/{registration_id}/attendances/delete', 'App\Http\Controllers\EventRegistrationsAttendancesController@destroy')->name('events.registrations.attendances.delete');
+
         
     //Blaze Tokens
     Route::get('/tokens/dashboard', 'App\Http\Controllers\BlazeTokensController@dashboard')->name('tokens.dashboard');
