@@ -35,6 +35,7 @@
               <tr>
                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Attendee Name</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Handle</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
 
                 <!-- <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
                   <span class="sr-only">Edit</span>
@@ -52,6 +53,30 @@
                 <tr>
                   <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{{ $attendance->attendee_first_name }} {{ $attendance->attendee_last_name }}</td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$attendance->attendee_handle_name }}</td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    <select id="{{ $attendance->id }}status" onchange="changeParticipantStatus('{{ $attendance->id }}')" name="location" class="mt-2 block  rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm/6">
+                      @if($attendance->attendee_status == 'Champion')
+                        <option selected>Champion</option>
+                        <option>Eliminated</option>
+                        <option>Competing</option>
+                      @elseif($attendance->attendee_status == 'Eliminated')
+                        <option>Champion</option>
+                        <option selected>Eliminated</option>
+                        <option>Competing</option>
+                      @else
+                        <option>Champion</option>
+                        <option>Eliminated</option>
+                        <option selected>Competing</option>
+                      @endif
+                    </select>
+                    @if($attendance->attendee_status == 'Champion')
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <form action="">
+                      <button type="button" class="rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Pay</button>
+                      </form>
+                    </td>
+                    @endif
+                  </td>
                 </tr>
               @endforeach
 
@@ -68,7 +93,43 @@
 
 </div>
 
+<script>
+        // let event_id = ";
+       
+        function changeParticipantStatus(attendance_id) {
+            console.log('here');
+            let registration_id = "{{ $event_registration->id }}";
+            let event_id = "{{ $event_registration->event->id }}";
 
+            // Display a confirmation dialog
+            var userConfirmed = window.confirm('Are you sure you want to change the status of ' + attendance_id + ' to ' + event.target.value + '?' );
+
+            // If the user clicks "OK" (true), redirect to another page
+            if (userConfirmed) {
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
+                $.ajax({
+                url: '/events/' + event_id + '/registrations/' + registration_id + '/attendances/' + attendance_id + '/changeStatus?attendance_id=' + attendance_id + '&status=' + event.target.value, // Replace with your server endpoint
+                type: "POST",
+                success: function(response) {
+                    // Handle success
+                    console.log("Success:", response);
+                    window.location.reload();
+                },
+                error: function(xhr, status, error) {
+                    // Handle error
+                    console.error("Error:", status, error);
+                }
+                });
+            } else {
+                // If the user clicks "Cancel" (false), you can add additional actions or do nothing
+                console.log('User canceled the action.');
+            }
+        }
+  </script>
     
 
 

@@ -38,7 +38,7 @@ class EventRegistrationsController extends Controller
     
      
         $event_registration = EventRegistration::find($request->event_registration_id);
-       
+    
         return view('events/registrations/show', compact('event_registration'));
     }
     public function create(Request $request){
