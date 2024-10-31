@@ -14,7 +14,7 @@ class EventRegistrationAttendancesController extends Controller
     }
 
     public function create(Request $request){
-        dd($request->all());
+       
             $event_registration = null;
     
             $event_registration_id = null;
@@ -69,6 +69,34 @@ class EventRegistrationAttendancesController extends Controller
             $event_registration_attendee->save();
 
             return;
+
+    }
+
+    public function payoutReward(Request $request){
+
+        //    dd($request->all());
+        $champion = EventRegistrationAttendance::find($request->attendance_id);
+        $amount = 0;
+
+        foreach($champion->registration->attendances as $prize_money){
+            $amount += $prize_money->attendee_charge;
+        }
+
+        
+
+        $cut = $amount * .40;
+
+        $prize = $amount - $cut;
+
+        $total = ($prize - $champion->attendee_charge );
+
+      
+
+        $b = $this->stripeService->payoutParticipant($champion->attendee_receipt_number, $total);
+
+        dd($b);
+
+        return;
 
     }
     

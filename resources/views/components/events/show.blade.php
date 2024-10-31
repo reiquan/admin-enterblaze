@@ -29,10 +29,10 @@
               <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900">{{ $event->registered }}</dd>
             </div>
 
-            <div class="flex flex-col gap-y-3 border-l border-gray-900/10 pl-6">
+            <!-- <div class="flex flex-col gap-y-3 border-l border-gray-900/10 pl-6">
               <dt class="text-sm leading-6 text-gray-600">Registered Vendors</dt>
               <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900">99.9%</dd>
-            </div>
+            </div> -->
             <div class="flex flex-col gap-y-3 border-l border-gray-900/10 pl-6">
               <dt class="text-sm leading-6 text-gray-600">Total Revenue</dt>
               <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900">${{ $event->revenue }}</dd>
