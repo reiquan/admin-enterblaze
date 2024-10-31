@@ -23,7 +23,8 @@ class EventRegistration extends Model
         'registration_fee',
         'registration_limit',
         'registration_event_id',
-        'registration_is_active'
+        'registration_is_active',
+        'registration_reference_number'
 
     ];
     protected $dates = [
