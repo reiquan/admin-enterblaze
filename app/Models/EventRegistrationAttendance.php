@@ -19,6 +19,7 @@ class EventRegistrationAttendance extends Model
         'attendee_email',
         'attendee_handle_type',
         'attendee_handle_name',
+        'attendee_payment_account_name',
         'attendee_phone_number',
         'event_registration_id',
         'attendee_company_name',

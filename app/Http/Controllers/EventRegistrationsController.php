@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class EventRegistrationsController extends Controller
 {
@@ -95,6 +96,7 @@ class EventRegistrationsController extends Controller
                         $event_registration->registration_fee = $request->registration_fee;
                         $event_registration->registration_limit = $request->registration_limit;
                         $event_registration->registration_is_active = 0;
+                        $event_registration->registration_reference_number = 'TJ'. substr(Hash::make($request->registration_name), 0, 5);
                         $event_registration->registration_event_id = $request->event_id;
                     $event_registration->save();
 
