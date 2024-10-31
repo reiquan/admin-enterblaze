@@ -14,7 +14,7 @@ class EventRegistrationAttendancesController extends Controller
     }
 
     public function create(Request $request){
-        dd($request->all());
+       
             $event_registration = null;
     
             $event_registration_id = null;
@@ -51,7 +51,7 @@ class EventRegistrationAttendancesController extends Controller
                         $event_registration_attendance->attendee_handle_name = $request->attendee_handle_name;
                         $event_registration_attendance->attendee_phone_number = $request->attendee_phone_number;
                         $event_registration_attendance->event_registration_id = $request->event_registration_id;
-                        $event_registration_attendance->is_active = 0;
+                        $event_registration_attendance->attendee_status = 'Competing';
                         $event_registration_attendance->attendee_charge = $request->attendee_charge;
                         $event_registration_attendance->attendee_receipt_number = $request->attendee_receipt_number;
                     $event_registration_attendance->save();
@@ -59,6 +59,45 @@ class EventRegistrationAttendancesController extends Controller
                 
         
                 return redirect()->route('events.registrations.show', ['registration_id' => $event_registration_attendance->event_registration_id]);
+    }
+
+    public function changeStatus(Request $request){
+
+           
+            $event_registration_attendee = EventRegistrationAttendance::find($request->attendance_id);
+            $event_registration_attendee->attendee_status = $request->status;
+            $event_registration_attendee->save();
+
+            return;
+
+    }
+
+    public function payoutReward(Request $request){
+
+        //    dd($request->all());
+        $champion = EventRegistrationAttendance::find($request->attendance_id);
+        $amount = 0;
+
+        foreach($champion->registration->attendances as $prize_money){
+            $amount += $prize_money->attendee_charge;
+        }
+
+        
+
+        $cut = $amount * .40;
+
+        $prize = $amount - $cut;
+
+        $total = ($prize - $champion->attendee_charge );
+
+      
+
+        $b = $this->stripeService->payoutParticipant($champion->attendee_receipt_number, $total);
+
+        dd($b);
+
+        return;
+
     }
     
     

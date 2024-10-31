@@ -86,11 +86,12 @@ Route::middleware([
         Route::post('/events/{event_id}/registrations/{registration_id}/publish', 'App\Http\Controllers\EventRegistrationsController@publish')->name('events.registrations.publish');
 
         // Event Registration Attendances
-        Route::get('/events/{event_id}/registrations/attendances/create', 'App\Http\Controllers\EventRegistrationsAttendancesController@create')->name('events.registrations.attendances.create');
-        Route::get('/events/{event_id}/registrations/{registration_id}/attendances/edit', 'App\Http\Controllers\EventRegistrationsAttendancesController@edit')->name('events.registrations.attendances.edit');
-        Route::post('/events/{event_id}/registrations/{registration_id}/attendances/update', 'App\Http\Controllers\EventRegistrationsAttendancesController@update')->name('events.registrations.attendances.update');
-        Route::post('/events/{event_id}/registrations/attendances/store', 'App\Http\Controllers\EventRegistrationsAttendancesController@store')->name('events.registrations.attendances.store');
-        Route::post('/events/{event_id}/registrations/{registration_id}/attendances/delete', 'App\Http\Controllers\EventRegistrationsAttendancesController@destroy')->name('events.registrations.attendances.delete');
+        Route::get('/events/{event_id}/registrations/attendances/create', 'App\Http\Controllers\EventRegistrationAttendancesController@create')->name('events.registrations.attendances.create');
+        Route::get('/events/{event_id}/registrations/{registration_id}/attendances/edit', 'App\Http\Controllers\EventRegistrationAttendancesController@edit')->name('events.registrations.attendances.edit');
+        Route::post('/events/{event_id}/registrations/{registration_id}/attendances/update', 'App\Http\Controllers\EventRegistrationAttendancesController@update')->name('events.registrations.attendances.update');
+        Route::post('/events/{event_id}/registrations/attendances/store', 'App\Http\Controllers\EventRegistrationAttendancesController@store')->name('events.registrations.attendances.store');
+        Route::post('/events/{event_id}/registrations/{registration_id}/attendances/delete', 'App\Http\Controllers\EventRegistrationAttendancesController@destroy')->name('events.registrations.attendances.delete');
+        Route::post('/events/{event_id}/registrations/{registration_id}/attendances/{attendance_id}/changeStatus', 'App\Http\Controllers\EventRegistrationAttendancesController@changeStatus')->name('events.registrations.attendances.changeStatus');
 
         
     //Blaze Tokens
