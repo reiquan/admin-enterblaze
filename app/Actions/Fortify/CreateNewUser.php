@@ -22,7 +22,7 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
-        if(app()->environment('production')){
+        if(app()->environment('beta')){
             if(isset($input['beta_code']) && $input['beta_code'] == config('services.beta.token')){
 
             } else {
