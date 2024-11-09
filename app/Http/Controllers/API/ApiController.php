@@ -29,8 +29,7 @@ class ApiController extends Controller
     }
     public function getUniverses(Request $request)
     {
-        
-        if($request->header('Authorization') == config('auth.api.token')){
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
             if(isset($request->universe_id)) {
                 return response()
                     ->json(Universe::where('universe_is_active', 1)
@@ -71,7 +70,7 @@ class ApiController extends Controller
 
     public function getBooks(Request $request)
     {
-        if($request->header('Authorization') == config('auth.api.token')){
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
        
             if(isset($request->universe_id)) {
                 return response()
@@ -110,7 +109,7 @@ class ApiController extends Controller
 
     public function getChapters(Request $request)
     {
-        if($request->header('Authorization') == config('auth.api.token')){
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
             $pages = IssuePage::where('issue_id', $request->issue_id)->with('issue')->get();
             $issue = Issue::where('issue_book_id', $pages[0]['issue']['issue_book_id'])
                             ->orderBy('issue_number')
@@ -133,7 +132,7 @@ class ApiController extends Controller
     }
 
     public function getEvents(Request $request){
-        if($request->header('Authorization') == config('auth.api.token')){
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
         
             if(isset($request->event_id) && $request->event_id){
                 $event = Event::find($request->event_id);
@@ -175,7 +174,7 @@ class ApiController extends Controller
 
         // dd($request->all());
 
-        if($request->header('Authorization') == config('auth.api.token')){
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
  
             if(isset($request->registration_event_id) && !isset($request->registration_id)){
 
@@ -225,7 +224,7 @@ class ApiController extends Controller
     }
 
     public function submitOpenRegistrationAttendance(Request $request){
-        if($request->header('Authorization') == config('auth.api.token')){
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
 
             //     return response()
             //     ->json([
@@ -315,7 +314,7 @@ class ApiController extends Controller
     }
     public function submitReservation(Request $request){
     
-        if($request->header('Authorization') == config('auth.api.token')){
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
                 //
             //     return response()
             //     ->json([
@@ -385,7 +384,7 @@ class ApiController extends Controller
 
     public function getBlazeTokenTiers(Request $request){
 
-        if($request->header('Authorization') == config('auth.api.token')){
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
         
             $tier = null;
             $tiers = null;
@@ -439,7 +438,7 @@ class ApiController extends Controller
 
      public function checkRegistrationLimit(Request $request){
         
-        if($request->header('Authorization') == config('auth.api.token')){
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
             $registration = EventRegistration::find($request->registration_id);
             $attendances = EventRegistrationAttendance::where('event_registration_id', $registration->id)->get();
                 // dd($attendances->toArray());
