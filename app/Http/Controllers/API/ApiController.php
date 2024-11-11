@@ -224,7 +224,7 @@ class ApiController extends Controller
     }
 
     public function submitOpenRegistrationAttendance(Request $request){
-        dd($request->all());
+     
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
 
             //     return response()
