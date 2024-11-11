@@ -135,7 +135,7 @@ class ApiController extends Controller
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
         
             if(isset($request->event_id) && $request->event_id){
-                $event = Event::find($request->event_id);
+                $event = Event::find($request->event_id)->load('registrations');
                     $data = $request->all();
 
                     return response()
@@ -147,7 +147,7 @@ class ApiController extends Controller
                     );
             } else {
                     $events = Event::where('is_active', 1)
-                    ->get();
+                    ->get()->load('registrations');
                     $data = $request->all();
             
                     return response()
@@ -224,6 +224,7 @@ class ApiController extends Controller
     }
 
     public function submitOpenRegistrationAttendance(Request $request){
+        dd($request->all());
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
 
             //     return response()
@@ -260,7 +261,7 @@ class ApiController extends Controller
                             'attendee_receipt_number' => $request->attendee_receipt_number,
                             'attendee_charge' => $request->attendee_charge,        
                         ]);
-        
+                        
                         $userNumber = $this->alertService->formatPhoneNumber($request['attendee_phone_number']);
                         $userName = $request->attendee_first_name. ' '.$request->attendee_last_name;
                 
@@ -271,10 +272,21 @@ class ApiController extends Controller
             
                         //send alert
                         // $this->alertService->sendAdminAlert($userName, $userNumber, 'Thank You For Your Purchase');
-        
-                        //send email
-                        $alertInfo = $this->alertService->createBody($request, 'event_receipt');
-                        $this->alertService->processAlert($alertInfo, $request['attendee_email']);
+
+                        //grab the registration
+                        $registration = EventRegistration::find($request->event_registration_id);
+                        //if the registration is an online tourney 
+                        if($registration && $registration->registration_type == 'Participant'){
+                            // then send the receipt for participants
+                            $alertInfo = $this->alertService->createBody($request, 'tournament_entry');
+                            $this->alertService->processAlert($alertInfo, $request['attendee_email'], 'new_participant');
+
+                        } else {
+                            //send email
+                            $alertInfo = $this->alertService->createBody($request, 'event_receipt');
+                            $this->alertService->processAlert($alertInfo, $request['attendee_email']);
+                        }
+
                         return response()
                             ->json([
                                 'status' => 'success',

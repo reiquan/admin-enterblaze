@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Twilio\Rest\Client;
 use Mailgun\Mailgun;
 use App\Mail\SendAlert;
+use App\Models\EventRegistration;
 use App\Mail\SendNewArtistAlert;
-use App\Models\CandidateSubscriberAlert;
-use App\Models\CandidateSubscriber;
+use App\Mail\SendNewParticipantAlert;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use libphonenumber\PhoneNumberUtil;
@@ -34,6 +34,8 @@ class SubscriptionService
             // $candidate_subscribers = $this->getCandidateSubscribers(auth()->user()->candidate->id);
             if($alert_type == 'new_artist'){
                 $this->scheduleEmail($request, $email, 'new_artist');
+            } else if($alert_type == 'new_participant') {
+                $this->scheduleEmail($request, $email, 'new_participant');
             } else {
                 $this->scheduleEmail($request, $email);
             }
@@ -178,7 +180,20 @@ class SubscriptionService
 
             return $alert_body;
 
-        } else  if($type == 'reservation'){
+        } else  if($type == 'tournament_entry'){
+            $registration = EventRegistration::find($body['event_registration_id']);
+            
+            $alert_body =  [ 
+                 'alert_title' => 'You are now scheduled to Participate in **'. $registration->event->event_name.'**',
+                 'alert_receipt' => 'Reservation #: '. $body['attendee_receipt_number'],
+                 'alert_body' => 'Please follow the link below on any updates to the upcoming tournament starting at '.$registration->registration_start_date.' **WARNING** Faiure to show up on time is an automatic forfeit so please make sure to show up',
+                 'alert_link' => 'https://discord.gg/',
+
+             ];
+ 
+             return $alert_body;
+
+         } else  if($type == 'reservation'){
             $alert_body =  [ 
                  'alert_title' => 'Reservation made! ',
                  'alert_body' => 'Reservation #:'. $body['reservation_number'],
@@ -201,6 +216,8 @@ class SubscriptionService
 
        if(isset($type) && $type == 'new_artist') {
              Mail::to($email)->send(new SendNewArtistAlert($alertInfo));
+       } else if(isset($type) && $type == 'new_participant') {
+            Mail::to($email)->send(new SendNewParticipantAlert($alertInfo));
        } else {
             Mail::to($email)->send(new SendAlert($alertInfo));
        }
