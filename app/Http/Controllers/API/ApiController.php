@@ -241,7 +241,6 @@ class ApiController extends Controller
                 
                 if(!isset($receipt_already_verified->id)){
                     $payment_verified = $this->stripeService->verifyPayment($request->attendee_receipt_number);
-                    // dd($payment_verified);
         
                     if($payment_verified->original['status'] == 'success'){
                     
