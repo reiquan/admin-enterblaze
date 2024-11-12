@@ -32,7 +32,8 @@ class Issue extends Model
       'issue_is_adult',
       'issue_is_locked',
       'issue_number',
-      'issue_price'
+      'issue_price',
+      'issue_blaze_token_amount'
     ];
 
     public function pages(){
