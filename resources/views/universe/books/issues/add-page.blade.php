@@ -290,43 +290,45 @@ function sendImage(objURL, file, dname) {
     formData.append("book_id",b_id);
     formData.append("issue_id",i_id);
     // Perform the AJAX request using jQuery
-    $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-    });
-    $.ajax({
-      url: '/universe/' + u_id + '/books/' + b_id + '/issues/' + i_id + '/update', // Replace with your server endpoint
-      type: "POST",
-      data: formData,
-      processData: false, // Prevent jQuery from processing the data
-      contentType: false, // Prevent jQuery from setting contentType
-      success: function(response) {
-        // Handle success
-        console.log("Success:", response);
-        console.log();
-        let id = response.issue_page_id;
-
-        // // Create a hidden input element
-        var hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.id = response.issue_page_id;
-        hiddenInput.name = 'issue_page' + response.issue_page_id; // Set the name attribute if needed
-        hiddenInput.value = response.issue_page_id; // Set the initial value if needed
-        document.body.appendChild(hiddenInput);
-        console.log(objURL);
-        let nname = document.getElementById(dname);
-        nname.value = response.issue_page_id;
-        console.log('ayyye');
-        console.log(nname.value);
-
-        console.log(id);
-
-      },
-      error: function(xhr, status, error) {
-        // Handle error
-        console.error("Error:", status, error);
+    $(document).ready(function() {
+      $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
+      });
+      $.ajax({
+        url: '/universe/' + u_id + '/books/' + b_id + '/issues/' + i_id + '/update', // Replace with your server endpoint
+        type: "POST",
+        data: formData,
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting contentType
+        success: function(response) {
+          // Handle success
+          console.log("Success:", response);
+          console.log();
+          let id = response.issue_page_id;
+
+          // // Create a hidden input element
+          var hiddenInput = document.createElement('input');
+          hiddenInput.type = 'hidden';
+          hiddenInput.id = response.issue_page_id;
+          hiddenInput.name = 'issue_page' + response.issue_page_id; // Set the name attribute if needed
+          hiddenInput.value = response.issue_page_id; // Set the initial value if needed
+          document.body.appendChild(hiddenInput);
+          console.log(objURL);
+          let nname = document.getElementById(dname);
+          nname.value = response.issue_page_id;
+          console.log('ayyye');
+          console.log(nname.value);
+
+          console.log(id);
+
+        },
+        error: function(xhr, status, error) {
+          // Handle error
+          console.error("Error:", status, error);
+        }
+      });
     });
   })
   .catch(error => {
@@ -355,26 +357,28 @@ gallery.onclick = ({ target }) => {
     formData.append("issue_id",i_id);
     formData.append("issue_page_id",imj);
     // Perform the AJAX request using jQuery
-    $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-    });
-    $.ajax({
-      url: '/universe/' + u_id + '/books/' + b_id + '/issues/' + i_id +  '/pages/' + imj + '/delete', // Replace with your server endpoint
-      type: "POST",
-      data: formData,
-      processData: false, // Prevent jQuery from processing the data
-      contentType: false, // Prevent jQuery from setting contentType
-      success: function(response) {
-        // Handle success
-        console.log("Success:", response);
-
-      },
-      error: function(xhr, status, error) {
-        // Handle error
-        console.error("Error:", status, error);
+    $(document).ready(function() {
+      $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
+      });
+      $.ajax({
+        url: '/universe/' + u_id + '/books/' + b_id + '/issues/' + i_id +  '/pages/' + imj + '/delete', // Replace with your server endpoint
+        type: "POST",
+        data: formData,
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting contentType
+        success: function(response) {
+          // Handle success
+          console.log("Success:", response);
+
+        },
+        error: function(xhr, status, error) {
+          // Handle error
+          console.error("Error:", status, error);
+        }
+      });
     });
 
 
