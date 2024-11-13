@@ -231,25 +231,27 @@ function sendImage(objURL, file) {
     formData.append("universe_id",u_id);
     formData.append("book_id",b_id);
     // Perform the AJAX request using jQuery
-    $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-    });
-    $.ajax({
-      url: '/universe/' + u_id + '/books/' + b_id + '/update', // Replace with your server endpoint
-      type: "POST",
-      data: formData,
-      processData: false, // Prevent jQuery from processing the data
-      contentType: false, // Prevent jQuery from setting contentType
-      success: function(response) {
-        // Handle success
-        console.log("Success:", response);
-      },
-      error: function(xhr, status, error) {
-        // Handle error
-        console.error("Error:", status, error);
+    $(document).ready(function() {
+      $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
+      });
+      $.ajax({
+        url: '/universe/' + u_id + '/books/' + b_id + '/update', // Replace with your server endpoint
+        type: "POST",
+        data: formData,
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting contentType
+        success: function(response) {
+          // Handle success
+          console.log("Success:", response);
+        },
+        error: function(xhr, status, error) {
+          // Handle error
+          console.error("Error:", status, error);
+        }
+      });
     });
   })
   .catch(error => {
@@ -286,26 +288,28 @@ document.getElementById("submit").onclick = (e) => {
   // Check if a file is selected
   if (fileInput.files.length > 0) {
       formData.append('file', fileInput.files[0]);
-      $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-       });
-      $.ajax({
-          url: '/universe/' + u_id + '/books/' + b_id + '/update', // Replace with your server endpoint
-          type: 'POST',
-          data: JSON.stringify(FILES),
-          processData: false,
-          contentType: false,
-          success: function(response) {
-              console.log('File uploaded successfully:', response);
-              // Handle the response from the server
-              console.log('done');
-          },
-          error: function(error) {
-              console.error('Error uploading file:', error);
-              // Handle errors
+      $(document).ready(function() {
+        $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
+        });
+        $.ajax({
+            url: '/universe/' + u_id + '/books/' + b_id + '/update', // Replace with your server endpoint
+            type: 'POST',
+            data: JSON.stringify(FILES),
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('File uploaded successfully:', response);
+                // Handle the response from the server
+                console.log('done');
+            },
+            error: function(error) {
+                console.error('Error uploading file:', error);
+                // Handle errors
+            }
+        });
       });
   } else {
       console.log('No file selected.');
