@@ -166,24 +166,26 @@
 
             // If the user clicks "OK" (true), redirect to another page
             if (userConfirmed) {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-                });
-                $.ajax({
-                url: '/events/' + event_id + '/registrations/' + registration_id + '/attendances/' + attendance_id + '/changeStatus?attendance_id=' + attendance_id + '&status=' + event.target.value, // Replace with your server endpoint
-                type: "POST",
-                success: function(response) {
-                    // Handle success
-                    console.log("Success:", response);
-                    window.location.reload();
-                },
-                error: function(xhr, status, error) {
-                    // Handle error
-                    console.error("Error:", status, error);
-                }
-                });
+              $(document).ready(function() {
+                  $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+                  });
+                  $.ajax({
+                  url: '/events/' + event_id + '/registrations/' + registration_id + '/attendances/' + attendance_id + '/changeStatus?attendance_id=' + attendance_id + '&status=' + event.target.value, // Replace with your server endpoint
+                  type: "POST",
+                  success: function(response) {
+                      // Handle success
+                      console.log("Success:", response);
+                      window.location.reload();
+                  },
+                  error: function(xhr, status, error) {
+                      // Handle error
+                      console.error("Error:", status, error);
+                  }
+                  });
+              });
             } else {
                 // If the user clicks "Cancel" (false), you can add additional actions or do nothing
                 console.log('User canceled the action.');

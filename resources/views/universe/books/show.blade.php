@@ -25,23 +25,25 @@
 
             // If the user clicks "OK" (true), redirect to another page
             if (userConfirmed) {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-                });
-                $.ajax({
-                url: '/universe/' + universe_id + '/books/' + book_id + '/issues' + '/' + issue_id + '/publish?issue_id=' + id + '&action=' + action, // Replace with your server endpoint
-                type: "POST",
-                success: function(response) {
-                    // Handle success
-                    console.log("Success:", response);
-                    window.location.reload();
-                },
-                error: function(xhr, status, error) {
-                    // Handle error
-                    console.error("Error:", status, error);
-                }
+                $(document).ready(function() {
+                    $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                    });
+                    $.ajax({
+                    url: '/universe/' + universe_id + '/books/' + book_id + '/issues' + '/' + issue_id + '/publish?issue_id=' + id + '&action=' + action, // Replace with your server endpoint
+                    type: "POST",
+                    success: function(response) {
+                        // Handle success
+                        console.log("Success:", response);
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error
+                        console.error("Error:", status, error);
+                    }
+                    });
                 });
             } else {
                 // If the user clicks "Cancel" (false), you can add additional actions or do nothing
@@ -61,23 +63,25 @@
 
             // If the user clicks "OK" (true), redirect to another page
             if (userConfirmed) {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-                });
-                $.ajax({
-                url: '/universe/' + universe_id + '/books/' + book_id + '/issues' + '/' + issue_id +  '/delete?issue_id=' + id, // Replace with your server endpoint
-                type: "POST",
-                success: function(response) {
-                    // Handle success
-                    console.log("Success:", response);
-                    window.location.reload();
-                },
-                error: function(xhr, status, error) {
-                    // Handle error
-                    console.error("Error:", status, error);
-                }
+                $(document).ready(function() {
+                    $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                    });
+                    $.ajax({
+                    url: '/universe/' + universe_id + '/books/' + book_id + '/issues' + '/' + issue_id +  '/delete?issue_id=' + id, // Replace with your server endpoint
+                    type: "POST",
+                    success: function(response) {
+                        // Handle success
+                        console.log("Success:", response);
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error
+                        console.error("Error:", status, error);
+                    }
+                    });
                 });
             } else {
                 // If the user clicks "Cancel" (false), you can add additional actions or do nothing
