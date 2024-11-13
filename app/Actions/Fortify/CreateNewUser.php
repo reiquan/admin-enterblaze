@@ -22,14 +22,17 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
-        if(isset($input['beta_code']) && $input['beta_code'] == config('services.beta.token')){
+        if(app()->environment('beta')){
+            if(isset($input['beta_code']) && $input['beta_code'] == config('services.beta.token')){
 
-        } else {
- 
-            throw ValidationException::withMessages([
-                'errors' => 'Incorrect Access Code.',
-            ]);
+            } else {
+     
+                throw ValidationException::withMessages([
+                    'errors' => 'Incorrect Access Code.',
+                ]);
+            }
         }
+    
 
 
         Validator::make($input, [

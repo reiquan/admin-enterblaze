@@ -55,7 +55,7 @@ class AuthApiController extends Controller
               
                 $alertInfo = $this->alertService->createBody($subscriber, 'artist_request');
                
-                $this->alertService->processAlert($alertInfo, 'enterblazecomics@gmail.com', 'new_artist');
+                $this->alertService->processAlert($alertInfo, $request->email, 'new_artist');
             
                 return response()->json(['success' => 'Artist request submitted!'], 200);
 

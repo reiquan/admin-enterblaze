@@ -3,6 +3,7 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use Stripe\Stripe;
+use Stripe\Refund;
 use Stripe\PaymentIntent;
 use Stripe\Exception\CardException;
 use Stripe\Exception\RateLimitException;
@@ -18,13 +19,21 @@ class StripeService
 
     public function __construct() { 
     
-        $this->secret_key = env('TEST_STRIPE_SECRET');
+        if(app()->environment('staging') || app()->environment('development')){
+            $this->secret_key = config('services.stripe.test.secret_key');
+        } else {
+            $this->secret_key = config('services.stripe.live.secret_key');
+        }
 
     }
 
     public function createPaymentIntent(Request $request)
     {
-        Stripe::setApiKey(env('TEST_STRIPE_SECRET'));
+        if(app()->environment('staging') || app()->environment('development')){
+            Stripe::setApiKey(config('services.stripe.test.secret_key'));
+        } else {
+            Stripe::setApiKey(config('services.stripe.live.secret_key'));
+        }
 
         $paymentIntent = PaymentIntent::create([
             'amount' => $request->amount, // Amount in cents
@@ -38,7 +47,11 @@ class StripeService
     }
     function createCardToken($number,$exp_month,$exp_year,$cvc){
 
-        $stripe = new \Stripe\StripeClient($this->secret_key);
+        if(app()->environment('staging') || app()->environment('development')){
+            $stripe = Stripe::setApiKey(config('services.stripe.test.secret_key'));
+        } else {
+            $stripe = Stripe::setApiKey(config('services.stripe.live.secret_key'));
+        }
         try {
            $tokens = $stripe->tokens->create([
                     'card' => [
@@ -70,7 +83,11 @@ class StripeService
 
     function createCharge($token,$amount,$description = null){  
 
-        $stripe = new \Stripe\StripeClient($this->secret_key);
+        if(app()->environment('staging') || app()->environment('development')){
+            $stripe = Stripe::setApiKey(config('services.stripe.test.secret_key'));
+        } else {
+            $stripe = Stripe::setApiKey(config('services.stripe.live.secret_key'));
+        }
         $charge = $stripe->charge->create([
             'amount' => $amount,
             'currency' => 'usd',
@@ -87,7 +104,11 @@ class StripeService
 
     function createCustomer($name, $email, $description = null){
         
-        $stripe = new \Stripe\StripeClient($this->secret_key);
+        if(app()->environment('staging') || app()->environment('development')){
+            $stripe = Stripe::setApiKey(config('services.stripe.test.secret_key'));
+        } else {
+            $stripe = Stripe::setApiKey(config('services.stripe.live.secret_key'));
+        }
         $customer = $stripe->customers->create([
             'description' => $description,
             'name' => $name
@@ -97,7 +118,11 @@ class StripeService
     }
 
     function createCardPayMethod($number,$exp_month,$exp_year,$cvc){
-        $stripe = new \Stripe\StripeClient($this->secret_key);
+        if(app()->environment('staging') || app()->environment('development')){
+            $stripe = Stripe::setApiKey(config('services.stripe.test.secret_key'));
+        } else {
+            $stripe = Stripe::setApiKey(config('services.stripe.live.secret_key'));
+        }
         $method = $stripe->paymentMethods->create([
         'type' => 'card',
         'card' => [
@@ -114,7 +139,11 @@ class StripeService
 
     function charge($intent_id){
 
-        $stripe = new \Stripe\StripeClient($this->secret_key);
+        if(app()->environment('staging') || app()->environment('development')){
+            $stripe = Stripe::setApiKey(config('services.stripe.test.secret_key'));
+        } else {
+            $stripe = Stripe::setApiKey(config('services.stripe.live.secret_key'));
+        }
         try {
             $confirm = $stripe->paymentIntents->confirm($intent_id);
         } catch(\Stripe\Exception\CardException $e) {
@@ -136,7 +165,7 @@ class StripeService
     }
     public function verifyPayment($paymentIntentId)
     {
-        
+       
         try {
             // Set the Stripe API key
             Stripe::setApiKey($this->secret_key);

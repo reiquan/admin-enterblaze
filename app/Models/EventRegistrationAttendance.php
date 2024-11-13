@@ -17,6 +17,9 @@ class EventRegistrationAttendance extends Model
         'attendee_first_name',
         'attendee_last_name',
         'attendee_email',
+        'attendee_handle_type',
+        'attendee_handle_name',
+        'attendee_payment_account_name',
         'attendee_phone_number',
         'event_registration_id',
         'attendee_company_name',
@@ -26,7 +29,9 @@ class EventRegistrationAttendance extends Model
         'acknowledgement_of_no_refunds',
         'attendee_receipt_number',
         'attendee_charge',
+        'attendee_status',
         'is_active',
+
 
     ];
 
