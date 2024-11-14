@@ -1,13 +1,22 @@
 <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
     <x-application-logo class="block h-12 w-auto" />
+    @if(isset($pages[0]->issue->issue_number))
+        <h1 class="mt-8 text-2xl font-medium text-gray-900">
+        <strong>{{ $pages[0]->issue->issue_number }}</strong> {{ $pages[0]->issue->issue_title }}
+        </h1>
 
-    <h1 class="mt-8 text-2xl font-medium text-gray-900">
-     <strong>{{ $pages[0]->issue->issue_number }}</strong> {{ $pages[0]->issue->issue_title }}
-    </h1>
+        <p class="mt-6 text-gray-500 leading-relaxed">
+        {{ $pages[0]->issue->issue_description }}
+        </p>
+    @else
+        <h1 class="mt-8 text-2xl font-medium text-gray-900">
+        <strong></strong> 
+        </h1>
 
-    <p class="mt-6 text-gray-500 leading-relaxed">
-    {{ $pages[0]->issue->issue_description }}
-    </p>
+        <p class="mt-6 text-gray-500 leading-relaxed">
+        
+        </p>
+    @endif
 </div>
 <div class="relative block w-full h-full rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
     <div class="mx-auto h-48 w-48 text-gray-400">
