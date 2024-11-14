@@ -110,7 +110,7 @@ class ApiController extends Controller
     public function getChapters(Request $request)
     {
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
-            $pages = IssuePage::where('issue_id', $request->issue_id)->with('issue')->whereNull('issue_page_is_locked')->get();
+            $pages = IssuePage::where('issue_id', $request->issue_id)->with('issue')->whereNull('issue_page_is_locked')->orderBy('issue_page_number')->get();
             $issue = Issue::where('issue_book_id', $pages[0]['issue']['issue_book_id'])
                             ->orderBy('issue_number')
                             ->get();    
