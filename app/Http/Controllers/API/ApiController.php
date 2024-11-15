@@ -404,7 +404,7 @@ class ApiController extends Controller
 
                 $tier = BlazeTokenTier::find($request->token_tier_id);
             } else {
-                $tiers = BlazeTokenTier::whereNull('deleted_at')->get();
+                $tiers = BlazeTokenTier::whereNull('deleted_at')->where('token_tier_is_active', 1)->get();
             }
 
             $data = $request->all();
