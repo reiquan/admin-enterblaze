@@ -172,14 +172,14 @@ class ApiController extends Controller
 
     public function getOpenRegistrations(Request $request){
 
-        // dd($request->all());
+        dd($request->all());
 
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
  
             
             $registrations = EventRegistration::where('registration_is_active','=', 1)
             ->where('id', $request->registration_id)
-            // ->with('event')
+            ->with('event')
             ->get();
            
             
