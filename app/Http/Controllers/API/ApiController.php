@@ -206,7 +206,7 @@ class ApiController extends Controller
                 return response()
                     ->json([
                         'status' => 'error',
-                        'message' => 'Could Not Find Any Events',
+                        'message' => $request->all(),
                     ], 
                     400
                 );
