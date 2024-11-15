@@ -81,10 +81,10 @@ class BlazeTokensController extends Controller
         //
         $tier = BlazeTokenTier::find($id);
         if($request->action == 'publish'){
-            $tier->is_active = 1;
+            $tier->token_tier_is_active = 1;
             $tier->save();
         } else {
-            $tier->is_active = 0;
+            $tier->token_tier_is_active = 0;
             $tier->save();
         }
        
