@@ -184,7 +184,7 @@ class ApiController extends Controller
            
             
 
-            if($registrations) {
+            if($registrations->toArray()) {
                 return response()
                     ->json([
                         'status' => 'success',
