@@ -193,7 +193,8 @@ class StripeService
         } catch (ApiErrorException $e) {
             // Handle generic API errors
             
-            return ['error' => $e->getMessage()];
+            // return ['error' => $e->getMessage()];
+            return false;
         }
     }
     public function confirmPaymentIntent($intent_id, $method_id)
