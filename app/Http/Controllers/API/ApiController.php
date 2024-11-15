@@ -176,25 +176,15 @@ class ApiController extends Controller
 
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
  
-            if(isset($request->registration_event_id) && !isset($request->registration_id)){
-
-                $registrations = EventRegistration::where('registration_is_active', 1)
-                ->where('registration_event_id', $request->registration_event_id)
-                ->with('event')
-                ->get();
-                
-            } else {
-
-                $registrations = EventRegistration::where('registration_is_active', 1)
-                ->where('id', $request->registration_id)
-                ->where('registration_event_id', $request->registration_event_id)
-                ->with('event')
-                ->get();
             
-                
-            }
+            $registrations = EventRegistration::where('registration_is_active', 1)
+            ->where('id', $request->registration_id)
+            ->with('event')
+            ->get();
+           
+            
 
-            if(isset($request->registration_event_id)) {
+            if($registrations) {
                 return response()
                     ->json([
                         'status' => 'success',
