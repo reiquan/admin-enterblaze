@@ -172,7 +172,7 @@ class ApiController extends Controller
 
     public function getOpenRegistrations(Request $request){
 
-        dd($request->all());
+        
 
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
  
@@ -196,7 +196,7 @@ class ApiController extends Controller
                 return response()
                     ->json([
                         'status' => 'error',
-                        'message' => 'Could Not Find Any Events',
+                        'message' => $request->all(),
                     ], 
                     400
                 );
