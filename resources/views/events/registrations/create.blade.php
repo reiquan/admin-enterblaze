@@ -122,6 +122,11 @@
                 @else
                 <option >Food Vendor</option>
                 @endif
+                @if($event_registration->registration_type == 'Participant')
+                <option selected>Participant</option>
+                @else
+                <option >Participant</option>
+                @endif
              @else
              <option>Guest</option>
              <option>Vendor</option>
