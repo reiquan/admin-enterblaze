@@ -229,14 +229,14 @@ class ApiController extends Controller
             // if(!$validation){
                 $receipt_already_verified = EventRegistrationAttendance::where('attendee_receipt_number', $request->attendee_receipt_number)->first();
                 
-                // if(!isset($receipt_already_verified->id)){
+                if(!isset($receipt_already_verified->id)){
                     $payment_verified = $this->stripeService->verifyPayment($request->attendee_receipt_number);
         
-                   if($payment_verified['error']){
+                   if($payment_verified == false){
                         return response()
                             ->json([
                                 'status' => 'failure',
-                                'message' => $payment_verified['error'],
+                                'message' => 'Something went wrong',
                             ], 
                             400
                         );
@@ -303,15 +303,15 @@ class ApiController extends Controller
                     }
                    }
 
-                // } else {
-                //     return response()
-                //         ->json([
-                //             'status' => 'error',
-                //             'message' => 'This receipt number has already been verified',
-                //         ], 
-                //         400
-                //     );
-                // }
+                } else {
+                    return response()
+                        ->json([
+                            'status' => 'error',
+                            'message' => 'This receipt number has already been verified',
+                        ], 
+                        400
+                    );
+                }
         } else {
             return response()
                 ->json([
