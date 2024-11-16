@@ -6,7 +6,7 @@
 
 
 @component('mail::button', ['url' => $alertInfo['alert_link']])
-{{ __('Accept Invitation') }}
+{{ __('Join Our Discord Channel For Tournament Updates') }}
 @endcomponent
 
 
