@@ -229,10 +229,11 @@ class ApiController extends Controller
             // if(!$validation){
                 $receipt_already_verified = EventRegistrationAttendance::where('attendee_receipt_number', $request->attendee_receipt_number)->first();
                 
-                if(!isset($receipt_already_verified->id)){
+                $is_free_event = str_contains($request->attendee_receipt_number, 'free');
+                if((isset($receipt_already_verified->id) && $is_free_event) || !isset($receipt_already_verified->id)){
                     $payment_verified = $this->stripeService->verifyPayment($request->attendee_receipt_number);
         
-                   if($payment_verified == false){
+                   if($payment_verified == false && !$is_free_event){
                         return response()
                             ->json([
                                 'status' => 'failure',
@@ -241,8 +242,8 @@ class ApiController extends Controller
                             400
                         );
                    }else{
-                    if($payment_verified->original['status'] == 'success'){
-                    
+                    if(isset($payment_verified->original['status']) && $payment_verified->original['status'] == 'success' || str_contains($request->attendee_receipt_number, 'free')){
+
                         $attendance = EventRegistrationAttendance::create([
                             'attendee_first_name' => $request->attendee_first_name,
                             'attendee_last_name' => $request->attendee_last_name,
@@ -255,7 +256,7 @@ class ApiController extends Controller
                             'attendee_company_description' => $request->attendee_company_description ?? null,
                             'attendee_company_url' => $request->attendee_company_url ?? null,
                             'attendee_number_of_employees_attending' => $request->attendee_number_of_employees_attending ?? null,
-                            'acknowledgement_of_no_refunds' => $request->acknowledgement_of_no_refunds,
+                            'acknowledgement_of_no_refunds' => str_contains($request->attendee_receipt_number, 'free') ? 'on' : $request->acknowledgement_of_no_refunds,
                             'attendee_receipt_number' => $request->attendee_receipt_number,
                             'attendee_charge' => $request->attendee_charge,        
                         ]);
