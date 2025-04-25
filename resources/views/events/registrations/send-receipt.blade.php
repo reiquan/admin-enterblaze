@@ -1,6 +1,6 @@
 @component('mail::message')
 
-Thank You for Your Purchase. We will see you there!!
+Thank You for Your Support! We Will be in contact soon!
 
 {{ $alertInfo['alert_body'] }}
 

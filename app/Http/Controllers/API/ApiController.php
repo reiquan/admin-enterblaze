@@ -71,8 +71,23 @@ class ApiController extends Controller
     public function getBooks(Request $request)
     {
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
-       
-            if(isset($request->universe_id)) {
+
+            if(isset($request->book_id)){
+                return response()
+                ->json(Book::where('is_active', 1)
+                ->where('id', $request->book_id)
+                ->with('issues')
+                ->get()
+                ->makeHidden(
+                    [
+                        'deleted_at',
+                        'created_at',
+                        'is_active',
+                    
+                    ]
+                )->toArray(), 200);
+
+            } else if(isset($request->universe_id)) {
                 return response()
                     ->json(Book::where('is_active', 1)
                     ->where('book_universe_id', $request->universe_id)
@@ -86,7 +101,7 @@ class ApiController extends Controller
                         
                         ]
                     )->toArray(), 200);
-            }
+            } 
             return response()
                     ->json(Book::where('is_active', 1)
                     ->get()
