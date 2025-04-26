@@ -375,8 +375,10 @@ class ApiController extends Controller
             } else if(isset($request->issue_id) && !empty($request->issue_id)) {
 
                 $issue = Issue::find($reservation->issue_id);
+                $issue->reservation_number = $request->reservation_number;
+               
                 $alertInfo = $this->alertService->createBody($issue, 'reservation');
-            
+           
                 //IMPORTANT: this method will fail when testing IN sandbox
                     // TO DO: VERIFY TASKS WITH MAILGUN TO SEND EMAILS OUT 
                 $this->alertService->processAlert($alertInfo, $request['email']);
