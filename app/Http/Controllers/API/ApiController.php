@@ -290,7 +290,7 @@ class ApiController extends Controller
                         //grab the registration
                         $registration = EventRegistration::find($request->event_registration_id);
                         //if the registration is an online tourney 
-                        if($registration && $registration->registration_type == 'Participant'){
+                        if($registration && $registration->registration_type == 'Tournament'){
                             // then send the receipt for participants
                             $alertInfo = $this->alertService->createBody($request, 'tournament_entry');
                             $this->alertService->processAlert($alertInfo, $request['attendee_email'], 'new_participant');

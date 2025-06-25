@@ -122,17 +122,17 @@
                 @else
                 <option >Food Vendor</option>
                 @endif
-                @if($event_registration->registration_type == 'Participant')
-                <option selected>Participant</option>
+                @if($event_registration->registration_type == 'Tournament')
+                <option selected>Tournament</option>
                 @else
-                <option >Participant</option>
+                <option >Tournament</option>
                 @endif
              @else
              <option>Guest</option>
              <option>Vendor</option>
              <option >Artist</option>
              <option >Food Vendor</option>
-             <option >Participant</option>
+             <option >Tournament</option>
              @endif
             
             </select>
