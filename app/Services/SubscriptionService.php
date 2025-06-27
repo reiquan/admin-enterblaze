@@ -36,6 +36,8 @@ class SubscriptionService
                 $this->scheduleEmail($request, $email, 'new_artist');
             } else if($alert_type == 'new_participant') {
                 $this->scheduleEmail($request, $email, 'new_participant');
+            } else if($alert_type == 'reservation_accepted') {
+                $this->scheduleEmail($request, $email, 'reservation_accepted');
             } else {
                 $this->scheduleEmail($request, $email);
             }
@@ -202,6 +204,16 @@ class SubscriptionService
  
              return $alert_body;
 
+         } else  if($type == 'reservation_accepted'){
+            
+            $alert_body =  [ 
+                 'alert_title' => 'You’re In! Vendor Application Approved ',
+                 'alert_body' => "Congratulations! We’re excited to let you know that your vendor application has been officially accepted for BlazeCon! We’re thrilled to have you join us and can’t wait to see what you bring to the table.
+                                    Stay tuned for next steps, including setup details, load-in times, and promotion opportunities. Welcome aboard!"
+             ];
+ 
+             return $alert_body;
+
          } else if('artist_request'){
             $alert_body =  [ 
                 'alert_title' => 'You Have a New Artist Request!',
@@ -219,6 +231,8 @@ class SubscriptionService
              Mail::to($email)->send(new SendNewArtistAlert($alertInfo));
        } else if(isset($type) && $type == 'new_participant') {
             Mail::to($email)->send(new SendNewParticipantAlert($alertInfo));
+       } else if(isset($type) && $type == 'reservation_accepted') {
+            Mail::to($email)->send(new SendReservationAcceptedAlert($alertInfo));
        } else {
             Mail::to($email)->send(new SendAlert($alertInfo));
        }
