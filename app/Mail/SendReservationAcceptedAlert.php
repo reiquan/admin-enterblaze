@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Mail;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -9,7 +7,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendReservationAcceptedAlert extends Mailable
+class SendNewParticipantAlert extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -32,7 +30,7 @@ class SendReservationAcceptedAlert extends Mailable
     {
         return $this->from('noreply@enterblazecomics.com')
         ->subject($this->alertInfo['alert_title'])
-        ->markdown('mail.reservation-accepted', [
+        ->markdown('mail.new-participant', [
             'alertInfo' => $this->alertInfo,
         ]);
     }
