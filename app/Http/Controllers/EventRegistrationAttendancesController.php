@@ -38,6 +38,8 @@ class EventRegistrationAttendancesController extends Controller
             'attendee_handle_type' => 'required',
             'attendee_handle_name' => 'required',
             'attendee_phone_number' => 'required',
+            'attendee_method_id' => 'required',
+            'attendee_intent_id' => 'required',
             'attendee_receipt_number' => 'required',
             'attendee_charge' => 'required',        
         ]);
@@ -53,6 +55,8 @@ class EventRegistrationAttendancesController extends Controller
                         $event_registration_attendance->event_registration_id = $request->event_registration_id;
                         $event_registration_attendance->attendee_status = 'Competing';
                         $event_registration_attendance->attendee_charge = $request->attendee_charge;
+                        $event_registration_attendance->attendee_method_id = $request->attendee_method_id;
+                        $event_registration_attendance->attendee_intent_id = $request->attendee_intent_id;
                         $event_registration_attendance->attendee_receipt_number = $request->attendee_receipt_number;
                     $event_registration_attendance->save();
 

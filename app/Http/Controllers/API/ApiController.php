@@ -243,12 +243,12 @@ class ApiController extends Controller
 
             // if(!$validation){
                 $receipt_already_verified = EventRegistrationAttendance::where('attendee_receipt_number', $request->attendee_receipt_number)->first();
-                
                 $is_free_event = str_contains($request->attendee_receipt_number, 'free');
-                if((isset($receipt_already_verified->id) && $is_free_event) || !isset($receipt_already_verified->id)){
+                $pending = $request->attendee_receipt_number == 'charge_pending' ? true : false;
+                if($pending || (isset($receipt_already_verified->id) && $is_free_event) || !isset($receipt_already_verified->id)){
                     $payment_verified = $this->stripeService->verifyPayment($request->attendee_receipt_number);
         
-                   if($payment_verified == false && !$is_free_event){
+                   if($payment_verified == false && !$is_free_event && !$pending){
                         return response()
                             ->json([
                                 'status' => 'failure',
@@ -257,7 +257,7 @@ class ApiController extends Controller
                             400
                         );
                    }else{
-                    if(isset($payment_verified->original['status']) && $payment_verified->original['status'] == 'success' || str_contains($request->attendee_receipt_number, 'free')){
+                    if($pending || isset($payment_verified->original['status']) && $payment_verified->original['status'] == 'success' || str_contains($request->attendee_receipt_number, 'free')){
 
                         $attendance = EventRegistrationAttendance::create([
                             'attendee_first_name' => $request->attendee_first_name,
@@ -272,6 +272,8 @@ class ApiController extends Controller
                             'attendee_company_url' => $request->attendee_company_url ?? null,
                             'attendee_number_of_employees_attending' => $request->attendee_number_of_employees_attending ?? null,
                             'acknowledgement_of_no_refunds' => str_contains($request->attendee_receipt_number, 'free') ? 'on' : $request->acknowledgement_of_no_refunds,
+                            'attendee_method_id' => $request->attendee_method_id,
+                            'attendee_intent_id' => $request->attendee_intent_id,
                             'attendee_receipt_number' => $request->attendee_receipt_number,
                             'attendee_charge' => $request->attendee_charge,        
                         ]);
@@ -294,6 +296,11 @@ class ApiController extends Controller
                             // then send the receipt for participants
                             $alertInfo = $this->alertService->createBody($request, 'tournament_entry');
                             $this->alertService->processAlert($alertInfo, $request['attendee_email'], 'new_participant');
+
+                        }else  if($registration && $registration->registration_type == 'Food Vendor' || $registration->registration_type == 'Vendor' || $registration->registration_type == 'Artist'){
+                            // then send the receipt for participants
+                            $alertInfo = $this->alertService->createBody($request, 'reservation');
+                            $this->alertService->processAlert($alertInfo, $request['attendee_email']);
 
                         } else {
                             //send email
