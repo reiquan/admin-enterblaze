@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\StripeService;
 use App\Models\EventRegistrationAttendance;
+use App\Services\SubscriptionService;
 
 class EventRegistrationAttendancesController extends Controller
 {
     //
-    public function __construct(StripeService $stripeService){
+    public function __construct(StripeService $stripeService,  SubscriptionService $alertService){
         $this->stripeService = $stripeService;
+        $this->alertService = $alertService;
     }
 
     public function create(Request $request){
@@ -71,8 +73,45 @@ class EventRegistrationAttendancesController extends Controller
             $event_registration_attendee = EventRegistrationAttendance::find($request->attendance_id);
             $event_registration_attendee->attendee_status = $request->status;
             $event_registration_attendee->save();
+            
+            //if request Status is Accepted
+            if($request->status == 'Accepted'){
+                $charge = $this->chargeVendor($request->attendance_id);
+            }
 
             return;
+
+    }
+
+    public function chargeVendor($attendance_id){
+
+        //    dd($request->all());
+        $vendor = EventRegistrationAttendance::find($attendance_id);
+        $amount = 0;
+
+
+        $total = $vendor->attendee_charge;
+
+      
+
+        $charged = $this->stripeService->confirmPaymentIntent($vendor->attendee_intent_id, $vendor->attendee_method_id);
+
+        if($charged){
+            //erase card
+            $vendor->attendee_method_id = null;
+            $vendor->attendee_intent_id = null;
+            $vendor->attendee_status = 'Payment Complete';
+            $vendor->attendee_receipt_number = $charged->original['paymentIntent']['id'];
+            $vendor->save();
+
+            $alertInfo = $this->alertService->createBody($vendor, 'reservation_accepted');
+            $this->alertService->processAlert($alertInfo, $vendor->attendee_email);
+
+            return true;
+
+        }
+
+        return;
 
     }
 
@@ -98,7 +137,6 @@ class EventRegistrationAttendancesController extends Controller
 
         $b = $this->stripeService->payoutParticipant($champion->attendee_receipt_number, $total);
 
-        dd($b);
 
         return;
 

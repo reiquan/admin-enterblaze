@@ -150,6 +150,10 @@
                               <option>Accepted</option>
                               <option selected>Rejected</option>
                               <option>Pending</option>
+                            @elseif( $attendance->attendee_status == 'Card Declined')
+                              <p><option >Card Declined</option></p>
+                            @elseif( $attendance->attendee_status == 'Payment Complete')
+                              <p><option>Payment Complete</option></p>
                             @else
                               <option>Accepted</option>
                               <option>Rejected</option>
