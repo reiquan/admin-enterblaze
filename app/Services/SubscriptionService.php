@@ -196,8 +196,8 @@ class SubscriptionService
          } else  if($type == 'reservation'){
             
             $alert_body =  [ 
-                 'alert_title' => 'Reservation made! ',
-                 'alert_body' => 'Reservation #:'. $body['reservation_number'],
+                 'alert_title' => 'You are on the Waiting List! ',
+                 'alert_body' => 'Your Application has been submitted for review! Your card has not been charged yet and will be charged if accepted. We will get back to you in within 24 to 48 hours.',
              ];
  
              return $alert_body;
