@@ -369,6 +369,11 @@ class ApiController extends Controller
             // $reservation->user_id = $request->user_id;
             $reservation->email = $request->email;
             $reservation->reservation_number = $request->reservation_number;
+            $reservation->address_line_1 = $request->address_line_1;
+            $reservation->address_line_2 = $request->address_line_2 ?? null;
+            $reservation->city = $request->city;
+            $reservation->state = $request->state;
+            $reservation->zip = $request->zip;
             $reservation->save();
             $book;
             $issue;
