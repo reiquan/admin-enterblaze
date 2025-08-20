@@ -32,6 +32,11 @@ class Reservation extends Model
         'user_id',
         'price',
         'email',
+        'address_line_1',
+        'address_line_2',
+        'city',
+        'state',
+        'zip',
         'reservation_number',
 
     ];
