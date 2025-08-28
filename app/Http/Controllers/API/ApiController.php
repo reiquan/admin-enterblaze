@@ -271,7 +271,7 @@ class ApiController extends Controller
                             'attendee_company_description' => $request->attendee_company_description ?? null,
                             'attendee_company_url' => $request->attendee_company_url ?? null,
                             'attendee_number_of_employees_attending' => $request->attendee_number_of_employees_attending ?? null,
-                            'acknowledgement_of_no_refunds' => str_contains($request->attendee_receipt_number, 'free') ? 'on' : $request->acknowledgement_of_no_refunds,
+                            'acknowledgement_of_no_refunds' => str_contains($request->attendee_receipt_number, 'free') ? 'off' : $request->acknowledgement_of_no_refunds,
                             'attendee_method_id' => $request->attendee_method_id,
                             'attendee_intent_id' => $request->attendee_intent_id,
                             'attendee_receipt_number' => $request->attendee_receipt_number,
