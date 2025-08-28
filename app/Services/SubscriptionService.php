@@ -189,7 +189,20 @@ class SubscriptionService
                  'alert_title' => 'You are now scheduled to Participate in **'. $registration->event->event_name.'**',
                  'alert_receipt' => 'Reservation #: '. $body['attendee_receipt_number'],
                  'alert_body' => 'Please follow the link below on any updates to the upcoming tournament starting at '.$registration->registration_start_date.' **WARNING** Faiure to show up on time is an automatic forfeit so please make sure to show up',
-                 'alert_link' => 'https://discord.gg/',
+                 'alert_link' => 'https://discord.gg/rAfzTXeB/',
+
+             ];
+ 
+             return $alert_body;
+
+         } else  if($type == 'tournament_guest'){
+            $registration = EventRegistration::find($body['event_registration_id']);
+            
+            $alert_body =  [ 
+                 'alert_title' => 'You are now registered to Participate in **'. $registration->event->event_name.'**',
+                 'alert_receipt' => 'Reservation #: 000-GA200',
+                 'alert_body' => 'You have secured your spot in the Tourney Junkie community! We will keep you updated on all local contests, events and tournaments moving forward.',
+                 'alert_link' => 'https://discord.gg/rAfzTXeB/',
 
              ];
  
