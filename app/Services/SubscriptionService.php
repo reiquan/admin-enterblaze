@@ -189,7 +189,7 @@ class SubscriptionService
                  'alert_title' => 'You are now scheduled to Participate in **'. $registration->event->event_name.'**',
                  'alert_receipt' => 'Reservation #: '. $body['attendee_receipt_number'],
                  'alert_body' => 'Please follow the link below on any updates to the upcoming tournament starting at '.$registration->registration_start_date.' **WARNING** Faiure to show up on time is an automatic forfeit so please make sure to show up',
-                 'alert_link' => 'https://discord.gg/',
+                 'alert_link' => 'https://discord.gg/rAfzTXeB/',
 
              ];
  
