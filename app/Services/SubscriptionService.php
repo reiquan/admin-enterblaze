@@ -195,6 +195,19 @@ class SubscriptionService
  
              return $alert_body;
 
+         } else  if($type == 'tournament_guest'){
+            $registration = EventRegistration::find($body['event_registration_id']);
+            
+            $alert_body =  [ 
+                 'alert_title' => 'You are now registered to Participate in **'. $registration->event->event_name.'**',
+                 'alert_receipt' => 'Reservation #: 000-GA200',
+                 'alert_body' => 'You have secured your spot in the Tourney Junkie community! We will keep you updated on all local contests, events and tournaments moving forward.',
+                 'alert_link' => 'https://discord.gg/rAfzTXeB/',
+
+             ];
+ 
+             return $alert_body;
+
          } else  if($type == 'reservation'){
             
             $alert_body =  [ 

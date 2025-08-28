@@ -297,6 +297,11 @@ class ApiController extends Controller
                             $alertInfo = $this->alertService->createBody($request, 'tournament_entry');
                             $this->alertService->processAlert($alertInfo, $request['attendee_email'], 'new_participant');
 
+                        }else  if($registration && $registration->event->event_type == 'Online Tournament' ){
+                            // then send the receipt for participants
+                            $alertInfo = $this->alertService->createBody($request, 'tournament_guest');
+                            $this->alertService->processAlert($alertInfo, $request['attendee_email'], 'new_participant');
+
                         }else  if($registration && $registration->registration_type == 'Food Vendor' || $registration->registration_type == 'Vendor' || $registration->registration_type == 'Artist'){
                             // then send the receipt for participants
                             $alertInfo = $this->alertService->createBody($request, 'reservation');
