@@ -105,6 +105,7 @@
             <option>--Select Option--</option>
             <option >Tradeshow</option>
             <option>Online Tournament</option>
+            <option>Registration</option>
             </select>
         </div>
       </div> 
