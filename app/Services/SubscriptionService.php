@@ -175,9 +175,12 @@ class SubscriptionService
 
     public function createBody($body, $type){
         if($type == 'event_receipt'){
+            $registration = EventRegistration::find($body['event_registration_id']);
            $alert_body =  [ 
                 'alert_title' => 'Badge Purchased! ',
                 'alert_body' => 'Confirmation #:'. $body['attendee_receipt_number'],
+                'event_name' =>  $registration->event->event_name,
+                
             ];
 
             return $alert_body;
