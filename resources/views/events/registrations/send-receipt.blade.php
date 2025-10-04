@@ -1,6 +1,6 @@
 @component('mail::message')
 
-Thank You for Your Support! We Will be in contact soon!
+Thank You for Your Support! We look forward to seeing you at {{ $alertInfo['event_name'] }}. We will be in contact soon!
 
 {{ $alertInfo['alert_body'] }}
 
