@@ -215,7 +215,7 @@ class SubscriptionService
             
             $alert_body =  [ 
                  'alert_title' => 'You are on the Waiting List! ',
-                 'alert_body' => 'Your Application has been submitted for review! Your card has not been charged yet and will be charged if accepted. We will get back to you in within 24 to 48 hours.',
+                 'alert_body' => 'Your reservation has been submitted. Be sure to check back regularly on our site and socials for all updates.',
              ];
  
              return $alert_body;
