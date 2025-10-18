@@ -354,14 +354,7 @@ class ApiController extends Controller
     public function submitReservation(Request $request){
     
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
-                //
-            //     return response()
-            //     ->json([
-            //         'status' => 'success',
-            //         'message' => $request->all(),
-            //     ], 
-            //     200
-            // );
+         
             $reservation = new Reservation;
             if(!empty($request->book_id)){
                 $reservation->book_id = intval($request->book_id) ?? '';
