@@ -120,7 +120,9 @@
                       <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
                       <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Phone #</th>
                       <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Website</th>
-                      <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                      @if($event_registration->registration_name !== 'Special Guest')
+                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                      @endif
                       <!-- <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
                         <span class="sr-only">Edit</span>
                       </th>
@@ -139,28 +141,31 @@
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$attendance->attendee_email }}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{$attendance->attendee_phone_number ?? 'n/a'}}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $attendance->attendee_company_url }}</td>
+                        @if($event_registration->registration_name !== 'Special Guest')
+                          <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <select id="{{ $attendance->id }}status" onchange="changeAttendeeStatus('{{ $attendance->id }}')" name="location" class="mt-2 block  rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm/6">
-                            @if($attendance->attendee_status == 'Accepted')
-                              <option selected>Accepted</option>
-                              <option>Rejected</option>
-                              <option>Pending</option>
-                            @elseif($attendance->attendee_status == 'Rejected')
-                              <option>Accepted</option>
-                              <option selected>Rejected</option>
-                              <option>Pending</option>
-                            @elseif( $attendance->attendee_status == 'Card Declined')
-                              <p><option >Card Declined</option></p>
-                            @elseif( $attendance->attendee_status == 'Payment Complete')
-                              <p><option>Payment Complete</option></p>
-                            @else
-                              <option>Accepted</option>
-                              <option>Rejected</option>
-                              <option selected>Pending</option>
-                            @endif
-                          </select>
-                        </td>
+                            <select id="{{ $attendance->id }}status" onchange="changeAttendeeStatus('{{ $attendance->id }}')" name="location" class="mt-2 block  rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm/6">
+
+                              @if($attendance->attendee_status == 'Accepted')
+                                <option selected>Accepted</option>
+                                <option>Rejected</option>
+                                <option>Pending</option>
+                              @elseif($attendance->attendee_status == 'Rejected')
+                                <option>Accepted</option>
+                                <option selected>Rejected</option>
+                                <option>Pending</option>
+                              @elseif( $attendance->attendee_status == 'Card Declined')
+                                <p><option >Card Declined</option></p>
+                              @elseif( $attendance->attendee_status == 'Payment Complete')
+                                <p><option>Payment Complete</option></p>
+                              @else
+                                <option>Accepted</option>
+                                <option>Rejected</option>
+                                <option selected>Pending</option>
+                              @endif
+                            </select>
+                          </td>
+                        @endif
                       </tr>
                     @endforeach
 
