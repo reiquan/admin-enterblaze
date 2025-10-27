@@ -224,7 +224,7 @@ class SubscriptionService
             
             $alert_body =  [ 
                  'alert_title' => 'You’re In! Vendor Application Approved ',
-                 'alert_body' => "Congratulations! We’re excited to let you know that your vendor application has been officially accepted for BlazeCon! We’re thrilled to have you join us and can’t wait to see what you bring to the table.
+                 'alert_body' => "Congratulations! We’re excited to let you know that your vendor application has been officially accepted for Eebee Con! We’re thrilled to have you join us and can’t wait to see what you bring to the table.
                                     Stay tuned for next steps, including setup details, load-in times, and promotion opportunities. Welcome aboard!"
              ];
  

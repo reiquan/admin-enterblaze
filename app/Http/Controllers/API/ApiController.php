@@ -213,7 +213,7 @@ class ApiController extends Controller
                         'status' => 'error',
                         'message' => 'Could Not Find Any Events',
                     ], 
-                    400
+                    300
                 );
             }
         } else {
