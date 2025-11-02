@@ -29,7 +29,7 @@ class EventImageUpload extends Component
 
         if($this->photo){
             $this->validate([
-                'photo' => 'image|max:1024', // 1MB Max
+                'photo' => 'image|max:40000', // 1MB Max
             ]);
     
             $fileUrl = $this->photo->store('events/'. $this->event_id .'/images', 's3-public');
