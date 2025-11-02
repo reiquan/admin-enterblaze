@@ -135,10 +135,10 @@ function addFile(target, file) {
   clone.querySelector("li").id = objectURL;
   clone.querySelector(".delete").dataset.target = objectURL;
   clone.querySelector(".size").textContent =
-    file.size > 1024
+    file.size > 40000
       ? file.size > 1048576
         ? Math.round(file.size / 1048576) + "mb"
-        : Math.round(file.size / 1024) + "kb"
+        : Math.round(file.size / 40000) + "kb"
       : file.size + "b";
 
   isImage &&

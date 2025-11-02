@@ -29,7 +29,7 @@ class ProfileUpload extends Component
 
         if($this->photo){
             $this->validate([
-                'photo' => 'image|max:1024', // 1MB Max
+                'photo' => 'image|max:20000', // 1MB Max
             ]);
     
             $fileUrl = $this->photo->store('universe/'. $this->universe_id .'/images/profile', 's3-public');
