@@ -150,7 +150,10 @@ class ApiController extends Controller
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
         
             if(isset($request->event_id) && $request->event_id){
-                $event = Event::find($request->event_id)->load('registrations');
+                $event = Event::where('id', $request->event_id)->where('event_end_date','>=', now())->where('is_active', 1)->get()
+                ->load(['registrations' => function ($query) {
+                        $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
+                    }]);
                     $data = $request->all();
 
                     return response()
@@ -161,8 +164,11 @@ class ApiController extends Controller
                         200
                     );
             } else {
-                    $events = Event::where('is_active', 1)
-                    ->get()->load('registrations');
+                    $events = Event::where('event_end_date','>=', now())->where('is_active', 1)
+                    ->get()
+                    ->load(['registrations' => function ($query) {
+                        $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
+                    }]);
                     $data = $request->all();
             
                     return response()
@@ -192,7 +198,7 @@ class ApiController extends Controller
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
  
             
-            $registrations = EventRegistration::where('registration_is_active','=', 1)
+            $registrations = EventRegistration::where('registration_end_date','>=', now())->where('registration_is_active','=', 1)
             ->where('id', $request->registration_id)
             ->with('event')
             ->get();
