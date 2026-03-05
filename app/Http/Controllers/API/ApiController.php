@@ -31,7 +31,9 @@ class ApiController extends Controller
     {
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
             if(isset($request->universe_id)) {
-                return response()
+                $universe = Universe::find($request->universe_id);
+               if($universe){
+                    return response()
                     ->json(Universe::where('universe_is_active', 1)
                     ->where('id', $request->universe_id)
                     ->with('books.issues')
@@ -44,6 +46,11 @@ class ApiController extends Controller
                             'universe_user_id'
                         ]
                     )->toArray(), 200);
+                } else {
+                    return [
+                        'error' => 'No universe found',
+                    ];
+                }
             }
             return response()
                     ->json(Universe::where('universe_is_active', 1)
