@@ -18,18 +18,7 @@
         </p>
     @endif
 </div>
-<div class="relative block w-full h-full rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-    <div class="mx-auto h-48 w-48 text-gray-400">
-        @if($book->book_image_path)
-            
-            <img src="{{ Storage::disk('s3-public')->url($book->book_image_path) }}" alt="Image" class="lg:h-full lg:w-full">
 
-        @else
-            <img class="rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-        @endif
-    </div>
-</div>
-<br>
 <form action="{{ route('issue_pages.addPage', ['universe_id' => $_REQUEST['u_id'] ?? $book->universe->id , 'book_id' => $_REQUEST['b_id'] ?? $book->id, 'issue_id' => $issue->id] ) }}" method="GET" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
     <input type="hidden" name="universe_id" value="{{$_REQUEST['u_id'] ?? $book->universe->id }}">
     <input type="hidden" name="book_id" value="{{ $_REQUEST['b_id'] ?? $book->universe->id }}">  
@@ -41,6 +30,23 @@
           </svg>
     
           Add New Page
+
+        </button>
+    </span>
+
+</form>
+<form action="{{ route('issue_pages.organizePages', ['universe_id' => $_REQUEST['u_id'] ?? $book->universe->id , 'book_id' => $_REQUEST['b_id'] ?? $book->id, 'issue_id' => $issue->id] ) }}" method="GET" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+    <input type="hidden" name="universe_id" value="{{$_REQUEST['u_id'] ?? $book->universe->id }}">
+    <input type="hidden" name="book_id" value="{{ $_REQUEST['b_id'] ?? $book->universe->id }}">  
+    <input type="hidden" name="issue_id" value="{{ $pages[0]->issue->id }}">  
+    
+    <span class="mt-2 block text-sm font-semibold text-gray-900">
+        <button type="submit">
+          <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6" />
+          </svg>
+    
+         Organize Pages
 
         </button>
     </span>

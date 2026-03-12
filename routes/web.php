@@ -61,6 +61,8 @@ Route::middleware([
     Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/pages/{page_id}/swapPageNumber', 'App\Http\Controllers\IssuePagesController@swapPageNumber')->name('issue_pages.swapPageNumber');
     Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/pages/{page_id?}/editPage', 'App\Http\Controllers\IssuePagesController@editPage')->name('issue_pages.editPage');
     Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/addPage', 'App\Http\Controllers\IssuePagesController@addPage')->name('issue_pages.addPage');
+    Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/organizePages', 'App\Http\Controllers\IssuePagesController@organizePages')->name('issue_pages.organizePages');
+    Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/StoreOrganizedPages', 'App\Http\Controllers\IssuePagesController@StoreOrganizedPages')->name('issue_pages.StoreOrganizedPages');
 
         //Uploader
             Route::get('/uploader', 'App\Http\Controllers\BookController@index')->name('admin.uploader');
