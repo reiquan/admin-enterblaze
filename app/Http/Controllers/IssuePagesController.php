@@ -182,4 +182,33 @@ class IssuePagesController extends Controller
             //
         }
     }
+                 /**
+     * Show the form for publishing the specified resource.
+     */
+    public function organizePages(Request $request, string $id)
+    {
+        //
+        $pages = IssuePage::where('issue_id', $request->issue_id)->orderBy('issue_page_number')->get();
+      
+        return view('universe/books/issues/organize', compact('pages'));
+    }
+    public function storeOrganizedPages(Request $request)
+    {
+        foreach($request['images'] as $key =>$value){
+            $issue_page = IssuePage::find($key);
+            
+            if($issue_page){
+                
+                 //if page number is the same. continue to next iteration
+              
+                $issue_page->issue_page_number = $value;
+                $issue_page->save();
+            } else {
+                continue;
+            }
+        }
+       
+        return redirect()->route('issues.show', ['universe_id' => $issue_page->issue->book->universe->id, 'book_id' => $issue_page->issue->book->id, 'issue_id' => $issue_page->issue->id]);
+    }
+
 }

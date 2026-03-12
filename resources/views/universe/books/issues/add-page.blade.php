@@ -398,14 +398,14 @@ document.getElementById("submit").onclick = (e) => {
   e.preventDefault();
   alert(`Submitted Files`);
  
-  console.log(FILES);
+  // console.log(FILES);
 
   var formData = new FormData();
   var fileInput = document.getElementById('hidden-input');
   var u_id = "<?php echo $issue->book->universe->id; ?>";
     var b_id = "<?php echo $issue->book->id; ?>";
     var i_id = "<?php echo $issue->id; ?>";
-  window.location.assign('/universe/' + u_id + '/books/' + b_id  + '/show?b_id=' + b_id +'&u_id=' + u_id);
+  window.location.assign('/universe/' + u_id + '/books/' + b_id  + '/issues/' + i_id + '/organizePages?universe_id=' + u_id + '&book_id=' + b_id + '&issue_id='+ i_id);
 
 };
 
