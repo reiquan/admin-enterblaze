@@ -151,7 +151,7 @@ class IssuesController extends Controller
      */
     public function update(Request $request)
     {
-     
+       
         $request->validate([
             'book_id' => ['required'],
             'universe_id' => ['required'],
@@ -187,15 +187,9 @@ class IssuesController extends Controller
                 } else {
                     $issue_page->issue_id = $request->issue_id;
                     $issue_page->issue_page_url = $path.$fileName;
+                    $count = count($issue->pages) ?? 0;
+                    $issue_page->issue_page_number = $count += 1;
                     $issue_page->save();
-                    $count = 0;
-                    foreach($issue->pages as $page){
-                        $p = IssuePage::find($page->id);
-                    
-                        $p->issue_page_number = $count += 1;
-                        $p->save();
-
-                    }
 
                 }
             }
