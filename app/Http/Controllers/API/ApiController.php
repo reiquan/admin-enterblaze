@@ -393,7 +393,7 @@ class ApiController extends Controller
 
                 $book = Book::find($reservation->book_id);
                 $alertInfo = $this->alertService->createBody($book, 'reservation');
-                $this->alertService->processAlert($alertInfo, $request['email']);
+                $this->alertService->processAlert($alertInfo, $request->email);
 
             } else if(isset($request->issue_id) && !empty($request->issue_id)) {
 
@@ -404,7 +404,7 @@ class ApiController extends Controller
            
                 //IMPORTANT: this method will fail when testing IN sandbox
                     // TO DO: VERIFY TASKS WITH MAILGUN TO SEND EMAILS OUT 
-                $this->alertService->processAlert($alertInfo, $request['email']);
+                $this->alertService->processAlert($alertInfo, $request->email);
 
             } else {
                 return response()
