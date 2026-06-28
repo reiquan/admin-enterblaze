@@ -154,6 +154,7 @@ class ApiController extends Controller
     }
 
     public function getEvents(Request $request){
+
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
         
             if(isset($request->event_id) && $request->event_id){
@@ -377,7 +378,11 @@ class ApiController extends Controller
             }
 
             $reservation->price = $request->price;
-            // $reservation->user_id = $request->user_id;
+            if(is_integer($request->user_id)){
+                $reservation->user_id = $request->user_id;
+            } else {
+                $reservation->stripe_user_id = $request->user_id;
+            }
             $reservation->email = $request->email;
             $reservation->reservation_number = $request->reservation_number;
             $reservation->address_line_1 = $request->address_line_1;
