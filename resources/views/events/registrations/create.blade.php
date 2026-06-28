@@ -107,6 +107,11 @@
                 @else
                 <option >Guest</option>
                 @endif
+                @if($event_registration->registration_type == 'Special Guest')
+                <option selected>Special Guest</option>
+                @else
+                <option >Special Guest</option>
+                @endif
                 @if($event_registration->registration_type == 'Vendor')
                 <option selected>Vendor</option>
                 @else
@@ -116,6 +121,11 @@
                 <option selected>Artist</option>
                 @else
                 <option >Artist</option>
+                @endif
+                @if($event_registration->registration_type == 'Manga Artist')
+                <option selected>Manga Artist</option>
+                @else
+                <option >Manga Artist</option>
                 @endif
                 @if($event_registration->registration_type == 'Food Vendor')
                 <option selected>Food Vendor</option>
@@ -129,8 +139,10 @@
                 @endif
              @else
              <option>Guest</option>
+             <option>Special Guest</option>
              <option>Vendor</option>
              <option >Artist</option>
+             <option >Mangaka</option>
              <option >Food Vendor</option>
              <option >Tournament</option>
              @endif

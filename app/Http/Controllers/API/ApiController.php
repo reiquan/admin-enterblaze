@@ -158,7 +158,7 @@ class ApiController extends Controller
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
         
             if(isset($request->event_id) && $request->event_id){
-                $event = Event::where('id', $request->event_id)->where('event_end_date','>=', now())->where('is_active', 1)->get()
+                $event = Event::find($request->event_id)
                 ->load(['registrations' => function ($query) {
                         $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
                     }]);

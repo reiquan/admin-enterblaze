@@ -108,6 +108,17 @@ class EventsController extends Controller
        if($request->event_id){
             $event = Event::find($request->event_id);
                 $event->event_name = $request->event_name;
+                
+                $event->subtitle = $request->subtitle;
+                $event->price = $request->price;
+                if($request->eventt_type){
+                    $event->event_type = $request->event_type;
+                }
+                if($request->event_audience){
+                    $event->event_audience = $request->event_audience;
+                }
+                $event->venue = $request->venue;
+
                 $event->event_type = $request->event_type;
                 $event->event_about = $request->event_about;
                 $event->host_user_id = auth()->user()->id;
@@ -116,15 +127,29 @@ class EventsController extends Controller
                 $event->event_city = $request->event_city;
                 $event->event_state = $request->event_state;
                 $event->event_zip = $request->event_zip;
-                $event->event_start_date = $request->event_start_date;
-                $event->event_end_date = $request->event_end_date;
+                if($request->event_start_date){
+                    $event->event_start_date = $request->event_start_date;
+                }
+                if($request->event_end_date){
+                    $event->event_end_date = $request->event_end_date;
+                }
                 $event->is_active = 1;
-                // $event->tags = json_encode($request->tags);
+                if($request->event_tags){
+                    $event->tags = $request->event_tags ?? null;
+                }
+            
             $event->save();
         
        } else {
             $event = new Event;
                 $event->event_name = $request->event_name;
+
+                $event->subtitle = $request->subtitle;
+                $event->price = $request->price;
+                $event->event_type = $request->event_type;
+                $event->event_audience = $request->event_audience;
+                $event->venue = $request->venue;
+
                 $event->event_type = $request->event_type;
                 $event->event_about = $request->event_about;
                 $event->host_user_id = auth()->user()->id;
@@ -137,7 +162,7 @@ class EventsController extends Controller
                 $event->event_end_date = $request->event_end_date;
                 $event->attendees = json_encode($request->attendees);
                 $event->is_active = 1;
-                // $event->tags = json_encode($request->tags);
+                $event->tags = $request->event_tags ?? null;
             $event->save();
             //Autmatically add host/candidate
             // if(isset(auth()->user()->candidate->id)){
