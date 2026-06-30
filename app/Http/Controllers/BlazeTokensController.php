@@ -44,11 +44,16 @@ class BlazeTokensController extends Controller
     }
 
     public function submit(Request $request){
-       
+        // dd($request->all());
 
         $tier = BlazeTokenTier::create([
             'token_tier_name' => $request->token_tier_name,
             'token_tier_description' => $request->token_tier_description,
+
+            'tag' => $request->tag,
+            'perks' => $request->perks,
+            'featured' => $request->featured,
+
             'token_tier_amount' => $request->token_tier_amount,
             'token_tier_usd_price' => $request->token_tier_usd_price,
             'token_tier_is_active' => 1,
