@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('card_tiers', function (Blueprint $table) {
+            //
+            $table->integer('card_tier_skill_points')->nullable()->after('card_tier_name');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('card_tiers', function (Blueprint $table) {
+            //
+            $table->dropColumn('card_tier_skill_points');
+        });
+    }
+};
