@@ -230,7 +230,7 @@
                         Start this series by adding your first card. You can add character cards, powers, locations, weapons, lore cards, and more.
                     </p>
 
-                    <form action="" method="GET" class="mt-6">
+                    <form action="{{ route('cards.create', ['universe_id' => request('universe_id'),'card_series_id' => $cardSeries->id] )}}" method="GET" class="mt-6">
                         <input type="hidden" name="universe_id" value="{{ request('u_id') ?? request('universe_id') }}">
                         <input type="hidden" name="card_series_id" value="{{ request('c_id') ?? request('card_series_id') }}">
 

@@ -124,7 +124,9 @@ class CardSeriesController extends Controller
     public function show(Request $request, string $id)
     {
         //
+        
         $card_series = CardSeries::find($request->c_id);
+        // dd($card_series->toArray());
         $cards = $card_series->cards;
     
         // dd($issues->toArray());

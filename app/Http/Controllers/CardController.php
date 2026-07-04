@@ -8,10 +8,14 @@ use App\Models\Card;
 use App\Services\BookService;
 use App\Models\IssuePage;
 use App\Models\Book;
+use App\Models\CardEra;
+use App\Models\CardType;
+use App\Models\CardTier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Carbon\Carbon;
 use Validator;
 
 class CardController extends Controller
@@ -23,26 +27,30 @@ class CardController extends Controller
     {
         //
 
-        $cards = Card::where('card_series_id', $request->universe_id)->get();
+        $cards = Card::where('card_series_id', $request->card_series_id)->get();
        
         $universe = Universe::find($request->universe_id);
 
-        return view('universe/cards/index', compact('cards', 'universe'));
+        return view('universe/card/index', compact('cards', 'universe'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create($universe_id)
+    public function create(REQUEST $request)
     {
         //
-        
+       
         $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
-        $universe = Universe::find($universe_id);
-        $universe_id = isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : '';
-        $book_id = isset($_REQUEST['book_id']) ? $_REQUEST['book_id'] : '';
-        $book = isset($_REQUEST['book']) ? $_REQUEST['book'] : '';
-        return view('universe/books/create', compact('step', 'universe', 'universe_id', 'book_id', 'book'));
+    
+        $card_series_id = isset($_REQUEST['card_series_id']) ? $_REQUEST['card_series_id'] : '';
+        $universe = Universe::find($request->universe_id);
+        $card_id = isset($_REQUEST['card_id']) ? $_REQUEST['card_id'] : '';
+        $card = isset($_REQUEST['card']) ? $_REQUEST['card'] : '';
+        $eras = CardEra::all();
+        $card_types = CardType::all();
+        $card_tiers = CardTier::all();
+        return view('universe/card-series/cards/create', compact('step', 'universe', 'card_series_id', 'card_id', 'card', 'eras', 'card_types', 'card_tiers'));
  
     }
 
@@ -51,44 +59,40 @@ class CardController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->toArray());
+     dd($request->all());
           //validate info
-          $request->validate([
-            'book_title' => ['required'],
-            'book_creator' => ['required'],
-            'book_audience' => ['required'],
-            'book_description' => ['required'],
-            'book_type' => ['required'],
-            // 'book_genres' => ['required'],
-            
-        ]);
+          if($request->step == 1){
+            $request->validate([
+                'card_name' => ['required'],
+                'card_subtitle' => ['required'],
+                'card_published_at' => ['required'],
+                'card_era_id' => ['required'],
+                'card_description' => ['required'],
+                
+            ]);
+          }
+          $card = isset($request->card_id) ? Card::find($request->card_id) : new Card;
         //save info
             if(isset($request->step) and $request->step == 1){
                
                 //save book
-                    $book = isset($request->book_id) ? Book::find($request->book_id) : new Book;
-                        $book->book_title = $request->book_title;
-                        $book->book_creator = $request->book_creator;
-                        $book->book_audience = $request->book_audience;
-                        $book->book_description = $request->book_description;
-                        $book->book_published_at = $request->book_published_at;
-                        $book->book_universe_id = $request->universe_id;
-                        $book->book_type = $request->book_type;
-                        $book->book_price = $request->book_price;
-                        if(isset($request->book_subtitle)){
-                            $book->book_subtitle = $request->book_subtitle;
+            
+                        $card->card_name = $request->card_name;
+                        $card->card_published_at = $request->card_published_at;
+                        $card->card_slug_name = preg_replace('/[^a-zA-Z0-9\s]/', '', $request->card_slug_name);
+                        $card->card_era_id = $request->card_era_id;
+                        $card->card_price = $request->card_price;
+                        $card->card_id = $request->universe_id;
+                        $card->card_description = $request->card_description;
+                        $card->card_is_active = $request->card_is_active;
+                        if(isset($request->card_subtitle)){
+                            $card->card_subtitle = $request->card_subtitle;
                         }
-                        $new_slug_name = preg_replace('/[^a-zA-Z0-9\s]/', '', $request->book_title);
-                        $book->book_slug_name = $new_slug_name;
-                        // $book->book_genres = $request->book_genres;
-                        // if(isset($request->issue_number)){
-                        //     $issue
-                        //     $book->issue_number = $request->issue_number;
-                        // }
-                        // if(isset($request->volume_number)){
-                        //     $book->volume_number = $request->volume_number;
-                        // }
-                    $book->save();
+                        if(isset($request->card_book_id)){
+                            $card->card_book_id = $request->card_book_id;
+                        }
+                    
+                    $card->save();
 
             }
 
@@ -96,22 +100,22 @@ class CardController extends Controller
             //if request->step == 4
             if($request->step == 3){
         
-                return view('books.index');
+                return view('card.index');
                
 
             } else {
                 
      
-                $step = $request->step += 1;
+                $step = $request->type == 'edit' ? $request->step : $request->step += 1;
                 $universe_id = $request->universe_id;
-                $book_id = $book->id;
+                $card_id = $card->id ?? $request->card_id;
                 
 
                 
                 if(isset($request->type) && $request->type == 'edit'){
-                    return view('universe.books.edit', compact('step', 'universe_id', 'book'));
+                    return view('universe.card.edit', compact('step', 'universe_id', 'card'));
                 } else {
-                    return view('universe.books.create', compact('step', 'universe_id', 'book_id', 'book'));
+                    return view('universe.card.create', compact('step', 'universe_id', 'card_id', 'card'));
                 }
 
             }
@@ -124,11 +128,12 @@ class CardController extends Controller
     public function show(Request $request, string $id)
     {
         //
-        $book = Book::find($request->b_id);
-        $issues = $book->issues;
+        $card = Card::find($request->c_id);
+        $cards = $card->cards;
+    
         // dd($issues->toArray());
        
-        return view('universe/books/show', compact('book', 'issues'));
+        return view('universe/card/show', compact('card', 'cards'));
     }
 
     /**
@@ -137,9 +142,15 @@ class CardController extends Controller
     public function edit(Request $request)
     {
         //
-        $book = Book::find($request->book_id);
-        $step=isset($request->step) ? $request->step : 1;;
-        return view('universe/books/edit', compact('book', 'step'));
+        $card = Card::find($request->card_id);
+       
+        $step=isset($request->step) ? $request->step : 1;
+        $universe = $card->universe;
+        $type='edit';
+        $eras = CardEra::all();
+        $formattedDate = Carbon::parse($card->card_published_at)->format('Y-m-d');
+        $books = Book::where('book_universe_id', $universe->id)->get();
+        return view('universe/card/edit', compact('card', 'step','eras','books', 'universe', 'formattedDate'));
     }
 
     /**
@@ -149,7 +160,7 @@ class CardController extends Controller
     {
        
         $request->validate([
-            'book_id' => ['required'],
+            'card_id' => ['required'],
             'universe_id' => ['required'],
                  
         ]);
@@ -158,7 +169,7 @@ class CardController extends Controller
             if(!empty($request->file)){
 
                 $fileName = $request->file('file')->getClientOriginalName();
-                $path = 'universe/'.$request->universe_id.'/'.'books/'.$request->book_id.'/'.'pages/';
+                $path = 'universe/'.$request->universe_id.'/'.'card/'.$request->card_id.'/images';
         
                 $file = $request->file('file');
             
@@ -166,15 +177,17 @@ class CardController extends Controller
                 $s3->putFileAs($path.$request->issue_number, $file, $fileName);
             }
 
-            $bookService = new BookService($request->universe_id);
+            $CardService = new CardService($request->universe_id);
 
-            $page_submitted = $bookService->checkIssuePage($path, $fileName);
+            $page_submitted = $CardService->checkCard($path, $fileName);
 
             if($page_submitted){
-                return response()->json(['Success' => 'Page Uploaded Succesfully']);
+                return response()->json(['Success' => 'Series Uploaded Succesfully']);
             } else {
-                return response()->json(['Error' => 'Page was not uploaded']);
+                return response()->json(['Error' => 'Series was not uploaded']);
             }
+
+            
      
     }
 
@@ -185,18 +198,18 @@ class CardController extends Controller
     {
         //
         $request->validate([
-            'book_id' => ['required']
+            'card_id' => ['required']
         ]);
-        $book = Book::find($request->book_id);
+        $card = Card::find($request->card_id);
         if($request->action == 'publish'){
-            $book->is_active = 1;
-            $book->save();
+            $card->card_is_active = 1;
+            $card->save();
         } else {
-            $book->is_active = 0;
-            $book->save();
+            $card->card_is_active = 0;
+            $card->save();
         }
        
-        return redirect()->route('books.index', $book->book_universe_id);
+        return redirect()->route('card.index', $card->card_id);
     }
 
     /**
@@ -206,37 +219,44 @@ class CardController extends Controller
     {
         //  dd($request->all());
          $request->validate([
-            'book_id' => ['required'],
+            'card_id' => ['required'],
                  
         ]);
-        $book = Book::find($request->book_id);
-        $issues= $book->issues;
-        if($issues){
-            foreach($issues as $issue) {
-                 // Delete file from S3
-                if (Storage::disk('s3-public')->exists($issue->issue_image_cover)) {
-                    Storage::disk('s3-public')->delete($issue->issue_image_cover);
-                    if($issue->pages) {
-                        foreach($issue->pages as $page){
-                            if (Storage::disk('s3-public')->exists($page->issue_page_url)) {
-                                Storage::disk('s3-public')->delete($page->issue_page_url);
-                                $page->delete();
-                            }
-                        }
-                    }
-
-                }
-
-                $issue->delete();
-            } 
-
-        }
-        if($book->book_image_path) {
-            if (Storage::disk('s3-public')->exists($book->book_image_path)) {
-                Storage::disk('s3-public')->delete($book->book_image_path);
+        $card = Card::find($request->card_id);
+        if($card->card_image_front) {
+            if (Storage::disk('s3-public')->exists($card->card_image_front)) {
+                Storage::disk('s3-public')->delete($card->card_image_front);
             }
         }
-        $book->delete();
-         return response()->json(['success' => 'Book deleted successfully.']);
+        if($card->card_image_back) {
+            if (Storage::disk('s3-public')->exists($card->card_image_back)) {
+                Storage::disk('s3-public')->delete($card->card_image_back);
+            }
+        }
+        $card->delete();
+         return response()->json(['success' => 'Card Series deleted successfully.']);
     }
+
+        /**
+     * Display a listing of the resource.
+     */
+    public function finish(REQUEST $request)
+    {
+        //
+
+        $card = Card::find($request->card_id);
+        $card_id = $card->id;
+        // dd($card->toArray());
+        $universe = Universe::find($card->card_id);
+        $universe_id = $card->card_id;
+
+        $step = 3;
+
+       if($request->type == 'edit'){
+        return view('universe.card.edit', compact('step', 'universe_id', 'card_id', 'card'));
+       } else {
+        return view('universe.card.create', compact('step', 'universe_id', 'card_id', 'card'));
+       }
+    }
+
 }

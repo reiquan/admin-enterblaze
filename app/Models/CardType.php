@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CardType extends Model
 {
@@ -17,6 +18,7 @@ class CardType extends Model
         'card_type_is_active',
     ];
 
+    protected $dates = ['deleted_at'];
     
          /**
      * Get the user's first name.

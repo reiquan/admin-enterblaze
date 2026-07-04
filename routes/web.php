@@ -76,6 +76,17 @@ Route::middleware([
       Route::post('/universe/{universe_id}/card-series/store', 'App\Http\Controllers\CardSeriesController@store')->name('card-series.store');
       Route::post('/universe/{universe_id}/card-series/{card_series_id}/finish', 'App\Http\Controllers\CardSeriesController@finish')->name('card-series.finish');
 
+            //Card 
+        Route::get('/universe/{universe_id}/card-series/{card_series_id}/cards/index', 'App\Http\Controllers\CardController@index')->name('cards.index');
+        Route::get('/universe/{universe_id}/card-series/{card_series_id}/cards/create', 'App\Http\Controllers\CardController@create')->name('cards.create');
+        Route::get('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/edit', 'App\Http\Controllers\CardController@edit')->name('cards.edit');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/update', 'App\Http\Controllers\CardController@update')->name('cards.update');
+        Route::get('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/show', 'App\Http\Controllers\CardController@show')->name('cards.show');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/publish', 'App\Http\Controllers\CardController@publish')->name('cards.publish');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/delete', 'App\Http\Controllers\CardController@destroy')->name('cards.delete');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/store', 'App\Http\Controllers\CardController@store')->name('cards.store');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/finish', 'App\Http\Controllers\CardController@finish')->name('cards.finish');
+
         //Uploader
             Route::get('/uploader', 'App\Http\Controllers\BookController@index')->name('admin.uploader');
 

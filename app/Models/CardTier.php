@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CardTier extends Model
 {
@@ -16,7 +17,7 @@ class CardTier extends Model
         'card_tier_skill_points',
     ];
 
-    
+    protected $dates = ['deleted_at'];
 
 
      /**
