@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Card extends Model
 {
@@ -29,6 +30,7 @@ class Card extends Model
         'card_tags',
         'card_bio'
     ];
+    protected $dates = ['deleted_at'];
 
     
 

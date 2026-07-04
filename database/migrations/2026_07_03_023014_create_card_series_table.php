@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('card_series_universe_id');
             $table->unsignedBigInteger('card_series_book_id')->nullable();
             $table->string('card_series_description');
-            $table->string('card_series_is_active');
+            $table->string('card_series_is_active')->nullable();
             $table->timestamps();
 
 

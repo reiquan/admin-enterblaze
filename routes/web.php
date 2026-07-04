@@ -44,6 +44,7 @@ Route::middleware([
         Route::post('/universe/{universe_id}/books/{book_id}/publish', 'App\Http\Controllers\BookController@publish')->name('books.publish');
         Route::post('/universe/{universe_id}/books/{book_id}/delete', 'App\Http\Controllers\BookController@destroy')->name('books.delete');
         Route::post('/universe/{universe_id}/books/store', 'App\Http\Controllers\BookController@store')->name('books.store');
+        
     //Issues
         Route::get('/universe/{universe_id}/books/{book_id}/issues', 'App\Http\Controllers\IssuesController@index')->name('issues.index');
         Route::get('/universe/{universe_id}/books/{book_id}/issues/create', 'App\Http\Controllers\IssuesController@create')->name('issues.create');
@@ -63,6 +64,17 @@ Route::middleware([
     Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/addPage', 'App\Http\Controllers\IssuePagesController@addPage')->name('issue_pages.addPage');
     Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/organizePages', 'App\Http\Controllers\IssuePagesController@organizePages')->name('issue_pages.organizePages');
     Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/StoreOrganizedPages', 'App\Http\Controllers\IssuePagesController@StoreOrganizedPages')->name('issue_pages.StoreOrganizedPages');
+
+      //Card Series
+      Route::get('/universe/{universe_id}/card-series', 'App\Http\Controllers\CardSeriesController@index')->name('card-series.index');
+      Route::get('/universe/{universe_id}/card-series/create', 'App\Http\Controllers\CardSeriesController@create')->name('card-series.create');
+      Route::get('/universe/{universe_id}/card-series/{card_series_id}/edit', 'App\Http\Controllers\CardSeriesController@edit')->name('card-series.edit');
+      Route::post('/universe/{universe_id}/card-series/{card_series_id}/update', 'App\Http\Controllers\CardSeriesController@update')->name('card-series.update');
+      Route::get('/universe/{universe_id}/card-series/{card_series_id}/show', 'App\Http\Controllers\CardSeriesController@show')->name('card-series.show');
+      Route::post('/universe/{universe_id}/card-series/{card_series_id}/publish', 'App\Http\Controllers\CardSeriesController@publish')->name('card-series.publish');
+      Route::post('/universe/{universe_id}/card-series/{card_series_id}/delete', 'App\Http\Controllers\CardSeriesController@destroy')->name('card-series.delete');
+      Route::post('/universe/{universe_id}/card-series/store', 'App\Http\Controllers\CardSeriesController@store')->name('card-series.store');
+      Route::post('/universe/{universe_id}/card-series/{card_series_id}/finish', 'App\Http\Controllers\CardSeriesController@finish')->name('card-series.finish');
 
         //Uploader
             Route::get('/uploader', 'App\Http\Controllers\BookController@index')->name('admin.uploader');

@@ -1,0 +1,249 @@
+<?php
+
+namespace App\Http\Controllers;
+use App\Http\Controllers\BookController;
+use App\Models\Universe;
+use App\Models\Issue;
+use App\Models\Cardseries;
+use App\Services\BookService;
+use App\Models\IssuePage;
+use App\Models\Book;
+use App\Models\CardEra;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Validator;
+
+class CardSeriesController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(REQUEST $request)
+    {
+        //
+
+        $card_series = CardSeries::where('card_series_universe_id', $request->universe_id)->get();
+        // dd($card_series->toArray());
+        $universe = Universe::find($request->universe_id);
+
+        return view('universe/card-series/index', compact('card_series', 'universe'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create($universe_id)
+    {
+        //
+        
+        $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
+        $universe = Universe::find($universe_id);
+        $universe_id = isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : '';
+        $card_series_id = isset($_REQUEST['card_series_id']) ? $_REQUEST['card_series_id'] : '';
+        $card_series = isset($_REQUEST['card_series']) ? $_REQUEST['card_series'] : '';
+        $books = Book::where('book_universe_id', $universe_id)->get();
+        $eras = CardEra::all();
+        return view('universe/card-series/create', compact('step', 'universe', 'universe_id', 'card_series_id', 'card_series', 'eras', 'books'));
+ 
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        // dd($request->toArray());
+          //validate info
+        $request->validate([
+            'card_series_name' => ['required'],
+            'card_series_subtitle' => ['required'],
+            'card_series_published_at' => ['required'],
+            'card_series_era_id' => ['required'],
+            'card_series_description' => ['required'],
+            
+        ]);
+        //save info
+            if(isset($request->step) and $request->step == 1){
+               
+                //save book
+                    $card_series = isset($request->card_series_id) ? CardSeries::find($request->card_series_id) : new CardSeries;
+                        $card_series->card_series_name = $request->card_series_name;
+                        $card_series->card_series_published_at = $request->card_series_published_at;
+                        $card_series->card_series_slug_name = preg_replace('/[^a-zA-Z0-9\s]/', '', $request->card_series_slug_name);
+                        $card_series->card_series_era_id = $request->card_series_era_id;
+                        $card_series->card_series_price = $request->card_series_price;
+                        $card_series->card_series_universe_id = $request->universe_id;
+                        $card_series->card_series_description = $request->card_series_description;
+                        $card_series->card_series_is_active = $request->card_series_is_active;
+                        if(isset($request->card_series_subtitle)){
+                            $card_series->card_series_subtitle = $request->card_series_subtitle;
+                        }
+                        if(isset($request->card_series_book_id)){
+                            $card_series->card_series_book_id = $request->card_series_book_id;
+                        }
+                    
+                    $card_series->save();
+
+            }
+
+           
+            //if request->step == 4
+            if($request->step == 3){
+        
+                return view('card-series.index');
+               
+
+            } else {
+                
+     
+                $step = $request->step += 1;
+                $universe_id = $request->universe_id;
+                $card_series_id = $card_series->id;
+                
+
+                
+                if(isset($request->type) && $request->type == 'edit'){
+                    return view('universe.card-series.edit', compact('step', 'universe_id', 'card_series'));
+                } else {
+                    return view('universe.card-series.create', compact('step', 'universe_id', 'card_series_id', 'card_series'));
+                }
+
+            }
+          ;
+    }
+
+  /**
+     * Display the specified resource.
+     */
+    public function show(Request $request, string $id)
+    {
+        //
+        $card_series = CardSeries::find($request->c_id);
+        $cards = $card_series->cards;
+    
+        // dd($issues->toArray());
+       
+        return view('universe/card-series/show', compact('card_series', 'cards'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Request $request)
+    {
+        //
+        $card_series = CardSeries::find($request->card_series_id);
+       
+        $step=isset($request->step) ? $request->step : 1;
+        $universe = $card_series->universe;
+        $type='edit';
+        $eras = CardEra::all();
+        $books = Book::where('book_universe_id', $universe->id)->get();
+        return view('universe/card-series/create', compact('card_series', 'step','eras','books', 'universe'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request)
+    {
+       
+        $request->validate([
+            'card_series_id' => ['required'],
+            'universe_id' => ['required'],
+                 
+        ]);
+
+        ////make sure file is present
+            if(!empty($request->file)){
+
+                $fileName = $request->file('file')->getClientOriginalName();
+                $path = 'universe/'.$request->universe_id.'/'.'card-series/'.$request->card_series_id.'/images';
+        
+                $file = $request->file('file');
+            
+                $s3 = Storage::disk('s3-public');
+                $s3->putFileAs($path.$request->issue_number, $file, $fileName);
+            }
+
+            $cardSeriesService = new CardSeriesService($request->universe_id);
+
+            $page_submitted = $cardSeriesService->checkCardSeries($path, $fileName);
+
+            if($page_submitted){
+                return response()->json(['Success' => 'Series Uploaded Succesfully']);
+            } else {
+                return response()->json(['Error' => 'Series was not uploaded']);
+            }
+
+            
+     
+    }
+
+         /**
+     * Show the form for publishing the specified resource.
+     */
+    public function publish(Request $request, string $id)
+    {
+        //
+        $request->validate([
+            'book_id' => ['required']
+        ]);
+        $book = Book::find($request->book_id);
+        if($request->action == 'publish'){
+            $book->is_active = 1;
+            $book->save();
+        } else {
+            $book->is_active = 0;
+            $book->save();
+        }
+       
+        return redirect()->route('books.index', $book->book_universe_id);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Request $request)
+    {
+        //  dd($request->all());
+         $request->validate([
+            'card_series_id' => ['required'],
+                 
+        ]);
+        $card_series = CardSeries::find($request->card_series_id);
+        if($card_series->card_series_image_front) {
+            if (Storage::disk('s3-public')->exists($card_series->card_series_image_front)) {
+                Storage::disk('s3-public')->delete($card_series->card_series_image_front);
+            }
+        }
+        if($card_series->card_series_image_back) {
+            if (Storage::disk('s3-public')->exists($card_series->card_series_image_back)) {
+                Storage::disk('s3-public')->delete($card_series->card_series_image_back);
+            }
+        }
+        $card_series->delete();
+         return response()->json(['success' => 'Card Series deleted successfully.']);
+    }
+
+        /**
+     * Display a listing of the resource.
+     */
+    public function finish(REQUEST $request)
+    {
+        //
+
+        $card_series = CardSeries::find($request->card_series_id);
+        $card_series_id = $card_series->id;
+        // dd($card_series->toArray());
+        $universe = Universe::find($request->universe_id);
+        $universe_id = $universe->id;
+
+        $step = 3;
+
+        return view('universe.card-series.create', compact('step', 'universe_id', 'card_series_id', 'card_series'));
+    }
+
+}
