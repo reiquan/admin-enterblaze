@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Carbon\Carbon;
 use Validator;
 
 class CardSeriesController extends Controller
@@ -25,7 +26,7 @@ class CardSeriesController extends Controller
         //
 
         $card_series = CardSeries::where('card_series_universe_id', $request->universe_id)->get();
-        // dd($card_series->toArray());
+       
         $universe = Universe::find($request->universe_id);
 
         return view('universe/card-series/index', compact('card_series', 'universe'));
@@ -54,21 +55,24 @@ class CardSeriesController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->toArray());
+     
           //validate info
-        $request->validate([
-            'card_series_name' => ['required'],
-            'card_series_subtitle' => ['required'],
-            'card_series_published_at' => ['required'],
-            'card_series_era_id' => ['required'],
-            'card_series_description' => ['required'],
-            
-        ]);
+          if($request->step == 1){
+            $request->validate([
+                'card_series_name' => ['required'],
+                'card_series_subtitle' => ['required'],
+                'card_series_published_at' => ['required'],
+                'card_series_era_id' => ['required'],
+                'card_series_description' => ['required'],
+                
+            ]);
+          }
+          $card_series = isset($request->card_series_id) ? CardSeries::find($request->card_series_id) : new CardSeries;
         //save info
             if(isset($request->step) and $request->step == 1){
                
                 //save book
-                    $card_series = isset($request->card_series_id) ? CardSeries::find($request->card_series_id) : new CardSeries;
+            
                         $card_series->card_series_name = $request->card_series_name;
                         $card_series->card_series_published_at = $request->card_series_published_at;
                         $card_series->card_series_slug_name = preg_replace('/[^a-zA-Z0-9\s]/', '', $request->card_series_slug_name);
@@ -98,9 +102,9 @@ class CardSeriesController extends Controller
             } else {
                 
      
-                $step = $request->step += 1;
+                $step = $request->type == 'edit' ? $request->step : $request->step += 1;
                 $universe_id = $request->universe_id;
-                $card_series_id = $card_series->id;
+                $card_series_id = $card_series->id ?? $request->card_series_id;
                 
 
                 
@@ -140,8 +144,9 @@ class CardSeriesController extends Controller
         $universe = $card_series->universe;
         $type='edit';
         $eras = CardEra::all();
+        $formattedDate = Carbon::parse($card_series->card_series_published_at)->format('Y-m-d');
         $books = Book::where('book_universe_id', $universe->id)->get();
-        return view('universe/card-series/create', compact('card_series', 'step','eras','books', 'universe'));
+        return view('universe/card-series/edit', compact('card_series', 'step','eras','books', 'universe', 'formattedDate'));
     }
 
     /**
@@ -189,18 +194,18 @@ class CardSeriesController extends Controller
     {
         //
         $request->validate([
-            'book_id' => ['required']
+            'card_series_id' => ['required']
         ]);
-        $book = Book::find($request->book_id);
+        $card_series = CardSeries::find($request->card_series_id);
         if($request->action == 'publish'){
-            $book->is_active = 1;
-            $book->save();
+            $card_series->card_series_is_active = 1;
+            $card_series->save();
         } else {
-            $book->is_active = 0;
-            $book->save();
+            $card_series->card_series_is_active = 0;
+            $card_series->save();
         }
        
-        return redirect()->route('books.index', $book->book_universe_id);
+        return redirect()->route('card-series.index', $card_series->card_series_universe_id);
     }
 
     /**
@@ -238,12 +243,16 @@ class CardSeriesController extends Controller
         $card_series = CardSeries::find($request->card_series_id);
         $card_series_id = $card_series->id;
         // dd($card_series->toArray());
-        $universe = Universe::find($request->universe_id);
-        $universe_id = $universe->id;
+        $universe = Universe::find($card_series->card_series_universe_id);
+        $universe_id = $card_series->card_series_universe_id;
 
         $step = 3;
 
+       if($request->type == 'edit'){
+        return view('universe.card-series.edit', compact('step', 'universe_id', 'card_series_id', 'card_series'));
+       } else {
         return view('universe.card-series.create', compact('step', 'universe_id', 'card_series_id', 'card_series'));
+       }
     }
 
 }

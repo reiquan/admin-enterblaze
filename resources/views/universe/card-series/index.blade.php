@@ -32,7 +32,7 @@
                     }
                     });
                     $.ajax({
-                    url: '/universe/' + universe_id + '/books/' + card_series_id + '/publish?action=' + action + '&card_series_id=' + card_series_id, // Replace with your server endpoint
+                    url: '/universe/' + universe_id + '/card-series/' + card_series_id + '/publish?action=' + action + '&card_series_id=' + card_series_id, // Replace with your server endpoint
                     type: "POST",
                     success: function(response) {
                         // Handle success

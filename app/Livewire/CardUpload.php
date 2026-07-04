@@ -17,14 +17,16 @@ class CardUpload extends Component
     public $logo;
     public $type;
     public $field;
+    public $current;
 
-    public function mount($universe_id, $card_series_id, $logo, $field, $type)
+    public function mount($universe_id, $card_series_id, $current, $logo, $field, $type)
     {
         $this->universe_id = $universe_id;
         $this->card_series_id = $card_series_id;
         $this->logo = $logo;
         $this->type = $type;
         $this->field = $field;
+        $this->current = $current;
  
     }
 

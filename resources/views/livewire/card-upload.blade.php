@@ -1,12 +1,18 @@
 <div>
     <form wire:submit.prevent="saveCardSeries">
 
-         @if($photo)
+        @if($photo)
          
            Photo Preview:
             <img src="{{ $photo->temporaryUrl() }}">
          
-        @endif
+        @else
+         
+         Photo Preview:
+          <img src="{{ $current }}">
+       
+      @endif
+        
 
         <input type="file" wire:model="photo">
 

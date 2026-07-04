@@ -1,5 +1,5 @@
 <div class="bg-gray-50/70 px-4 py-6 sm:px-6 lg:px-8">
-    <form method="POST" action="{{ route('card-series.finish',['universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id, 'card_series_id' => $card_series->id ]) }}" class="mx-auto max-w-6xl" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('card-series.finish',['universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id ?? $universe_id, 'card_series_id' => $card_series->id ]) }}" class="mx-auto max-w-6xl" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="step" value="{{ $step }}">
 
@@ -107,10 +107,12 @@
                                 </div>
 
                                 <div class="p-5">
+                                    <br>
                                     <div data-upload-card-zone class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4 transition hover:border-indigo-300 hover:bg-indigo-50/30">
                                         @livewire('card-upload', [
-                                            'universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id,
+                                            'universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id ?? $universe_id,
                                             'card_series_id' => $card_series->id,
+                                            'current' => Storage::disk('s3-public')->url($card_series->card_series_image_front),
                                             'logo' => $card_series->card_series_image_front ?? '',
                                             'field' => 'card_series_image_front',
                                             'type' => Route::is('card-series.edit') ? 'edit' : ''
@@ -135,10 +137,12 @@
                                 </div>
 
                                 <div class="p-5">
+                                    <br>
                                     <div data-upload-card-zone class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4 transition hover:border-purple-300 hover:bg-purple-50/30">
                                         @livewire('card-upload', [
-                                            'universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id,
+                                            'universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id  ?? $universe_id,
                                             'card_series_id' => $card_series->id,
+                                            'current' => Storage::disk('s3-public')->url($card_series->card_series_image_back),
                                             'logo' => $card_series->card_series_image_back ?? '',
                                             'field' => 'card_series_image_back',
                                             'type' => Route::is('card-series.edit') ? 'edit' : ''

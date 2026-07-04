@@ -1,227 +1,326 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-red-800 leading-tight">
-            {{ __('Create Your Story') }}
-        </h2>
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-indigo-500">
+                    Card Series Builder
+                </p>
+                <h2 class="mt-1 text-xl font-semibold leading-tight text-gray-900">
+                    {{ __('Create Your Card Series') }}
+                </h2>
+            </div>
+
+            <a href="{{ route('card-series.index', $universe->id ?? $universe_id) }}"
+               class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50">
+                Back to Series
+            </a>
+        </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+    <div class="py-10">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
+            <div class="overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-gray-200">
 
-               
+                <div class="relative overflow-hidden border-b border-gray-200 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 px-6 py-8 text-white sm:px-8">
+                    <div class="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-white/10 blur-2xl"></div>
+                    <div class="absolute -bottom-24 left-16 h-64 w-64 rounded-full bg-purple-300/20 blur-3xl"></div>
 
+                    <div class="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                        <div class="max-w-3xl">
+                            <p class="text-sm font-semibold uppercase tracking-[0.25em] text-indigo-100">
+                                {{ $universe->universe_name ?? 'Universe' }}
+                            </p>
+                            @if($card_series)
+                              <h1 class="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
+                                  Edit your card series
+                              </h1>
+                              <p class="mt-3 max-w-2xl text-sm leading-6 text-indigo-100 sm:text-base">
+                                  Add the core publishing details first. You can continue through the upload and submit steps after this information is saved.
+                              </p>
+                            @else
+                              <h1 class="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
+                                  Build a new card series
+                              </h1>
+                              <p class="mt-3 max-w-2xl text-sm leading-6 text-indigo-100 sm:text-base">
+                                  Add the core publishing details first. You can continue through the upload and submit steps after this information is saved.
+                              </p>
+                            @endif
+                        </div>
 
+                        <div class="rounded-2xl border border-white/20 bg-white/10 p-4 shadow-lg backdrop-blur">
+                            <p class="text-xs font-medium uppercase tracking-widest text-indigo-100">Current Step</p>
+                            <p class="mt-1 text-2xl font-bold">Step {{ $step ?? 1 }} of 3</p>
+                        </div>
+                    </div>
+                </div>
 
-<div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+                <div class="border-b border-gray-200 bg-gray-50 px-6 py-5 sm:px-8">
+                    <nav aria-label="Progress">
+                        <ol role="list" class="grid gap-3 md:grid-cols-3">
+                            <li>
+                            <form method="GET" action="{{route('card-series.edit', ['universe_id' => $universe->id ?? $universe_id, 'card_series_id' => $card_series->id])}}">
+                              @csrf
+                                <div class="flex items-center gap-3 rounded-xl border {{ ($step ?? 1) == 1 ? 'border-indigo-200 bg-indigo-50 text-indigo-700' : 'border-gray-200 bg-white text-gray-500' }} px-4 py-3">
+                                    <button type="submit" class="flex h-8 w-8 items-center justify-center rounded-full {{ ($step ?? 1) == 1 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500' }} text-sm font-bold">1</button>
+                                    <div>
+                                        <p class="text-sm font-semibold">Series Info</p>
+                                        <p class="text-xs">Title, creator, audience</p>
+                                    </div>
+                                </div>
+                              </form>
+                            </li>
 
-<nav class="flex" aria-label="Breadcrumb">
-      <ol role="list" class="flex space-x-4 rounded-md bg-white px-6 shadow">
+                            <li>
+                              <form method="POST" action="{{route('card-series.store', $card_series->id)}}">
+                                @csrf
+                                <input type="hidden" name="step" value="2">
+                                <input type="hidden" name="type" value="edit">
+                                <input type="hidden" name="card_series_id" value="{{ $card_series->id }}">
+                                <div class="flex items-center gap-3 rounded-xl border {{ ($step ?? 1) == 2 ? 'border-indigo-200 bg-indigo-50 text-indigo-700' : 'border-gray-200 bg-white text-gray-500' }} px-4 py-3">
+                                    <button type="submit" class="flex h-8 w-8 items-center justify-center rounded-full {{ ($step ?? 1) == 2 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500' }} text-sm font-bold">2</button>
+                                    <div>
+                                        <p class="text-sm font-semibold">Cover Upload</p>
+                                        <p class="text-xs">Add artwork and images</p>
+                                    </div>
+                                </div>
+                              </form>
+                            </li>
 
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <a class="ml-4 text-lg font-medium text-gray-500 hover:text-gray-700">Create a Story</a>
-          </div>
-        </li>
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="{{ $step == 1 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <form method="GET" action="{{ route('books.edit',  [$book->universe->id, $book->id] ) }}" >
-              @csrf
-              <input type="hidden" name="step" value="1" >
-              <input type="hidden" name="universe_id" value="{{ $book->universe->id }}" >
-              <button class="{{ $step == 1 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 1 - Book Info</button>
-            </form>
-            
-          </div>
-        </li>
-        
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="{{ $step == 2 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <form method="GET" action="{{ route('books.edit', [$book->universe->id, $book->id]) }}" >
-              @csrf
-              <input type="hidden" name="step" value="2" >
-              <input type="hidden" name="universe_id" value="{{ $book->universe->id }}" >
-              <button class="{{ $step == 2 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 2 - Book Cover</button>
-            </form>
-          </div>
-        </li>
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="{{ $step == 4 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <form method="GET" action="{{ route('books.index', $book->universe->id) }}" >
-              @csrf
-              <input type="hidden" name="step" value="4" >
-              <input type="hidden" name="universe_id" value="{{ $book->universe->id }}" >
-              <button class="{{ $step == 4 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 4 - Submit</button>
-            </form>
-          </div>
-        </li>
-      </ol>
-    </nav>
+                            <li>
+                              <form method="POST" action="{{route('card-series.finish',  ['universe_id' => $universe->id ?? $universe_id, 'card_series_id' => $card_series->id])}}">
+                                @csrf
+                                <input type="hidden" name="step" value="2">
+                                <input type="hidden" name="type" value="edit">
+                                <input type="hidden" name="card_series_id" value="{{ $card_series->id }}">
+                                <div class="flex items-center gap-3 rounded-xl border {{ ($step ?? 1) == 3 ? 'border-indigo-200 bg-indigo-50 text-indigo-700' : 'border-gray-200 bg-white text-gray-500' }} px-4 py-3">
+                                    <button type="submit" class="flex h-8 w-8 items-center justify-center rounded-full {{ ($step ?? 1) == 3 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500' }} text-sm font-bold">3</button>
+                                    <div>
+                                        <p class="text-sm font-semibold">Submit</p>
+                                        <p class="text-xs">Review and finish</p>
+                                    </div>
+                                </div>
+                              </form>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
 
-</div>
+                <div class="bg-gray-50 px-6 py-8 sm:px-8">
+                    @if($step !== 1)
 
-<div class="bg-gray-200 bg-opacity-25  gap-6 lg:gap-4 p-6 lg:p-8">
-<!--
-This example requires some changes to your config:
+                        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                            @include('components.universe.card-series.card-series-uploader.card-series-form-step-'.$step)
+                        </div>
 
-```
-// tailwind.config.js
-module.exports = {
-// ...
-plugins: [
-  // ...
-  require('@tailwindcss/forms'),
-],
-}
-```
--->
-@if($step > 1)
+                    @else
 
-@include('components.universe.books.book-uploader.book-form-step-'.$step)
+                        <form method="POST" action="{{ route('card-series.store', $universe->id) }}">
+                            @csrf
 
-@else
-<form method="POST" action="{{ route('books.store', $book->universe->id) }}" >
-@csrf
-<input type="hidden" name="step" value="1" >
-<input type="hidden" name="universe_id" value="{{ $book->universe->id }}" >
-@if(isset($book->id))
-<input type="hidden" name="book_id" value="{{ $book->id }}" >
-@endif
-<div class="">
-  @if ($errors->any())
-      <div class="alert alert-danger">
-          <ul>
-              @foreach ($errors->all() as $error)
-                  <li><strong>*{{ $error }}</strong></li>
-              @endforeach
-          </ul>
-      </div>
-  @endif
-  <br>
-  <div class="border-b border-gray-900/10 pb-12">
+                            <input type="hidden" name="step" value="1">
+                            <input type="hidden" name="universe_id" value="{{ $universe->id }}">
 
-    <h2 class="text-base font-semibold leading-7 text-gray-900">Publish Your Book</h2>
-    <p class="mt-1 text-sm leading-6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
+                            @if ($errors->any())
+                                <div class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-red-700">
+                                    <div class="flex items-start gap-3">
+                                        <div class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-red-100 text-sm font-bold">
+                                            !
+                                        </div>
+                                        <div>
+                                            <h3 class="text-sm font-semibold">Please fix the following:</h3>
+                                            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm">
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
 
-    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-      <div class="sm:col-span-4">
-        <label for="book_title" class="block text-sm font-medium leading-6 text-gray-900">Book Title</label>
-        <div class="mt-2">
-          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-            <input type="text" name="book_title" id="book_title" value="{{ $book->book_title }}" autocomplete="book_title" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
-          </div>
-        </div>
-      </div>
-      <div class="sm:col-span-4">
-        <label for="book_subtitle" class="block text-sm font-medium leading-6 text-gray-900">Subtitle</label>
-        <div class="mt-2">
-          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-            <input type="text" name="book_subtitle" id="book_subtitle" autocomplete="book_subtitle" value="{{ $book->book_subtitle }}" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
-          </div>
-        </div>
-      </div>
+                            <div class="grid gap-8 lg:grid-cols-12">
+                                <aside class="lg:col-span-4">
+                                    <div class="sticky top-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-100 text-indigo-700">
+                                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 5.25A2.25 2.25 0 0 1 6.75 3h10.5a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 17.25 21H6.75a2.25 2.25 0 0 1-2.25-2.25V5.25Z" />
+                                            </svg>
+                                        </div>
 
-      <div class="sm:col-span-4">
-        <label for="book_price" class="block text-sm font-medium leading-6 text-gray-900">Book Reservation Price  <p class="mt-1 text-sm leading-6 text-gray-400">Set future Price for your book once it drops.</p></label>
-        <div class="mt-2">
-          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-            <input type="number" name="book_price" id="book_price" autocomplete="book_price" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" min="5.00" placeholder="25.00">
-          </div>
-        </div>
-      </div>
+                                        <h3 class="mt-5 text-lg font-bold text-gray-900">
+                                            Series Foundation
+                                        </h3>
+                                        <p class="mt-2 text-sm leading-6 text-gray-500">
+                                            Start with the details readers will see first: title, creator, type, audience, and a strong summary.
+                                        </p>
 
-      <div class="sm:col-span-4">
-        <label for="book_creator" class="block text-sm font-medium leading-6 text-gray-900">Creator</label>
-        <div class="mt-2">
-          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-            <input type="text" name="book_creator" id="book_creator" value="{{ $book->book_creator }}"autocomplete="book_creator" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
-          </div>
-        </div>
-      </div>
+                                        <div class="mt-6 rounded-xl bg-gray-50 p-4">
+                                            <p class="text-xs font-semibold uppercase tracking-widest text-gray-500">
+                                                Tip
+                                            </p>
+                                            <p class="mt-2 text-sm text-gray-600">
+                                                Use a clear title and a short summary that explains the hook of the series quickly.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </aside>
 
-      <div class="sm:col-span-4">
-        <label for="book_published_at" class="block text-sm font-medium leading-6 text-gray-900">Publication Date</label>
-        <div class="mt-2">
-          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-            <input type="date" name="book_published_at" id="book_published_at" value="{{ $book->book_published_at }}" autocomplete="book_published_at" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
-          </div>
-        </div>
-      </div>
+                                <section class="lg:col-span-8">
+                                    <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+                                        <div class="border-b border-gray-200 pb-6">
+                                          @if($card_series)
+                                            <h2 class="text-xl font-bold text-gray-900">
+                                                  Edit Your <strong class="text-purple-300">{{ $card_series->card_series_name }}</strong> Card series 
+                                              </h2>
+                                          @else
+                                            <h2 class="text-xl font-bold text-gray-900">
+                                                  Create Your Card series
+                                              </h2>
+                                              <p class="mt-2 text-sm leading-6 text-gray-500">
+                                                  This information may be displayed publicly, so make sure everything is accurate before moving forward.
+                                              </p>
+                                          @endif
+                                           
+                                        </div>
 
-      <div class="">
-        <label for="book_type" class="block text-sm font-medium leading-6 text-gray-900">Book Type</label>
-        <div class="mt-2">
-          <select id="book_type" name="book_type" autocomplete="book_type" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-            <option>Web Comic</option>
-            <option>Manga</option>
-          </select>
-        </div>
-      </div>
+                                        <div class="mt-8 grid grid-cols-1 gap-x-6 gap-y-7 sm:grid-cols-6">
+                                            <div class="sm:col-span-4">
+                                                <label for="card_series_name" class="block text-sm font-semibold text-gray-900">
+                                                   Card Series title
+                                                </label>
+                                                <div class="mt-2">
+                                                    <input type="text"
+                                                           name="card_series_name"
+                                                           id="card_series_name"
+                                                           autocomplete="card_series_name"
+                                                           value="{{ $card_series->card_series_name ?? old('card_series_name') }}"
+                                                           class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                                                           placeholder="Example: Reiden Tapped In">
+                                                </div>
+                                            </div>
 
-      
+                                            <div class="sm:col-span-4">
+                                                <label for="card_series_subtitle" class="block text-sm font-semibold text-gray-900">
+                                                    Subtitle
+                                                </label>
+                                                <div class="mt-2">
+                                                    <input type="text"
+                                                           name="card_series_subtitle"
+                                                           id="card_series_subtitle"
+                                                           autocomplete="card_series_subtitle"
+                                                           value="{{ $card_series->card_series_subtitle ?? old('card_series_subtitle') }}"
+                                                           class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                                                           placeholder="Example: Volume One">
+                                                </div>
+                                            </div>
+                                            <div class="sm:col-span-2">
+                                                <label for="card_series_price" class="block text-sm font-semibold text-gray-900">
+                                                    Price
+                                                </label>
+                                                <div class="mt-2">
+                                                    <input type="number"
+                                                           name="card_series_price"
+                                                           id="card_series_price"
+                                                           autocomplete="card_series_price"
+                                                           value="{{ $card_series->card_series_price ?? old('card_series_price') }}"
+                                                           class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                                                           >
+                                                </div>
+                                            </div>
 
-      <div class="">
-        <label for="book_audience" class="block text-sm font-medium leading-6 text-gray-900">Audience</label>
-        <div class="mt-2">
-          <select id="book_audience" name="book_audience" autocomplete="book_audience" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-            <option>Teens</option>
-            <option>Mature Audience</option>
-            <option>Adults Only</option>
-          </select>
-        </div>
-      </div>
+                                            <div class="sm:col-span-3">
+                                                <label for="card_series_published_at" class="block text-sm font-semibold text-gray-900">
+                                                    Publication Date
+                                                </label>
+                                                <div class="mt-2">
+                                                    <input type="date"
+                                                           name="card_series_published_at"
+                                                           id="card_series_published_at"
+                                                           autocomplete="card_series_published_at"
+                                                           value="{{ $formattedDate ?? now()->format('Y-m-d\TH:i') }}"
+                                                           class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                                                </div>
+                                            </div>
 
-      <div class="col-span-full">
-        <label for="book_description" class="block text-sm font-medium leading-6 text-gray-900">Book Summary</label>
-        <div class="mt-2">
-          <textarea id="book_description" name="book_description"  rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">{{ $book->book_description }}</textarea>
-        </div>
-        <p class="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about your universe.</p>
-      </div>
+                                            <div class="sm:col-span-3">
+                                                <label for="card_series_era_id" class="block text-sm font-semibold text-gray-900">
+                                                    Card Series Era
+                                                </label>
+                                                <div class="mt-2">
+                                                    <select id="card_series_era_id"
+                                                            name="card_series_era_id"
+                                                            autocomplete="card_series_era_id"
+                                                            class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                                                            @foreach($eras as $era)
+                                                              @if($era->id == $card_series->card_series_era_id)
+                                                              <option value="{{$era['id']}}" @selected(old('card_series_era_id') === '') selected>{{$era['card_era_name']}}</option>
+                                                              @else
+                                                              <option value="{{$era['id']}}" @selected(old('card_series_era_id') === '')>{{$era['card_era_name']}}</option>
+                                                              @endif
+                                                            @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
 
-      <!-- <div class="col-span-full">
-        <label for="photo" class="block text-sm font-medium leading-6 text-gray-900">Universe Photo</label>
-        <div class="mt-2 flex items-center gap-x-3">
-          <svg class="h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
-          </svg>
-          <button type="button" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Change</button>
-        </div>
-      </div> -->
-    </div>
-  </div>
+                                            @if(!$books->isEmpty())
+                                                <div class="sm:col-span-3">
+                                                    <label for="card_series_book_id" class="block text-sm font-semibold text-gray-900">
+                                                        Which book does this series belongs to
+                                                    </label>
+                                                    <div class="mt-2">
+                                                        <select id="card_series_book_id"
+                                                                name="card_series_book_id"
+                                                                autocomplete="card_series_book_id"
+                                                                class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                                                                @foreach($books as $book)
+                                                                      @if($book->id == $card_series->card_series_book_id)
+                                                                      <option value="{{$book['id']}}" @selected(old('card_series_book_id') === '') selected>{{$book['book_name']}}</option>
+                                                                      @else
+                                                                      <option value="{{$book['id']}}" @selected(old('card_series_book_id') === '')>{{$book['book_name']}}</option>
+                                                                      @endif
+                                                                @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            @endif
 
-    
+                                            <div class="col-span-full">
+                                                <label for="card_series_description" class="block text-sm font-semibold text-gray-900">
+                                                    Card Series Summary
+                                                </label>
+                                                <div class="mt-2">
+                                                    <textarea id="card_series_description"
+                                                              name="card_series_description"
+                                                              rows="5"
+                                                              class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                                                              placeholder="Write a few sentences about this book, manga, or card series.">{{ $card_series->card_series_description ?? old('card_series_description') }}</textarea>
+                                                </div>
+                                                <p class="mt-3 text-sm leading-6 text-gray-500">
+                                                    A strong summary helps users understand the tone, setting, and reason to keep readinggyy.
+                                                </p>
+                                            </div>
+                                        </div>
 
-  
+                                        <div class="mt-8 flex flex-col-reverse gap-3 border-t border-gray-200 pt-6 sm:flex-row sm:items-center sm:justify-end">
+                                            <a href="{{ route('card-series.index', $universe->id) }}"
+                                               class="inline-flex justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-100">
+                                                Cancel
+                                            </a>
 
-      
-</div>
+                                            <button type="submit"
+                                                    class="inline-flex justify-center rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                                Save and Continue
+                                            </button>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </form>
 
-<div class="mt-6 flex items-center justify-end gap-x-6">
-  <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
-  <button type="submit" name="type" value ="{{ Route::is('books.edit') ? 'edit' : '' }}" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
-</div>
-
-</form>
-@endif
-
-
-</div>
-              
+                    @endif
+                </div>
             </div>
         </div>
     </div>
