@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('card_rarity');
             $table->unsignedBigInteger('card_tier_id');
             $table->string('card_bio');
-            $table->string('card_image_one');
+            $table->string('card_image_one')->nullable();
             $table->string('card_image_two')->nullable();
-            $table->string('card_is_published');
+            $table->string('card_is_active')->nullable();
             $table->json('card_tags')->nullable();
             $table->timestamps();
 

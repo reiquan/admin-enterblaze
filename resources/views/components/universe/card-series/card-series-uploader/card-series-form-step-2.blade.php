@@ -109,10 +109,10 @@
                                 <div class="p-5">
                                     <br>
                                     <div data-upload-card-zone class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4 transition hover:border-indigo-300 hover:bg-indigo-50/30">
-                                        @livewire('card-upload', [
+                                        @livewire('card-series-upload', [
                                             'universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id ?? $universe_id,
                                             'card_series_id' => $card_series->id,
-                                            'current' => Storage::disk('s3-public')->url($card_series->card_series_image_front),
+                                            'current' => isset($card_series->card_series_image_front) ? Storage::disk('s3-public')->url($card_series->card_series_image_front) : null,
                                             'logo' => $card_series->card_series_image_front ?? '',
                                             'field' => 'card_series_image_front',
                                             'type' => Route::is('card-series.edit') ? 'edit' : ''
@@ -139,10 +139,10 @@
                                 <div class="p-5">
                                     <br>
                                     <div data-upload-card-zone class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4 transition hover:border-purple-300 hover:bg-purple-50/30">
-                                        @livewire('card-upload', [
+                                        @livewire('card-series-upload', [
                                             'universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id  ?? $universe_id,
                                             'card_series_id' => $card_series->id,
-                                            'current' => Storage::disk('s3-public')->url($card_series->card_series_image_back),
+                                            'current' => isset($card_series->card_series_image_back) ? Storage::disk('s3-public')->url($card_series->card_series_image_back) : null,
                                             'logo' => $card_series->card_series_image_back ?? '',
                                             'field' => 'card_series_image_back',
                                             'type' => Route::is('card-series.edit') ? 'edit' : ''

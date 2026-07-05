@@ -5,11 +5,12 @@ use App\Http\Controllers\BookController;
 use App\Models\Universe;
 use App\Models\Issue;
 use App\Models\Card;
-use App\Services\BookService;
+use App\Models\CardCharacter;
 use App\Models\IssuePage;
 use App\Models\Book;
 use App\Models\CardEra;
 use App\Models\CardType;
+use App\Models\CardFaction;
 use App\Models\CardTier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -50,7 +51,8 @@ class CardController extends Controller
         $eras = CardEra::all();
         $card_types = CardType::all();
         $card_tiers = CardTier::all();
-        return view('universe/card-series/cards/create', compact('step', 'universe', 'card_series_id', 'card_id', 'card', 'eras', 'card_types', 'card_tiers'));
+        $card_factions = CardFaction::where('card_faction_universe_id', $universe->id)->get();
+        return view('universe/card-series/cards/create', compact('step', 'universe','card_factions', 'card_series_id', 'card_id', 'card', 'eras', 'card_types', 'card_tiers'));
  
     }
 
@@ -59,66 +61,76 @@ class CardController extends Controller
      */
     public function store(Request $request)
     {
-     dd($request->all());
+    
           //validate info
-          if($request->step == 1){
-            $request->validate([
-                'card_name' => ['required'],
-                'card_subtitle' => ['required'],
-                'card_published_at' => ['required'],
-                'card_era_id' => ['required'],
-                'card_description' => ['required'],
-                
-            ]);
-          }
           $card = isset($request->card_id) ? Card::find($request->card_id) : new Card;
         //save info
             if(isset($request->step) and $request->step == 1){
+                if($request->step == 1){
+                    $request->validate([
+                        'card_name' => ['required'],
+                        'card_price' => ['required'],
+                        'card_published_at' => ['required'],
+                        'card_tier_id' => ['required'],
+                        'card_type_id' => ['required'],
+                        'card_bio' => ['required'],
+                        'card_rarity' => ['required'],
+        
+                        
+                    ]);
+                  }
                
                 //save book
             
                         $card->card_name = $request->card_name;
-                        $card->card_published_at = $request->card_published_at;
-                        $card->card_slug_name = preg_replace('/[^a-zA-Z0-9\s]/', '', $request->card_slug_name);
+                        $card->card_series_id = $request->card_series_id;
+                        $card->card_slug = preg_replace('/[^a-zA-Z0-9\s]/', '', $request->card_name);
                         $card->card_era_id = $request->card_era_id;
+                        $card->card_character_id = $request->card_character_id ?? null;
+                        $card->card_locaton_id = $request->card_locaton_id ?? null;
+                        $card->card_faction_id = $request->card_faction_id ?? null;
+                        $card->card_type_id = $request->card_type_id;
+                        $card->card_rarity = $request->card_rarity;
+                        $card->card_tier_id = $request->card_tier_id;
                         $card->card_price = $request->card_price;
-                        $card->card_id = $request->universe_id;
-                        $card->card_description = $request->card_description;
-                        $card->card_is_active = $request->card_is_active;
-                        if(isset($request->card_subtitle)){
-                            $card->card_subtitle = $request->card_subtitle;
-                        }
-                        if(isset($request->card_book_id)){
-                            $card->card_book_id = $request->card_book_id;
-                        }
+                        $card->card_bio = $request->card_bio;
+                        $card->card_is_active = null;
                     
                     $card->save();
 
             }
 
            
-            //if request->step == 4
+            $universe_id = $request->universe_id;
+            $card_id = $card->id ?? $request->card_id;
+            $card_series_id = $card->card_series_id;
+            $step = $request->type == 'edit' ? $request->step : $request->step += 1;
+         
             if($request->step == 3){
-        
-                return view('card.index');
-               
+              
+                $card_type = CardType::where('id',$card->card_type_id )->first();
+             
+                $card_type_form = strtolower($card_type->card_type_name).'-form';
+                $card_tier_skill_points = $card->tier->card_tier_skill_points;
+    
 
-            } else {
-                
-     
-                $step = $request->type == 'edit' ? $request->step : $request->step += 1;
-                $universe_id = $request->universe_id;
-                $card_id = $card->id ?? $request->card_id;
-                
-
-                
                 if(isset($request->type) && $request->type == 'edit'){
-                    return view('universe.card.edit', compact('step', 'universe_id', 'card'));
+                    
+                    return view('universe.card-series.cards.edit', compact('step', 'universe_id', 'card', 'card_type', 'card_type_form', 'card_tier_skill_points'));
                 } else {
-                    return view('universe.card.create', compact('step', 'universe_id', 'card_id', 'card'));
+                   
+                    return view('universe.card-series.cards.create', compact('step', 'universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
                 }
 
-            }
+            } 
+                
+                if(isset($request->type) && $request->type == 'edit'){
+                    return view('universe.card-series.cards.edit', compact('step', 'universe_id', 'card'));
+                } else {
+                    return view('universe.card-series.cards.create', compact('step', 'universe_id','card_series_id', 'card_id', 'card'));
+                }
+
+            
           ;
     }
 
@@ -158,37 +170,55 @@ class CardController extends Controller
      */
     public function update(Request $request)
     {
+        // dd($request->all());
        
         $request->validate([
-            'card_id' => ['required'],
-            'universe_id' => ['required'],
-                 
+            'card_character_name' => ['required'],
+            'card_character_alias' => ['required'],
+            'card_character_race' => ['required'],
+            'card_character_gender' => ['required'],
+            'card_character_age' => ['required'],
+            'card_character_occupation' => ['required'],      
         ]);
 
-        ////make sure file is present
-            if(!empty($request->file)){
+        $cardCharacter = isset($request->card_character_id) ? CardCharacter::find($request->card_character_id) : new CardCharacter;
 
-                $fileName = $request->file('file')->getClientOriginalName();
-                $path = 'universe/'.$request->universe_id.'/'.'card/'.$request->card_id.'/images';
+        $cardCharacter->card_character_name = $request->card_character_name;
+            $cardCharacter->card_character_universe_id = $request->card_character_universe_id;
+            $cardCharacter->card_character_alias = $request->card_character_alias;
+            $cardCharacter->card_character_race = $request->card_character_race ?? null;
+            $cardCharacter->card_character_age = $request->card_character_age ?? null;
+            $cardCharacter->card_character_gender = $request->card_character_gender ?? null;
+            $cardCharacter->card_character_affiliation = $request->card_character_affiliation ?? null;
+            $cardCharacter->card_character_occupation = $request->card_character_occupation;
+            $cardCharacter->card_character_abilities = json_encode($request->card_character_abilities);
+            $cardCharacter->card_character_physical = $request->card_character_physical;
+            $cardCharacter->card_character_bio = $request->card_character_bio;
+            $cardCharacter->card_character_mental = $request->card_character_mental;
+            $cardCharacter->card_character_spiritual = $request->card_character_spiritual;
         
-                $file = $request->file('file');
-            
-                $s3 = Storage::disk('s3-public');
-                $s3->putFileAs($path.$request->issue_number, $file, $fileName);
-            }
+        $cardCharacter->save();
 
-            $CardService = new CardService($request->universe_id);
+        $card = Card::find($request->card_id);
+        $card->card_character_id = $cardCharacter->id;
+        $card->save();
 
-            $page_submitted = $CardService->checkCard($path, $fileName);
+        $universe_id = $request->card_character_universe_id;
+        $card_id = $card->id ?? $request->card_id;
+        $card_series_id = $card->card_series_id;
+        $step = $request->type == 'edit' ? $request->step : $request->step += 1;
+        $card_type = CardType::where('id',$card->card_type_id )->first();
+             
+        $card_type_form ='skill-form';
+        $card_tier_skill_points = $card->tier->card_tier_skill_points;
 
-            if($page_submitted){
-                return response()->json(['Success' => 'Series Uploaded Succesfully']);
-            } else {
-                return response()->json(['Error' => 'Series was not uploaded']);
-            }
-
-            
-     
+        if(isset($request->type) && $request->type == 'edit'){
+                    
+            return view('universe.card-series.cards.edit', compact('step', 'universe_id', 'card', 'card_type', 'card_type_form', 'card_tier_skill_points'));
+        } else {
+           
+            return view('universe.card-series.cards.create', compact('step', 'universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
+        }
     }
 
          /**

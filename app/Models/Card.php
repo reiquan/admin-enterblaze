@@ -26,7 +26,7 @@ class Card extends Model
         'card_bio',
         'card_image_one',
         'card_image_two',
-        'card_is_published',
+        'card_is_is_active',
         'card_tags',
         'card_bio'
     ];
@@ -65,10 +65,10 @@ class Card extends Model
     }
     public function era()
     {
-        return $this->belongsTo(CardEra::Class, 'card_tier_id');
+        return $this->belongsTo(CardEra::Class, 'card_era_id');
     }
     public function series()
     {
-        return $this->belongsTo(CardSeries::Class, 'card_tier_id');
+        return $this->belongsTo(CardSeries::Class, 'card_series_id');
     }
 }

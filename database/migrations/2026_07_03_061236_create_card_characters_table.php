@@ -21,9 +21,7 @@ return new class extends Migration
             $table->string('card_character_age');
             $table->string('card_character_affiliation');
             $table->string('card_character_occupation');
-            $table->string('card_character_image_one')->nullable();
-            $table->string('card_character_image_two')->nullable();
-            $table->string('card_character_is_published');
+            $table->string('card_character_is_published')->nullable();
             $table->json('card_character_tags')->nullable();
             $table->timestamps();
 

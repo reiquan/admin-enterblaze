@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('card_tiers', function (Blueprint $table) {
+        Schema::table('card_characters', function (Blueprint $table) {
             //
-            $table->integer('card_tier_skill_points')->nullable()->after('card_tier_name');
+            $table->softDeletes();
         });
     }
 
@@ -22,9 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('card_tiers', function (Blueprint $table) {
+        Schema::table('card_characters', function (Blueprint $table) {
             //
-            $table->dropColumn('card_tier_skill_points');
+            $table->dropSoftDeletes();
         });
     }
 };

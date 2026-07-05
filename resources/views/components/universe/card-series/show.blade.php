@@ -190,14 +190,14 @@
 
                                 <div class="mt-5 flex flex-wrap items-center gap-2">
                                     @if(Route::has('cards.show'))
-                                        <a href="{{ route('cards.show', ['card' => $card->id]) }}"
+                                        <a href="{{ route('cards.show', ['universe_id' => $card->series->universe->id,'card_series_id' => $card->series->id,'card_id' => $card->id]) }}"
                                             class="inline-flex flex-1 items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">
                                             View
                                         </a>
                                     @endif
 
                                     @if(Route::has('cards.edit'))
-                                        <a href="{{ route('cards.edit', ['card' => $card->id]) }}"
+                                        <a href="{{ route('cards.edit',  ['universe_id' => $card->series->universe->id,'card_series_id' => $card->series->id,'card_id' => $card->id]) }}"
                                             class="inline-flex flex-1 items-center justify-center rounded-lg bg-gray-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-gray-800">
                                             Edit
                                         </a>

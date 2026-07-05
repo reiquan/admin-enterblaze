@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CardCharacter extends Model
 {
@@ -19,8 +20,6 @@ class CardCharacter extends Model
         'card_character_age',
         'card_character_affiliation',
         'card_character_occupation',
-        'card_character_image_one',
-        'card_character_image_two',
         'card_character_physical',
         'card_character_mental',
         'card_character_spiritual',
@@ -29,7 +28,7 @@ class CardCharacter extends Model
 
     ];
 
-    
+    protected $dates = ['deleted_at'];
 
 
      /**

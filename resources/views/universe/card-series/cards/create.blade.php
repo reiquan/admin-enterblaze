@@ -246,6 +246,23 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            @if(!$card_factions->isEmpty())
+                                              <div class="sm:col-span-3">
+                                                  <label for="card_faction_id" class="block text-sm font-semibold text-gray-900">
+                                                      Card Faction
+                                                  </label>
+                                                  <div class="mt-2">
+                                                      <select id="card_faction_id"
+                                                              name="card_faction_id"
+                                                              autocomplete="card_faction_id"
+                                                              class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                                                              @foreach($card_factions as $faction)
+                                                                  <option value="{{$faction['id']}}" @selected(old('card_faction_id') === '')>{{$faction['card_faction_name']}}</option>
+                                                              @endforeach
+                                                      </select>
+                                                  </div>
+                                              </div>
+                                            @endif
 
                                             <div class="sm:col-span-3">
                                                 <label for="card_tier_id" class="block text-sm font-semibold text-gray-900">
