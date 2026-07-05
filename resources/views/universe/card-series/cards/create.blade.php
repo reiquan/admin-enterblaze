@@ -6,7 +6,11 @@
                     Card Builder
                 </p>
                 <h2 class="mt-1 text-xl font-semibold leading-tight text-gray-900">
-                    {{ __('Create Your Card') }}
+                    @if($card_id)
+                        {{ __('Edit Your Card') }}
+                    @else
+                        {{ __('Create Your Card') }}
+                    @endif
                 </h2>
             </div>
 
@@ -22,65 +26,7 @@
 
             <div class="overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-gray-200">
 
-                <div class="relative overflow-hidden border-b border-gray-200 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 px-6 py-8 text-white sm:px-8">
-                    <div class="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-white/10 blur-2xl"></div>
-                    <div class="absolute -bottom-24 left-16 h-64 w-64 rounded-full bg-purple-300/20 blur-3xl"></div>
-
-                    <div class="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                        <div class="max-w-3xl">
-                            <p class="text-sm font-semibold uppercase tracking-[0.25em] text-indigo-100">
-                                {{ $universe->universe_name ?? 'Universe' }}
-                            </p>
-                            <h1 class="mt-3 text-3xl font-black tracking-tight sm:text-4xl">
-                                Build a new card series
-                            </h1>
-                            <p class="mt-3 max-w-2xl text-sm leading-6 text-indigo-100 sm:text-base">
-                                Add the core publishing details first. You can continue through the upload and submit steps after this information is saved.
-                            </p>
-                        </div>
-
-                        <div class="rounded-2xl border border-white/20 bg-white/10 p-4 shadow-lg backdrop-blur">
-                            <p class="text-xs font-medium uppercase tracking-widest text-indigo-100">Current Step</p>
-                            <p class="mt-1 text-2xl font-bold">Step {{ $step ?? 1 }} of 3</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="border-b border-gray-200 bg-gray-50 px-6 py-5 sm:px-8">
-                    <nav aria-label="Progress">
-                        <ol role="list" class="grid gap-3 md:grid-cols-3">
-                            <li>
-                                <div class="flex items-center gap-3 rounded-xl border {{ ($step ?? 1) == 1 ? 'border-indigo-200 bg-indigo-50 text-indigo-700' : 'border-gray-200 bg-white text-gray-500' }} px-4 py-3">
-                                    <span class="flex h-8 w-8 items-center justify-center rounded-full {{ ($step ?? 1) == 1 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500' }} text-sm font-bold">1</span>
-                                    <div>
-                                        <p class="text-sm font-semibold">Series Info</p>
-                                        <p class="text-xs">Title, creator, audience</p>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="flex items-center gap-3 rounded-xl border {{ ($step ?? 1) == 2 ? 'border-indigo-200 bg-indigo-50 text-indigo-700' : 'border-gray-200 bg-white text-gray-500' }} px-4 py-3">
-                                    <span class="flex h-8 w-8 items-center justify-center rounded-full {{ ($step ?? 1) == 2 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500' }} text-sm font-bold">2</span>
-                                    <div>
-                                        <p class="text-sm font-semibold">Cover Upload</p>
-                                        <p class="text-xs">Add artwork and images</p>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="flex items-center gap-3 rounded-xl border {{ ($step ?? 1) == 3 ? 'border-indigo-200 bg-indigo-50 text-indigo-700' : 'border-gray-200 bg-white text-gray-500' }} px-4 py-3">
-                                    <span class="flex h-8 w-8 items-center justify-center rounded-full {{ ($step ?? 1) == 3 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500' }} text-sm font-bold">3</span>
-                                    <div>
-                                        <p class="text-sm font-semibold">Submit</p>
-                                        <p class="text-xs">Review and finish</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
+                @include('components.universe.card-series.cards.progress')
 
                 <div class="bg-gray-50 px-6 py-8 sm:px-8">
                     @if($step !== 1)
@@ -96,6 +42,9 @@
 
                             <input type="hidden" name="step" value="1">
                             <input type="hidden" name="universe_id" value="{{ $universe->id }}">
+                            @if($card_id)
+                            <input type="hidden" name="card_id" value="{{ $card->id }}">
+                            @endif
 
                             @if ($errors->any())
                                 <div class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-red-700">
@@ -147,7 +96,11 @@
                                     <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
                                         <div class="border-b border-gray-200 pb-6">
                                             <h2 class="text-xl font-bold text-gray-900">
-                                                Create Your Card 
+                                                @if($card_id)
+                                                    {{ __('Edit Your Card') }}
+                                                @else
+                                                    {{ __('Create Your Card') }}
+                                                @endif
                                             </h2>
                                             <p class="mt-2 text-sm leading-6 text-gray-500">
                                                 This information may be displayed publicly, so make sure everything is accurate before moving forward.
@@ -162,6 +115,7 @@
                                                 <div class="mt-2">
                                                     <input type="text"
                                                            name="card_name"
+                                                           value ="{{ $card_id ? $card->card_name : ''}}"
                                                            id="card_name"
                                                            autocomplete="card_name"
                                                            value="{{ old('card_name') }}"
@@ -176,6 +130,7 @@
                                                 <div class="mt-2">
                                                     <input type="number"
                                                            name="card_price"
+                                                           value ="{{ $card_id ? $card->card_price : ''}}"
                                                            id="card_price"
                                                            autocomplete="card_price"
                                                            value="{{ old('card_price') }}"
@@ -192,6 +147,7 @@
                                                     <input type="date"
                                                            name="card_published_at"
                                                            id="card_published_at"
+                                                           value="{{ $formattedDate ?? now()->format('Y-m-d') }}"
                                                            autocomplete="card_published_at"
                                                            value="{{ old('card_published_at') }}"
                                                            class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
@@ -205,6 +161,7 @@
                                                 <div class="mt-2">
                                                     <select id="card_era_id"
                                                             name="card_era_id"
+                                                            value ="{{ $card_id ? $card->card_era_id : ''}}"
                                                             autocomplete="card_era_id"
                                                             class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
                                                             @foreach($eras as $era)
@@ -221,6 +178,7 @@
                                                 <div class="mt-2">
                                                     <select id="card_rarity"
                                                             name="card_rarity"
+                                                            value ="{{ $card_id ? $card->card_rarity : ''}}"
                                                             autocomplete="card_rarity"
                                                             class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
                                                             <option value="Legendary" @selected(old('card_rarity') === '')>Legendary</option>
@@ -238,6 +196,7 @@
                                                 <div class="mt-2">
                                                     <select id="card_type_id"
                                                             name="card_type_id"
+                                                            value ="{{ $card_id ? $card->card_type_id : ''}}"
                                                             autocomplete="card_type_id"
                                                             class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
                                                             @foreach($card_types as $type)
@@ -254,10 +213,15 @@
                                                   <div class="mt-2">
                                                       <select id="card_faction_id"
                                                               name="card_faction_id"
+                                                              value ="{{ $card_id ? $card->card_faction_id : ''}}"
                                                               autocomplete="card_faction_id"
                                                               class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
                                                               @foreach($card_factions as $faction)
-                                                                  <option value="{{$faction['id']}}" @selected(old('card_faction_id') === '')>{{$faction['card_faction_name']}}</option>
+                                                                  @if($faction->id == $card->card_faction_id)
+                                                                    <option value="{{$faction['id']}}" @selected(old('card_faction_id') === '') selected>{{$faction['card_faction_name']}}</option>
+                                                                    @else
+                                                                    <option value="{{$faction['id']}}" @selected(old('card_faction_id') === '')>{{$faction['card_faction_name']}}</option>
+                                                                    @endif
                                                               @endforeach
                                                       </select>
                                                   </div>
@@ -271,10 +235,15 @@
                                                 <div class="mt-2">
                                                     <select id="card_tier_id"
                                                             name="card_tier_id"
+                                                            value ="{{ $card_id ? $card->card_tier_id : ''}}"
                                                             autocomplete="card_tier_id"
                                                             class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
                                                             @foreach($card_tiers as $tier)
+                                                                @if($tier->id == $card->card_tier_id)
+                                                                <option value="{{$tier['id']}}" @selected(old('card_tier_id') === '') selected>{{$tier['card_tier_name']}}</option>
+                                                                @else
                                                                 <option value="{{$tier['id']}}" @selected(old('card_tier_id') === '')>{{$tier['card_tier_name']}}</option>
+                                                                @endif
                                                             @endforeach
                                                     </select>
                                                 </div>
@@ -287,9 +256,10 @@
                                                 <div class="mt-2">
                                                     <textarea id="card_bio"
                                                               name="card_bio"
+                                                              value ="{{ $card_id ? $card->card_bio : ''}}"
                                                               rows="5"
                                                               class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                                                              placeholder="Write a few sentences about this book, manga, or card series.">{{ old('card_description') }}</textarea>
+                                                              placeholder="Write a few sentences about this book, manga, or card series.">{{ $card_id ? $card->card_bio : old('card_description') }}</textarea>
                                                 </div>
                                                 <p class="mt-3 text-sm leading-6 text-gray-500">
                                                     A strong summary helps users understand the tone, setting, and reason to keep reading.

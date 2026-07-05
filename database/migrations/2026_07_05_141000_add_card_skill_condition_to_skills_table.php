@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::table('card_skills', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('card_skill_character_id')->nullale()->after('card_skill_element');
+            $table->string('card_skill_condition')->nullable()->after('card_skill_type_id');
+            $table->string('card_skill_is_active')->nullable()->after('card_skill_condition');
+
         });
     }
 
@@ -24,7 +26,8 @@ return new class extends Migration
     {
         Schema::table('card_skills', function (Blueprint $table) {
             //
-            $table->dropColumn('card_character_id');
+            $table->dropColumn('card_skill_condition');
+            $table->dropColumn('card_skill_is_active');
         });
     }
 };

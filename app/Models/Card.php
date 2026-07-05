@@ -71,4 +71,8 @@ class Card extends Model
     {
         return $this->belongsTo(CardSeries::Class, 'card_series_id');
     }
+    public function skills()
+    {
+        return $this->hasMany(CardSkill::Class, 'card_skill_card_id');
+    }
 }

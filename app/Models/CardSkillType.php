@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CardSkillType extends Model
 {
@@ -14,6 +15,8 @@ class CardSkillType extends Model
     protected $fillable = [
         'card_skill_type_name',
     ];
+
+    protected $dates = ['deleted_at'];
 
 
          /**

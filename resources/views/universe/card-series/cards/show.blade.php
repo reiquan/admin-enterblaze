@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-red-800 leading-tight">
-            {{ __($book->book_title) }}
+            {{ __($card->card_name) }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <x-universe.books.show :book="$book" :issues="$issues"/>
+                <x-universe.card-series.cards.show :card="$card"/>
             </div>
         </div>
     </div>

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('card_skills', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('card_skill_character_id')->nullale()->after('card_skill_element');
+            $table->softDeletes();
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('card_skills', function (Blueprint $table) {
             //
-            $table->dropColumn('card_character_id');
+            $table->dropSoftDeletes();
         });
     }
 };

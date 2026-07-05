@@ -6,6 +6,8 @@ use App\Models\Universe;
 use App\Models\Issue;
 use App\Models\Card;
 use App\Models\CardCharacter;
+use App\Models\CardSkill;
+use App\Models\CardSkillType;
 use App\Models\IssuePage;
 use App\Models\Book;
 use App\Models\CardEra;
@@ -29,30 +31,56 @@ class CardController extends Controller
         //
 
         $cards = Card::where('card_series_id', $request->card_series_id)->get();
+
+        $card_series_id = $request->card_series_id;
        
         $universe = Universe::find($request->universe_id);
 
-        return view('universe/card/index', compact('cards', 'universe'));
+        return view('universe/card-series/cards/index', compact('cards', 'card_series_id','universe'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(REQUEST $request)
+    public function update(REQUEST $request)
     {
-        //
-       
+        $card_type = null;
+                
+        $card_type_form = null;
+        $card_tier_skill_points = null;
         $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
-    
+
         $card_series_id = isset($_REQUEST['card_series_id']) ? $_REQUEST['card_series_id'] : '';
         $universe = Universe::find($request->universe_id);
         $card_id = isset($_REQUEST['card_id']) ? $_REQUEST['card_id'] : '';
-        $card = isset($_REQUEST['card']) ? $_REQUEST['card'] : '';
+
+        $card = isset($_REQUEST['card_id']) ? Card::find($_REQUEST['card_id']) : '';
         $eras = CardEra::all();
         $card_types = CardType::all();
         $card_tiers = CardTier::all();
         $card_factions = CardFaction::where('card_faction_universe_id', $universe->id)->get();
-        return view('universe/card-series/cards/create', compact('step', 'universe','card_factions', 'card_series_id', 'card_id', 'card', 'eras', 'card_types', 'card_tiers'));
+        $formattedDate = $card_id ? Carbon::parse($card->card_published_at)->format('Y-m-d') : null;
+        $cardSkills = $card->skills->toArray() ?? null;
+        $card_skill_types = CardSkillType::all();
+
+        if($request->step == 3){
+            $card_type = CardType::where('id',$card->card_type_id )->first();
+             
+            $card_type_form = strtolower($card_type->card_type_name).'-form';
+            $card_tier_skill_points = $card->tier->card_tier_skill_points;
+        }
+
+        if($request->step == 4){
+
+            $card_type = CardType::where('id',$card->card_type_id )->first();
+
+            $card_type_form = strtolower('skill-form');
+
+            $card_tier_skill_points = $card->tier->card_tier_skill_points;
+
+        }
+
+        return view('universe/card-series/cards/create', compact('step', 'card_skill_types', 'cardSkills','formattedDate','card_type_form','card_type','card_tier_skill_points','universe','card_factions', 'card_series_id', 'card_id', 'card', 'eras', 'card_types', 'card_tiers'));
  
     }
 
@@ -137,15 +165,15 @@ class CardController extends Controller
   /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $id)
+    public function show(Request $request)
     {
         //
         $card = Card::find($request->c_id);
-        $cards = $card->cards;
+   
     
         // dd($issues->toArray());
        
-        return view('universe/card/show', compact('card', 'cards'));
+        return view('universe/card-series/cards/show', compact('card'));
     }
 
     /**
@@ -162,13 +190,14 @@ class CardController extends Controller
         $eras = CardEra::all();
         $formattedDate = Carbon::parse($card->card_published_at)->format('Y-m-d');
         $books = Book::where('book_universe_id', $universe->id)->get();
+
         return view('universe/card/edit', compact('card', 'step','eras','books', 'universe', 'formattedDate'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function updateCardTier(Request $request)
     {
         // dd($request->all());
        
@@ -206,21 +235,94 @@ class CardController extends Controller
         $universe_id = $request->card_character_universe_id;
         $card_id = $card->id ?? $request->card_id;
         $card_series_id = $card->card_series_id;
-        $step = $request->type == 'edit' ? $request->step : $request->step += 1;
+        $step = $request->step && $request->step == 3 ? $request->step += 1 : $request->step;
         $card_type = CardType::where('id',$card->card_type_id )->first();
              
         $card_type_form ='skill-form';
         $card_tier_skill_points = $card->tier->card_tier_skill_points;
 
-        if(isset($request->type) && $request->type == 'edit'){
-                    
-            return view('universe.card-series.cards.edit', compact('step', 'universe_id', 'card', 'card_type', 'card_type_form', 'card_tier_skill_points'));
-        } else {
+        if($request->step == 4){
+            $cardSkills= isset($request->card_character_id) ? CardSkill::where('card_skill_character_id',$request->card_character_id)->limit(2)->get() : new CardSkill;
+          
+            $card_skill_types = CardSkillType::all();
+            $card_types = CardType::all();
+
+            return view('universe.card-series.cards.create', compact('step', 'card_types','cardSkills', 'card_skill_types','universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
+
+        }
+        
            
             return view('universe.card-series.cards.create', compact('step', 'universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
-        }
     }
 
+    public function updateCardSkill(Request $request)
+    {
+        
+        // dd($request->all());
+          $card = Card::find($request->card_id);
+    
+
+        $cardSkillOne = isset($request->card_skill_id_one) ? CardSkill::findOrNew($request->card_skill_id_one) : new CardSkill;
+        $cardSkillTwo = isset($request->card_skill_id_two) ? CardSkill::findOrNew($request->card_skill_id_two) : new CardSkill;
+
+
+            $cardSkillOne->card_skill_name = $request->skills[0]['card_skill_name']  ?? null;
+            $cardSkillOne->card_skill_condition = $request->skills[0]['card_skill_condition']  ?? null;
+            $cardSkillOne->card_skill_element = $request->skills[0]['card_skill_element']  ?? null;
+            $cardSkillOne->card_skill_energy_cost = $request->skills[0]['card_skill_energy_cost'] ?? null;
+            $cardSkillOne->card_skill_cooldown = $request->skills[0]['card_skill_cooldown']  ?? null;
+            $cardSkillOne->card_skill_range = $request->skills[0]['card_skill_range']  ?? null;
+            $cardSkillOne->card_skill_description = $request->skills[0]['card_skill_description']  ?? null;
+            $cardSkillOne->card_skill_range = $request->skills[0]['card_skill_range']  ?? null;
+            $cardSkillOne->card_skill_card_id = $request->card_id  ?? null;
+            $cardTypeOne = CardType::find($request->skills[0]['card_skill_type_id']);
+            $cardSkillOne->card_skill_type_id = $cardTypeOne->id ?? null;
+            $cardSkillOne->card_skill_character_id = $request->card_character_id ?? null;
+        
+        $cardSkillOne->save();
+
+        if(isset($request->skills[1])){
+                $cardSkillTwo->card_skill_name = $request->skills[1]['card_skill_name']  ?? null;
+                $cardSkillTwo->card_skill_condition = $request->skills[1]['card_skill_condition']  ?? null;
+                $cardSkillTwo->card_skill_element = $request->skills[1]['card_skill_element']  ?? null;
+                $cardSkillTwo->card_skill_energy_cost = $request->skills[1]['card_skill_energy_cost'] ?? null;
+                $cardSkillTwo->card_skill_cooldown = $request->skills[1]['card_skill_cooldown']  ?? null;
+                $cardSkillTwo->card_skill_range = $request->skills[1]['card_skill_range']  ?? null;
+                $cardSkillTwo->card_skill_description = $request->skills[1]['card_skill_description']  ?? null;
+                $cardSkillTwo->card_skill_range = $request->skills[1]['card_skill_range']  ?? null;
+                $cardSkillTwo->card_skill_card_id = $request->card_id  ?? null;
+                    $cardTypeTwo = CardType::find($request->skills[1]['card_skill_type_id']);
+                $cardSkillTwo->card_skill_type_id = $cardTypeTwo->id ?? null;
+                $cardSkillTwo->card_skill_character_id = $request->card_character_id ?? null;
+        
+            $cardSkillTwo->save();
+        }
+
+        
+        $card->card_character_id =  $request->card_character_id;
+        $card->save();
+
+        $universe_id = $request->card_character_universe_id;
+        $card_id = $card->id ?? $request->card_id;
+        $card_series_id = $card->card_series_id;
+        $step = $request->step && $request->step == 4 ? $request->step += 1 : $request->step;
+        $card_type = CardType::where('id',$card->card_type_id )->first();
+             
+        $card_type_form ='finish';
+        $card_tier_skill_points = $card->tier->card_tier_skill_points;
+            // dd($step);
+        if($request->step == 5){
+            $card_skills= isset($request->card_character_id) ? CardSkill::where('card_skill_character_id',$request->card_character_id)->get() : new CardSkill;
+            $card_skill_types = CardSkillType::all();
+            
+
+            return view('universe.card-series.cards.finish', compact('step', 'card_skills', 'card_skill_types','universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
+
+        }
+        
+           
+            return view('universe.card-series.cards.create', compact('step', 'universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
+    }
          /**
      * Show the form for publishing the specified resource.
      */

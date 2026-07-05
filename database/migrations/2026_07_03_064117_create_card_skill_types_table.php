@@ -17,10 +17,10 @@ return new class extends Migration
             $table->timestamps();
         });
         DB::table('card_skill_types')->insert([
-            ['card_skill_type_name' => 'Physical', 'created_at' => now()],
-            ['card_skill_type_name' => 'Mental', 'created_at' => now()],
-            ['card_skill_type_name' => 'Spiritual', 'created_at' => now()],
+            ['card_skill_type_name' => 'Attack', 'created_at' => now()],
+            ['card_skill_type_name' => 'Defense', 'created_at' => now()],
             ['card_skill_type_name' => 'Support', 'created_at' => now()],
+            ['card_skill_type_name' => 'Transformation', 'created_at' => now()],
             ['card_skill_type_name' => 'Passive', 'created_at' => now()],
             ['card_skill_type_name' => 'Ultimate', 'created_at' => now()],
         ]);
