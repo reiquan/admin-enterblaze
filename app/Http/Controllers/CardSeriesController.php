@@ -24,9 +24,10 @@ class CardSeriesController extends Controller
     public function index(REQUEST $request)
     {
         //
-
-        $card_series = CardSeries::where('card_series_universe_id', $request->universe_id)->get();
-       
+        // dd($request->toArray());
+        $card_series = CardSeries::where('card_series_universe_id', intval($request->universe_id))->get();
+    
+      
         $universe = Universe::find($request->universe_id);
 
         return view('universe/card-series/index', compact('card_series', 'universe'));
@@ -55,7 +56,7 @@ class CardSeriesController extends Controller
      */
     public function store(Request $request)
     {
-     
+       
           //validate info
           if($request->step == 1){
             $request->validate([
@@ -95,23 +96,28 @@ class CardSeriesController extends Controller
            
             //if request->step == 4
             if($request->step == 3){
-        
-                return view('card-series.index');
+              
+                $universe_id =$card_series->universe->id;
+                $card_series_id = $card_series->id ?? $request->card_series_id;
+                return view('card-series.finish', compact('step', 'universe_id', 'card_series'));
                
 
             } else {
                 
-     
+        
                 $step = $request->type == 'edit' ? $request->step : $request->step += 1;
-                $universe_id = $request->universe_id;
+                $universe_id =$card_series->universe->id;
+               $universe = Universe::find($universe_id);
                 $card_series_id = $card_series->id ?? $request->card_series_id;
-                
-
+               
+          
                 
                 if(isset($request->type) && $request->type == 'edit'){
-                    return view('universe.card-series.edit', compact('step', 'universe_id', 'card_series'));
+                   
+                    return view('universe.card-series.edit', compact('step','universe', 'universe_id', 'card_series_id', 'card_series'));
                 } else {
-                    return view('universe.card-series.create', compact('step', 'universe_id', 'card_series_id', 'card_series'));
+                   
+                    return view('universe.card-series.create', compact('step','universe', 'universe_id', 'card_series_id', 'card_series'));
                 }
 
             }
@@ -139,8 +145,9 @@ class CardSeriesController extends Controller
      */
     public function edit(Request $request)
     {
+        // dd($request->all());
         //
-        $card_series = CardSeries::find($request->card_series_id);
+        $card_series = CardSeries::find($request->card_series_id ?? $request->c_id);
        
         $step=isset($request->step) ? $request->step : 1;
         $universe = $card_series->universe;
@@ -241,20 +248,18 @@ class CardSeriesController extends Controller
     public function finish(REQUEST $request)
     {
         //
-
-        $card_series = CardSeries::find($request->card_series_id);
-        $card_series_id = $card_series->id;
+        // dd($request->all());
+        $card_series = CardSeries::where('card_series_universe_id', $request->universe_id)->get();
         // dd($card_series->toArray());
-        $universe = Universe::find($card_series->card_series_universe_id);
-        $universe_id = $card_series->card_series_universe_id;
+       
+    
+        $universe = Universe::find($request->universe_id);
 
         $step = 3;
 
-       if($request->type == 'edit'){
-        return view('universe.card-series.edit', compact('step', 'universe_id', 'card_series_id', 'card_series'));
-       } else {
-        return view('universe.card-series.create', compact('step', 'universe_id', 'card_series_id', 'card_series'));
-       }
+
+        return view('universe.card-series.index', compact('step', 'universe', 'card_series'));
+       
     }
 
 }

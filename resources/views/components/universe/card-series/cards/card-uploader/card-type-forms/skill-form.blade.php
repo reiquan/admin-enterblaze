@@ -67,10 +67,10 @@
                                 <input
                                     type="text"
                                     name="skills[0][card_skill_name]"
-                                    value="{{ $cardSkills[0]['card_skill_name'] ?? old(skills[0][card_skill_name]) }}"
+                                    value="{{ $cardSkills[0]['card_skill_name'] ?? old('skills[0][card_skill_name]') }}"
                                     class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                     placeholder="Dragon Strike"
-                                >
+                                    required>
                             </div>
 
                             <div>
@@ -80,10 +80,10 @@
                                 <select
                                     name="skills[0][card_skill_type_id]"
                                     class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                >
+                                    required>
                                     <option value="">Select Type</option>
                                     @foreach($card_skill_types as $type)
-                                    @if($type->id == $cardSkills[0]['id'])
+                                    @if(isset($cardSkills[0]['id']) && $type->id == $cardSkills[0]['id'])
                                         <option value="{{$type->id}}" selected>{{$type->card_skill_type_name}}</option>
                                     @else
                                         <option value="{{$type->id}}" >{{$type->card_skill_type_name}}</option>
@@ -99,9 +99,9 @@
                                 </label>
                                 <select
                                     name="skills[0][card_skill_element]"
-                                    value="{{ $cardSkills[0]['card_skill_element'] ?? old(skills[0][card_skill_element]) }}"
+                                    value="{{ $cardSkills[0]['card_skill_element'] ?? old('skills[0][card_skill_element]') }}"
                                     class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                >
+                                    required>
                                     <option value="">Select Element</option>
                                     <!-- <option value="Fire">Fire</option>
                                     <option value="Water">Water</option>
@@ -111,7 +111,7 @@
                                     <option value="Light">Light</option> -->
                                     <option value="None">None</option>
                                         @foreach(['mental' => 'Mental', 'spiritual'=> 'Spiritual', 'physical' => 'Physical'] as $key => $value)
-                                        @if($cardSkills[0]['card_skill_element'] == $key)
+                                        @if(isset($cardSkills[0]['card_skill_element']) && $cardSkills[0]['card_skill_element'] == $key)
                                             <option value="{{$key}}" selected>{{ $value }}</option>
                                         @else
                                             <option value="{{$key}}">{{ $value }}</option>
@@ -128,10 +128,10 @@
                                     type="number"
                                     min="0"
                                     name="skills[0][card_skill_energy_cost]"
-                                    value="{{ $cardSkills[0]['card_skill_energy_cost'] ?? old(skills[0][card_skill_energy_cost]) }}"
+                                    value="{{ $cardSkills[0]['card_skill_energy_cost'] ?? old('skills[0][card_skill_energy_cost]') }}"
                                     class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                     placeholder="0"
-                                >
+                                    required>
                             </div>
 
                             <div>
@@ -142,10 +142,10 @@
                                     type="number"
                                     min="0"
                                     name="skills[0][card_skill_cooldown]"
-                                     value="{{ $cardSkills[0]['card_skill_cooldown'] ?? old(skills[0][card_skill_cooldown]) }}"
+                                     value="{{ $cardSkills[0]['card_skill_cooldown'] ?? old('skills[0][card_skill_cooldown]') }}"
                                     class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                     placeholder="0"
-                                >
+                                    required>
                             </div>
 
                             <div class="md:col-span-2">
@@ -154,12 +154,12 @@
                                 </label>
                                 <select
                                     name="skills[0][card_skill_range]"
-                                    value="{{ $cardSkills[0]['card_skill_range'] ?? old(skills[0][card_skill_range]) }}"
+                                    value="{{ $cardSkills[0]['card_skill_range'] ?? old('skills[0][card_skill_range]') }}"
                                     class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                >
+                                    required>
                                 <option value="">Select Range</option>
                                     @foreach(['self' => 'Self', 'touch'=> 'Touch', 'melee' => 'Melee','short' => 'Short', 'medium'=> 'Medium', 'long' => 'Long', 'globe' => 'Globe'] as $key => $value)
-                                        @if($cardSkills[0]['card_skill_range'] == $key)
+                                        @if(isset($cardSkills[0]['card_skill_range']) && $cardSkills[0]['card_skill_range'] == $key)
                                         <option value="{{$key}}" selected>{{$value}}</option>
                                         @else
                                         <option value="{{$key}}">{{$value}}</option>
@@ -171,10 +171,10 @@
                                 <label class="mb-2 block text-sm font-bold text-gray-700">
                                     Condition
                                 </label>
-                                <select name="skills[0][card_skill_condition]" class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <select name="skills[0][card_skill_condition]" class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                     <option value="">Select Condition</option>
                                     @foreach(['dice_roll' => 'Dice Roll', 'coin_toss' => 'Coin Toss'] as $key => $value)
-                                        @if($cardSkills[0]['card_skill_condition'] == $key)
+                                        @if(isset($cardSkills[0]['card_skill_condition']) && $cardSkills[0]['card_skill_condition'] == $key)
                                         <option value="{{$key}}" selected>{{$value}}</option>
                                         @else
                                         <option value="{{$key}}">{{$value}}</option>
@@ -190,10 +190,10 @@
                                 <textarea
                                     rows="5"
                                     name="skills[0][card_skill_description]"
-                                    value="{{ $cardSkills[0]['card_skill_description'] ?? old(skills[0][card_skill_description]) }}"
+                                    value="{{ $cardSkills[0]['card_skill_description'] ?? old('skills[0][card_skill_description]') }}"
                                     class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                     placeholder="Describe what this skill does..."
-                                >{{ $cardSkills[0]['card_skill_description'] ?? old(skills[0][card_skill_description]) }}</textarea>
+                                    required>{{ $cardSkills[0]['card_skill_description'] ?? old('skills[0][card_skill_description]') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -243,7 +243,7 @@
                                 <label class="mb-2 block text-sm font-bold text-gray-700">
                                     Skill Name
                                 </label>
-                                <input type="text" name="skills[1][card_skill_name]" value="{{ $cardSkills[1]['card_skill_name'] ?? old(skills[1][card_skill_name]) }}" class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Spirit Breaker">
+                                <input type="text" name="skills[1][card_skill_name]" value="{{ $cardSkills[1]['card_skill_name'] ?? old('skills[1][card_skill_name]') }}" class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Spirit Breaker">
                             </div>
 
                             <div>
@@ -253,7 +253,7 @@
                                 <select name="skills[1][card_skill_type_id]" class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                     <option value="">Select Type</option>
                                     @foreach($card_skill_types as $type)
-                                    @if($type->id == $cardSkills[1]['id'])
+                                    @if(isset($cardSkills[1]['id']) && $type->id == $cardSkills[1]['id'])
                                         <option value="{{$type->id}}" selected>{{$type->card_skill_type_name}}</option>
                                     @else
                                     <option value="{{$type->id}}" >{{$type->card_skill_type_name}}</option>
@@ -279,7 +279,7 @@
                                         <option value="Light">Light</option> -->
                                         <option value="None">None</option>
                                         @foreach(['mental' => 'Mental', 'spiritual'=> 'Spiritual', 'physical' => 'Physical'] as $key => $value)
-                                        @if($cardSkills[1]['card_skill_element'] == $key)
+                                        @if(isset($cardSkills[1]['card_skill_element']) && $cardSkills[1]['card_skill_element'] == $key)
                                             <option value="{{$key}}" selected>{{ $value }}</option>
                                         @else
                                             <option value="{{$key}}">{{ $value }}</option>
@@ -294,14 +294,14 @@
                                 <label class="mb-2 block text-sm font-bold text-gray-700">
                                     Energy Cost
                                 </label>
-                                <input type="number" min="0" name="skills[1][card_skill_energy_cost]" value="{{ $cardSkills[1]['card_skill_energy_cost'] ?? old(skills[1][card_skill_energy_cost]) }}" class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="0">
+                                <input type="number" min="0" name="skills[1][card_skill_energy_cost]" value="{{ $cardSkills[1]['card_skill_energy_cost'] ?? old('skills[1][card_skill_energy_cost]') }}" class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="0">
                             </div>
 
                             <div>
                                 <label class="mb-2 block text-sm font-bold text-gray-700">
                                     Cooldown
                                 </label>
-                                <input type="number" min="0" name="skills[1][card_skill_cooldown]" value="{{ $cardSkills[1]['card_skill_cooldown'] ?? old(skills[1][card_skill_cooldown]) }}" class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="0">
+                                <input type="number" min="0" name="skills[1][card_skill_cooldown]" value="{{ $cardSkills[1]['card_skill_cooldown'] ?? old('skills[1][card_skill_cooldown]') }}" class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="0">
                             </div>
 
                             <div class="md:col-span-2">
@@ -312,7 +312,7 @@
                                     <option value="">Select Range</option>
                                     <option value="">Select Range</option>
                                     @foreach(['self' => 'Self', 'touch'=> 'Touch', 'melee' => 'Melee','short' => 'Short', 'medium'=> 'Medium', 'long' => 'Long', 'globe' => 'Globe'] as $key => $value)
-                                        @if($cardSkills[1]['card_skill_range'] == $key)
+                                        @if(isset($cardSkills[1]['card_skill_range']) && $cardSkills[1]['card_skill_range'] == $key)
                                         <option value="{{$key}}" selected>{{$value}}</option>
                                         @else
                                         <option value="{{$key}}">{{$value}}</option>
@@ -327,7 +327,7 @@
                                 <select name="skills[1][card_skill_condition]" class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                     <option value="">Select Condition</option>
                                     @foreach(['dice_roll' => 'Dice Roll', 'coin_toss' => 'Coin Toss'] as $key => $value)
-                                        @if($cardSkills[1]['card_skill_condition'] == $key)
+                                        @if(isset($cardSkills[1]['card_skill_condition']) && $cardSkills[1]['card_skill_condition'] == $key)
                                         <option value="{{$key}}" selected>{{$value}}</option>
                                         @else
                                         <option value="{{$key}}">{{$value}}</option>
@@ -340,7 +340,7 @@
                                 <label class="mb-2 block text-sm font-bold text-gray-700">
                                     Skill Description
                                 </label>
-                                <textarea rows="5" name="skills[1][card_skill_description]" value="{{ $cardSkills[1]['card_skill_description'] ?? old(skills[1][card_skill_description]) }}" class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Describe what this skill does...">{{$cardSkills[1]['card_skill_description'] ?? old(skills[1][card_skill_description])}}</textarea>
+                                <textarea rows="5" name="skills[1][card_skill_description]" value="{{ $cardSkills[1]['card_skill_description'] ?? old('skills[1][card_skill_description]') }}" class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Describe what this skill does...">{{$cardSkills[1]['card_skill_description'] ?? old('skills[1][card_skill_description]')}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -402,7 +402,7 @@
                                     name="skills[0][card_skill_name]"
                                     class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                     placeholder="Dragon Strike"
-                                >
+                                    required>
                             </div>
 
                             <div>
@@ -412,7 +412,7 @@
                                 <select
                                     name="skills[0][card_skill_type_id]"
                                     class="w-full rounded-2xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                >
+                                required>
                                     <option value="">Select Type</option>
                                     @foreach($card_skill_types as $type)
                                         <option value="{{$type->id}}">{{$type->card_skill_type_name}}</option>

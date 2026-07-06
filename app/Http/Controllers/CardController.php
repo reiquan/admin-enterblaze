@@ -44,6 +44,7 @@ class CardController extends Controller
      */
     public function update(REQUEST $request)
     {
+        
         $card_type = null;
                 
         $card_type_form = null;
@@ -60,7 +61,7 @@ class CardController extends Controller
         $card_tiers = CardTier::all();
         $card_factions = CardFaction::where('card_faction_universe_id', $universe->id)->get();
         $formattedDate = $card_id ? Carbon::parse($card->card_published_at)->format('Y-m-d') : null;
-        $cardSkills = $card->skills->toArray() ?? null;
+        $cardSkills = $card ? $card->skills->toArray() : null;
         $card_skill_types = CardSkillType::all();
 
         if($request->step == 3){
@@ -89,7 +90,7 @@ class CardController extends Controller
      */
     public function store(Request $request)
     {
-    
+   
           //validate info
           $card = isset($request->card_id) ? Card::find($request->card_id) : new Card;
         //save info
@@ -139,6 +140,7 @@ class CardController extends Controller
                 $card_type = CardType::where('id',$card->card_type_id )->first();
              
                 $card_type_form = strtolower($card_type->card_type_name).'-form';
+                // dd($card_type_form);
                 $card_tier_skill_points = $card->tier->card_tier_skill_points;
     
 
@@ -167,13 +169,28 @@ class CardController extends Controller
      */
     public function show(Request $request)
     {
-        //
+        
+        
         $card = Card::find($request->c_id);
+        $card_series_id = $card->series->id;
+        $universe_id = $card->series->universe->id;
+        $card->load([
+            'series',
+            'era',
+            'type',
+            'tier',
+            'character',
+            'skills',
+        ]);
    
     
         // dd($issues->toArray());
        
-        return view('universe/card-series/cards/show', compact('card'));
+        return view('universe.card-series.cards.show', compact(
+            'card',
+            'universe_id',
+            'card_series_id'
+        ));
     }
 
     /**
@@ -182,16 +199,20 @@ class CardController extends Controller
     public function edit(Request $request)
     {
         //
-        $card = Card::find($request->card_id);
-       
+        $card = Card::find($request->card_id ?? $request->c_id);
+        $card_id = $card->id;
         $step=isset($request->step) ? $request->step : 1;
-        $universe = $card->universe;
+        $universe = $card->series->universe;
+        $card_series_id = $card->series->id;
+        $card_types = CardType::all();
+        $card_factions = CardFaction::all();
+        $card_tiers = CardTier::all();
         $type='edit';
         $eras = CardEra::all();
         $formattedDate = Carbon::parse($card->card_published_at)->format('Y-m-d');
         $books = Book::where('book_universe_id', $universe->id)->get();
 
-        return view('universe/card/edit', compact('card', 'step','eras','books', 'universe', 'formattedDate'));
+        return view('universe/card-series/cards/create', compact('card','card_tiers','card_types','card_factions','card_id','card_series_id', 'step','eras','books', 'universe', 'formattedDate'));
     }
 
     /**
@@ -341,7 +362,7 @@ class CardController extends Controller
             $card->save();
         }
        
-        return redirect()->route('card.index', $card->card_id);
+        return redirect()->route('cards.index',['universe_id' => $card->series->universe->id, 'card_series_id' => $card->series->id]);
     }
 
     /**
@@ -375,7 +396,6 @@ class CardController extends Controller
     public function finish(REQUEST $request)
     {
         //
-
         $card = Card::find($request->card_id);
         $card_id = $card->id;
         // dd($card->toArray());

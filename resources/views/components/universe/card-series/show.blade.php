@@ -17,7 +17,7 @@
                     </div>
                 </div>
 
-                <form action="" method="GET" class="shrink-0">
+                <form action="{{ route('cards.create', ['universe_id' => $cardSeries->universe->id, 'card_series_id' => $cardSeries->id]) }}" method="GET" class="shrink-0">
                     <input type="hidden" name="universe_id" value="{{ request('u_id') ?? request('universe_id') }}">
                     <input type="hidden" name="card_series_id" value="{{ request('c_id') ?? request('card_series_id') }}">
 
@@ -212,6 +212,8 @@
 
                                     @if(Route::has('cards.destroy'))
                                         <form method="POST" action="{{ route('cards.destroy', ['card' => $card->id]) }}" onsubmit="return confirm('Delete this card?')" class="w-full">
+                                        <input type="hidden" id="u_id" name="universe_id" value="{{ $card->series->card_series_universe_id }}">
+                                        <input type="hidden" id="c_id"  name="card_id" value="{{ $card->id }}">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"

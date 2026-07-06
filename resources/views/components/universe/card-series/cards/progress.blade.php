@@ -26,7 +26,7 @@
                     <nav aria-label="Progress">
                         <ol role="list" class="grid gap-3 md:grid-cols-3">
                             <li>
-                               @if($card_id)
+                               @if($card_id ?? $card->id)
                                     <form method="get" action="{{ route('cards.create', ['universe_id' => $card->series->universe->id,'card_series_id' => $card->series->id,'card_id' => $card->id]) }}">
                                         @csrf
                                         <input type="hidden" name="card_series_id" value="{{ $card->series->id }}">
@@ -51,7 +51,7 @@
                             </li>
 
                             <li>
-                                @if($card_id)
+                                @if($card_id ?? $card->id)
                                     <form method="get" action="{{ route('cards.create', ['universe_id' => $card->series->universe->id,'card_series_id' => $card->series->id,'card_id' => $card->id]) }}">
                                         @csrf
                                         <input type="hidden" name="card_series_id" value="{{ $card->series->id }}">
@@ -79,7 +79,7 @@
 
 
                             <li>
-                                @if($card_id)
+                                @if($card_id ?? $card->id)
                                     <form method="get" action="{{ route('cards.create', ['universe_id' => $card->series->universe->id,'card_series_id' => $card->series->id,'card_id' => $card->id]) }}">
                                         @csrf
                                         <input type="hidden" name="card_series_id" value="{{ $card->series->id }}">
@@ -105,7 +105,7 @@
                             </li>
 
                             <li>
-                                @if($card_id)
+                                @if($card_id ?? $card->id)
                                     <form method="get" action="{{ route('cards.create', ['universe_id' => $card->series->universe->id,'card_series_id' => $card->series->id,'card_id' => $card->id]) }}">
                                         @csrf
                                         <input type="hidden" name="card_series_id" value="{{ $card->series->id }}">
@@ -131,7 +131,7 @@
                             </li>
 
                             <li>
-                                @if($card_id)
+                                @if($card_id ?? $card->id)
                                         <input type="hidden" name="card_series_id" value="{{ $card->series->id }}">
                                         <input type="hidden" name="card_id" value="{{ $card->id }}">
                                         <input type="hidden" name="step" value="5">

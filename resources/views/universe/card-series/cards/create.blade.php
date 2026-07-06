@@ -239,7 +239,7 @@
                                                             autocomplete="card_tier_id"
                                                             class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
                                                             @foreach($card_tiers as $tier)
-                                                                @if($tier->id == $card->card_tier_id)
+                                                                @if(isset($card->card_tier_id) && $tier->id == $card->card_tier_id)
                                                                 <option value="{{$tier['id']}}" @selected(old('card_tier_id') === '') selected>{{$tier['card_tier_name']}}</option>
                                                                 @else
                                                                 <option value="{{$tier['id']}}" @selected(old('card_tier_id') === '')>{{$tier['card_tier_name']}}</option>

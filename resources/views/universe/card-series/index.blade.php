@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-red-800 leading-tight">
-            {{ __($universe->universe_name.': Card Series ') }}
+            {{ __($universe->universe_name ?? $card_series->universe->universe_name .': Card Series ') }}
         </h2>
     </x-slot>
 

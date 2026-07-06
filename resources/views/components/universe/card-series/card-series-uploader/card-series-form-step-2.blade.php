@@ -2,6 +2,8 @@
     <form method="POST" action="{{ route('card-series.finish',['universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id ?? $universe_id, 'card_series_id' => $card_series->id ]) }}" class="mx-auto max-w-6xl" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="step" value="{{ $step }}">
+        <input type="hidden" name="universe_id" value="{{ $universe_id }}">
+        <input type="hidden" name="card_series_id" value="{{ $card_series_id }}">
 
         @if ($errors->any())
             <div class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
