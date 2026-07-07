@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CardLocation extends Model
 {
@@ -21,7 +22,8 @@ class CardLocation extends Model
     ];
 
     
-
+   
+    protected $dates = ['deleted_at'];
 
      /**
      * Get the user's first name.
@@ -32,6 +34,11 @@ class CardLocation extends Model
     public function universe()
     {
         return $this->belongsTo(Universe::Class, 'card_location_universe_id');
+    }
+
+    public function cards()
+    {
+        return $this->hasMany(Card::class, 'card_location_id', 'id');
     }
 
 }

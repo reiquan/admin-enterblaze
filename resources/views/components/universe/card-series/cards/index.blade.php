@@ -27,6 +27,7 @@
 
             <form action="{{ route('cards.create', ['universe_id' => $universe->id, 'card_series_id' => $cardSeriesId]) }}" method="GET">
                 <input type="hidden" name="universe_id" value="{{ $universe->id }}">
+                <input type="hidden" name="card_series_id" value="{{ $cardSeriesId }}">
 
                 <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

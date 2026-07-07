@@ -14,7 +14,7 @@
                 </h2>
             </div>
 
-            <a href="{{ route('card-series.index', $universe->id ?? $universe_id) }}"
+            <a href="{{ route('cards.index', ['universe_id' => $universe->id ?? $universe_id, 'card_series_id' => $card_series_id ?? $card_series->id]) }}"
                class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50">
                 Back to Series
             </a>
@@ -118,7 +118,6 @@
                                                            value ="{{ $card_id ? $card->card_name : ''}}"
                                                            id="card_name"
                                                            autocomplete="card_name"
-                                                           value="{{ old('card_name') }}"
                                                            class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
                                                            placeholder="Example: Reiden Tapped In">
                                                 </div>
@@ -165,7 +164,12 @@
                                                             autocomplete="card_era_id"
                                                             class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
                                                             @foreach($eras as $era)
-                                                                <option value="{{$era['id']}}" @selected(old('card_era_id') === '')>{{$era['card_era_name']}}</option>
+
+                                                               @if(isset($card->series->card_series_era_id) && $card->series->card_series_era_id == $era->id)
+                                                                <option value="{{$era['id']}}" selected>{{$era['card_era_name']}}</option>
+                                                               @else
+                                                               <option value="{{$era['id']}}" >{{$era['card_era_name']}}</option>
+                                                               @endif
                                                             @endforeach
                                                     </select>
                                                 </div>
@@ -200,7 +204,12 @@
                                                             autocomplete="card_type_id"
                                                             class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
                                                             @foreach($card_types as $type)
-                                                                <option value="{{$type['id']}}" @selected(old('card_type_id') === '')>{{$type['card_type_name']}}</option>
+                                            
+                                                                @if(isset($card->type->id) && $card->type->id == $type->id)
+                                                                <option value="{{$type['id']}}" selected>{{$type['card_type_name']}}</option>
+                                                               @else
+                                                               <option value="{{$type['id']}}" >{{$type['card_type_name']}}</option>
+                                                               @endif
                                                             @endforeach
                                                     </select>
                                                 </div>

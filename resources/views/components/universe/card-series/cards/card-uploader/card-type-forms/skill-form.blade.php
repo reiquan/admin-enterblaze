@@ -1,3 +1,24 @@
+@if($card->type->card_type_name !== 'Character' )
+    <form method="post" action="{{ route('cards.updateCardSkill', ['universe_id' => $universe_id ?? $universe->id, 'card_series_id' => $card_series_id, 'card_id' => $card->id]) }}" enctype="multipart/form-data">
+            @csrf
+
+            <input type="hidden" name="type" value="location">
+            <input type="hidden" name="universe_id" value="{{ $universe_id ?? $universe->id }}">
+            <input type="hidden" name="card_id" value="{{ $card->id ?? null }}">
+            <div>
+                <h2 class="mt-2 text-2xl font-black text-gray-950">
+                    {{$card->type->card_type_name}} cards cannot have skill points
+                </h2>
+            </div>
+            <br>
+            <button
+                type="submit"
+                class="rounded-2xl bg-indigo-600 px-8 py-3 text-sm font-black text-white shadow-sm hover:bg-indigo-700"
+            >
+                Next Step
+            </button>
+    </form>
+@else
     <form method="post" action="{{ route('cards.updateCardSkill', ['universe_id' => $universe_id ?? $universe->id, 'card_series_id' => $card_series_id, 'card_id' => $card->id]) }}" enctype="multipart/form-data">
         @csrf
 
@@ -704,3 +725,4 @@
             refreshSkillUI();
         });
         </script>
+ @endif

@@ -111,6 +111,7 @@
                                         <input type="hidden" name="card_series_id" value="{{ $card->series->id }}">
                                         <input type="hidden" name="card_id" value="{{ $card->id }}">
                                         <input type="hidden" name="step" value="4">
+                                        <input type="hidden" name="type" value="{{ $card->location->id ?? null}}">
                                         <div class="flex items-center gap-3 rounded-xl border {{ ($step ?? 4) == 4 ? 'border-indigo-200 bg-indigo-50 text-indigo-700' : 'border-gray-200 bg-white text-gray-500' }} px-4 py-3">
                                            <button type="submit"> <span class="flex h-8 w-8 items-center justify-center rounded-full {{ ($step ?? 4) == 4 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500' }} text-sm font-bold">4</span></button>
                                            <div>

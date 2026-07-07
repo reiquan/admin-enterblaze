@@ -50,11 +50,6 @@ class Card extends Model
     {
         return $this->belongsTo(CardFaction::Class, 'card_faction_id');
     }
-
-    public function location()
-    {
-        return $this->belongsTo(CardLocation::Class, 'card_location_id');
-    }
     public function type()
     {
         return $this->belongsTo(CardType::Class, 'card_type_id');
@@ -74,5 +69,9 @@ class Card extends Model
     public function skills()
     {
         return $this->hasMany(CardSkill::Class, 'card_skill_card_id');
+    }
+    public function location()
+    {
+        return $this->belongsTo(CardLocation::class, 'card_location_id', 'id');
     }
 }

@@ -82,6 +82,7 @@ Route::middleware([
         Route::get('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/edit', 'App\Http\Controllers\CardController@edit')->name('cards.edit');
         Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/updateCardTier', 'App\Http\Controllers\CardController@updateCardTier')->name('cards.updateCardTier');
         Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/updateCardSkill', 'App\Http\Controllers\CardController@updateCardSkill')->name('cards.updateCardSkill');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/updateCardLocation', 'App\Http\Controllers\CardController@updateCardLocation')->name('cards.updateCardLocation');
         Route::get('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/show', 'App\Http\Controllers\CardController@show')->name('cards.show');
         Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/publish', 'App\Http\Controllers\CardController@publish')->name('cards.publish');
         Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/delete', 'App\Http\Controllers\CardController@destroy')->name('cards.delete');

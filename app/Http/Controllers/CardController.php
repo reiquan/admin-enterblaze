@@ -6,6 +6,7 @@ use App\Models\Universe;
 use App\Models\Issue;
 use App\Models\Card;
 use App\Models\CardCharacter;
+use App\Models\CardLocation;
 use App\Models\CardSkill;
 use App\Models\CardSkillType;
 use App\Models\IssuePage;
@@ -44,7 +45,31 @@ class CardController extends Controller
      */
     public function update(REQUEST $request)
     {
+     
+        if(isset($request->type) && $request->type == 'default'){
+            $card = Card::find($request->card_id);
+            $card->card_tags = $request->card_tags;
+            $card->save();
+            
+            $step= 5;
+            $universe_id = $request->card_location_universe_id;
+            $card_id = $card->id ?? $request->card_id;
+            $card_series_id = $card->card_series_id;
+            $card_type = CardType::where('id',$card->card_type_id )->first();
+                
+            $card_type_form ='finish';
+            $card_tier_skill_points = $card->tier->card_tier_skill_points;
+
+
+            $card_skills=null;
+            $bonuses = json_decode($request->card_tags);
+         
+            $card_skill_types = CardSkillType::all();
         
+           
+            return view('universe.card-series.cards.finish', compact('step', 'universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points', 'card_skills', 'bonuses'));
+
+        }
         $card_type = null;
                 
         $card_type_form = null;
@@ -52,10 +77,12 @@ class CardController extends Controller
         $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
 
         $card_series_id = isset($_REQUEST['card_series_id']) ? $_REQUEST['card_series_id'] : '';
+
         $universe = Universe::find($request->universe_id);
         $card_id = isset($_REQUEST['card_id']) ? $_REQUEST['card_id'] : '';
 
         $card = isset($_REQUEST['card_id']) ? Card::find($_REQUEST['card_id']) : '';
+     
         $eras = CardEra::all();
         $card_types = CardType::all();
         $card_tiers = CardTier::all();
@@ -116,7 +143,7 @@ class CardController extends Controller
                         $card->card_slug = preg_replace('/[^a-zA-Z0-9\s]/', '', $request->card_name);
                         $card->card_era_id = $request->card_era_id;
                         $card->card_character_id = $request->card_character_id ?? null;
-                        $card->card_locaton_id = $request->card_locaton_id ?? null;
+                        $card->card_location_id = $request->card_location_id ?? null;
                         $card->card_faction_id = $request->card_faction_id ?? null;
                         $card->card_type_id = $request->card_type_id;
                         $card->card_rarity = $request->card_rarity;
@@ -278,52 +305,128 @@ class CardController extends Controller
 
     public function updateCardSkill(Request $request)
     {
+        if(isset($request->type) && $request->type){ 
+            
+            
+            $card = Card::find($request->card_id);
+            $bonuses = null;
+            if(isset($card->location->card_location_bonuses)){
+                $bonuses = json_decode($card->location->card_location_bonuses) ?? "[]";
+
+            } else {
+                $bonuses = json_decode($card->card_tags) ?? "[]";
+            }
+            
+     
+            $universe_id = $request->universe_id;
+            $card_id = $card->id ?? $request->card_id;
+            $card_series_id = $card->card_series_id;
+            $step = $request->step && $request->step == 4 ? $request->step += 1 : $request->step;
+            $card_type = CardType::where('id',$card->card_type_id )->first();
+                 
+            $card_type_form ='finish';
+            $card_tier_skill_points = $card->tier->card_tier_skill_points;
+                // dd($step);
         
-        // dd($request->all());
-          $card = Card::find($request->card_id);
+            $card_skills= null;
+            $card_skill_types = CardSkillType::all();
+                
+
+                return view('universe.card-series.cards.finish', compact('step','bonuses', 'card_skills', 'card_skill_types','universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
+    
+   
+
+        } else {
+             // dd($request->all());
+          
     
 
-        $cardSkillOne = isset($request->card_skill_id_one) ? CardSkill::findOrNew($request->card_skill_id_one) : new CardSkill;
-        $cardSkillTwo = isset($request->card_skill_id_two) ? CardSkill::findOrNew($request->card_skill_id_two) : new CardSkill;
-
-
-            $cardSkillOne->card_skill_name = $request->skills[0]['card_skill_name']  ?? null;
-            $cardSkillOne->card_skill_condition = $request->skills[0]['card_skill_condition']  ?? null;
-            $cardSkillOne->card_skill_element = $request->skills[0]['card_skill_element']  ?? null;
-            $cardSkillOne->card_skill_energy_cost = $request->skills[0]['card_skill_energy_cost'] ?? null;
-            $cardSkillOne->card_skill_cooldown = $request->skills[0]['card_skill_cooldown']  ?? null;
-            $cardSkillOne->card_skill_range = $request->skills[0]['card_skill_range']  ?? null;
-            $cardSkillOne->card_skill_description = $request->skills[0]['card_skill_description']  ?? null;
-            $cardSkillOne->card_skill_range = $request->skills[0]['card_skill_range']  ?? null;
-            $cardSkillOne->card_skill_card_id = $request->card_id  ?? null;
-            $cardTypeOne = CardType::find($request->skills[0]['card_skill_type_id']);
-            $cardSkillOne->card_skill_type_id = $cardTypeOne->id ?? null;
-            $cardSkillOne->card_skill_character_id = $request->card_character_id ?? null;
-        
-        $cardSkillOne->save();
-
-        if(isset($request->skills[1])){
-                $cardSkillTwo->card_skill_name = $request->skills[1]['card_skill_name']  ?? null;
-                $cardSkillTwo->card_skill_condition = $request->skills[1]['card_skill_condition']  ?? null;
-                $cardSkillTwo->card_skill_element = $request->skills[1]['card_skill_element']  ?? null;
-                $cardSkillTwo->card_skill_energy_cost = $request->skills[1]['card_skill_energy_cost'] ?? null;
-                $cardSkillTwo->card_skill_cooldown = $request->skills[1]['card_skill_cooldown']  ?? null;
-                $cardSkillTwo->card_skill_range = $request->skills[1]['card_skill_range']  ?? null;
-                $cardSkillTwo->card_skill_description = $request->skills[1]['card_skill_description']  ?? null;
-                $cardSkillTwo->card_skill_range = $request->skills[1]['card_skill_range']  ?? null;
-                $cardSkillTwo->card_skill_card_id = $request->card_id  ?? null;
-                    $cardTypeTwo = CardType::find($request->skills[1]['card_skill_type_id']);
-                $cardSkillTwo->card_skill_type_id = $cardTypeTwo->id ?? null;
-                $cardSkillTwo->card_skill_character_id = $request->card_character_id ?? null;
-        
-            $cardSkillTwo->save();
+          $cardSkillOne = isset($request->card_skill_id_one) ? CardSkill::findOrNew($request->card_skill_id_one) : new CardSkill;
+          $cardSkillTwo = isset($request->card_skill_id_two) ? CardSkill::findOrNew($request->card_skill_id_two) : new CardSkill;
+  
+  
+              $cardSkillOne->card_skill_name = $request->skills[0]['card_skill_name']  ?? null;
+              $cardSkillOne->card_skill_condition = $request->skills[0]['card_skill_condition']  ?? null;
+              $cardSkillOne->card_skill_element = $request->skills[0]['card_skill_element']  ?? null;
+              $cardSkillOne->card_skill_energy_cost = $request->skills[0]['card_skill_energy_cost'] ?? null;
+              $cardSkillOne->card_skill_cooldown = $request->skills[0]['card_skill_cooldown']  ?? null;
+              $cardSkillOne->card_skill_range = $request->skills[0]['card_skill_range']  ?? null;
+              $cardSkillOne->card_skill_description = $request->skills[0]['card_skill_description']  ?? null;
+              $cardSkillOne->card_skill_range = $request->skills[0]['card_skill_range']  ?? null;
+              $cardSkillOne->card_skill_card_id = $request->card_id  ?? null;
+              $cardTypeOne = CardType::find($request->skills[0]['card_skill_type_id']);
+              $cardSkillOne->card_skill_type_id = $cardTypeOne->id ?? null;
+              $cardSkillOne->card_skill_character_id = $request->card_character_id ?? null;
+          
+          $cardSkillOne->save();
+  
+          if(isset($request->skills[1])){
+                  $cardSkillTwo->card_skill_name = $request->skills[1]['card_skill_name']  ?? null;
+                  $cardSkillTwo->card_skill_condition = $request->skills[1]['card_skill_condition']  ?? null;
+                  $cardSkillTwo->card_skill_element = $request->skills[1]['card_skill_element']  ?? null;
+                  $cardSkillTwo->card_skill_energy_cost = $request->skills[1]['card_skill_energy_cost'] ?? null;
+                  $cardSkillTwo->card_skill_cooldown = $request->skills[1]['card_skill_cooldown']  ?? null;
+                  $cardSkillTwo->card_skill_range = $request->skills[1]['card_skill_range']  ?? null;
+                  $cardSkillTwo->card_skill_description = $request->skills[1]['card_skill_description']  ?? null;
+                  $cardSkillTwo->card_skill_range = $request->skills[1]['card_skill_range']  ?? null;
+                  $cardSkillTwo->card_skill_card_id = $request->card_id  ?? null;
+                      $cardTypeTwo = CardType::find($request->skills[1]['card_skill_type_id']);
+                  $cardSkillTwo->card_skill_type_id = $cardTypeTwo->id ?? null;
+                  $cardSkillTwo->card_skill_character_id = $request->card_character_id ?? null;
+          
+              $cardSkillTwo->save();
+          }
+  
+          
+          $card->card_character_id =  $request->card_character_id;
+          $card->save();
+  
+          $universe_id = $request->card_character_universe_id;
+          $card_id = $card->id ?? $request->card_id;
+          $card_series_id = $card->card_series_id;
+          $step = $request->step && $request->step == 4 ? $request->step += 1 : $request->step;
+          $card_type = CardType::where('id',$card->card_type_id )->first();
+               
+          $card_type_form ='finish';
+          $card_tier_skill_points = $card->tier->card_tier_skill_points;
+              // dd($step);
+          if($request->step == 5){
+              $card_skills= isset($request->card_character_id) ? CardSkill::where('card_skill_character_id',$request->card_character_id)->get() : new CardSkill;
+              $card_skill_types = CardSkillType::all();
+              
+  
+              return view('universe.card-series.cards.finish', compact('step', 'card_skills', 'card_skill_types','universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
+  
+          }
+          
+             
+              return view('universe.card-series.cards.create', compact('step', 'universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
         }
+       
+    }
 
+    public function updateCardLocation(Request $request)
+    {
         
-        $card->card_character_id =  $request->card_character_id;
+        // dd($request->all());
+        $card = Card::find($request->card_id);
+    // dd($card->toArray());
+
+        $card_location = isset($request->location_id) ? CardLocation::findOrNew($request->location_id) : new CardLocation;
+
+
+            $card_location->card_location_name = $request->card_location_name  ?? null;
+            $card_location->card_location_environment = $request->card_location_environment  ?? null;
+            $card_location->card_location_region = $request->card_location_region  ?? null;
+            $card_location->card_location_universe_id = $request->card_location_universe_id ?? null;
+            $card_location->card_location_bonuses = $request->card_location_bonuses;
+        
+        
+        $card_location->save();
+        $card->card_location_id = $card_location->id;
         $card->save();
 
-        $universe_id = $request->card_character_universe_id;
+        $universe_id = $request->card_location_universe_id;
         $card_id = $card->id ?? $request->card_id;
         $card_series_id = $card->card_series_id;
         $step = $request->step && $request->step == 4 ? $request->step += 1 : $request->step;
@@ -331,18 +434,15 @@ class CardController extends Controller
              
         $card_type_form ='finish';
         $card_tier_skill_points = $card->tier->card_tier_skill_points;
-            // dd($step);
-        if($request->step == 5){
-            $card_skills= isset($request->card_character_id) ? CardSkill::where('card_skill_character_id',$request->card_character_id)->get() : new CardSkill;
+
+
+            $card_skills=null;
+            $bonuses = json_decode($request->card_location_bonuses);
+         
             $card_skill_types = CardSkillType::all();
-            
-
-            return view('universe.card-series.cards.finish', compact('step', 'card_skills', 'card_skill_types','universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
-
-        }
         
            
-            return view('universe.card-series.cards.create', compact('step', 'universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
+            return view('universe.card-series.cards.finish', compact('step', 'universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points', 'card_skills', 'bonuses'));
     }
          /**
      * Show the form for publishing the specified resource.
@@ -405,9 +505,9 @@ class CardController extends Controller
         $step = 3;
 
        if($request->type == 'edit'){
-        return view('universe.card.edit', compact('step', 'universe_id', 'card_id', 'card'));
+        return view('universe.card-series.cards.edit', compact('step', 'universe_id', 'card_id', 'card'));
        } else {
-        return view('universe.card.create', compact('step', 'universe_id', 'card_id', 'card'));
+        return view('universe.card-series.cards.create', compact('step', 'universe_id', 'card_id', 'card'));
        }
     }
 

@@ -53,7 +53,7 @@
             @php
                 $reviewSkills = $card_skills;
 
-                $cardImage = Storage::disk('s3-public')->url($card->card_image_one) ?? null;
+                $cardImage = $card->card_image_one ? Storage::disk('s3-public')->url($card->card_image_one) : null;
             @endphp
 
             <div class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
@@ -79,9 +79,19 @@
                             </div>
                         </div>
 
-                        <div class="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-bold text-gray-600">
-                            {{ $reviewSkills->count() }}/2 Skills Ready
-                        </div>
+                        @if($bonuses)
+                            <div class="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-bold text-gray-600">
+                                {{ $bonuses ? count($bonuses) : 0 }} Effects
+                            </div>
+                        @elseif( $reviewSkills)
+                            <div class="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-bold text-gray-600">
+                                {{ $reviewSkills->count() }}/2 Skills Ready
+                            </div>
+                        @else
+                            <div class="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-bold text-gray-600">
+                               
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -159,91 +169,128 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
                                             </svg>
                                         </div>
-                                        <div>
-                                            <h3 class="text-base font-black text-gray-950">Skill Summary</h3>
-                                            <p class="text-sm text-gray-500">These are the skills that will be attached to the card.</p>
-                                        </div>
+                                        @if($reviewSkills)
+                                            <div>
+                                                <h3 class="text-base font-black text-gray-950">Skill Summary</h3>
+                                                <p class="text-sm text-gray-500">These are the skills that will be attached to the card.</p>
+                                            </div>
+                                        @else
+                                            <div>
+                                                <h3 class="text-base font-black text-gray-950"> Card Effects</h3>
+                                                <p class="text-sm text-gray-500">These are the effects that will be attached to the card.</p>
+                                            </div>
+                                        @endif
+
                                     </div>
                                 </div>
 
                                 <div class="p-5">
-                                    @if ($reviewSkills->isNotEmpty())
+                                    @if($reviewSkills)
+                                        @if ($reviewSkills->isNotEmpty)
+                                            <div class="space-y-5">
+                                                @foreach ($reviewSkills as $index => $skill)
+                                                    @php
+                                                        $skillName = $skill['card_skill_name'] ?? $skill->card_skill_name ?? 'Untitled Skill';
+                                                        $skillType = $skill['card_skill_type'] ?? $skill->card_skill_type ?? 'Not set';
+                                                        $skillElement = $skill['card_skill_element'] ?? $skill->card_skill_element ?? 'None';
+                                                        $skillCondition = $skill['card_skill_condition'] ?? $skill->card_skill_condition ?? 'Not set';
+                                                        $energyCost = $skill['card_skill_energy_cost'] ?? $skill->card_skill_energy_cost ?? 0;
+                                                        $cooldown = $skill['card_skill_cooldown'] ?? $skill->card_skill_cooldown ?? 0;
+                                                        $range = $skill['card_skill_range'] ?? $skill->card_skill_range ?? 'Not set';
+                                                        $description = $skill['card_skill_description'] ?? $skill->card_skill_description ?? 'No description added.';
+                                                    @endphp
+
+                                                    <article class="overflow-hidden rounded-3xl border border-gray-200 bg-gray-50">
+                                                        <div class="flex flex-col gap-4 border-b border-gray-200 bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                                                            <div>
+                                                                <p class="text-xs font-black uppercase tracking-[0.2em] text-indigo-600">
+                                                                    Skill {{ $index + 1 }}
+                                                                </p>
+                                                                <h4 class="mt-1 text-xl font-black text-gray-950">
+                                                                    {{ $skillName }}
+                                                                </h4>
+                                                            </div>
+
+                                                            <div class="flex flex-wrap gap-2">
+                                                                <span class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/20">
+                                                                    {{ $skillType }}
+                                                                </span>
+                                                                <span class="rounded-full bg-purple-50 px-3 py-1 text-xs font-bold text-purple-700 ring-1 ring-inset ring-purple-600/20">
+                                                                    {{ $skillElement }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="grid gap-4 p-5 sm:grid-cols-2 xl:grid-cols-4">
+                                                            <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100">
+                                                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Condition</p>
+                                                                <p class="mt-1 text-sm font-black text-gray-900">{{ $skillCondition }}</p>
+                                                            </div>
+
+                                                            <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100">
+                                                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Energy Cost</p>
+                                                                <p class="mt-1 text-sm font-black text-gray-900">{{ $energyCost }}</p>
+                                                            </div>
+
+                                                            <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100">
+                                                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Cooldown</p>
+                                                                <p class="mt-1 text-sm font-black text-gray-900">{{ $cooldown }}</p>
+                                                            </div>
+
+                                                            <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100">
+                                                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Range</p>
+                                                                <p class="mt-1 text-sm font-black text-gray-900">{{ $range }}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="px-5 pb-5">
+                                                            <div class="rounded-2xl border border-gray-200 bg-white p-4">
+                                                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Description</p>
+                                                                <p class="mt-2 text-sm leading-6 text-gray-600">{{ $description }}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        @foreach ($card_skills as $skill)
+                                                            <input type="hidden" name="card_skill_name" value="{{$skill->card_skill_name }}">
+                                                        @endforeach
+                                                    </article>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <div class="flex min-h-64 items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-gray-50 p-8 text-center">
+                                                <div>
+                                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                                                    </svg>
+                                                    <h3 class="mt-4 text-lg font-black text-gray-900">No skills found</h3>
+                                                    <p class="mt-2 text-sm text-gray-500">Go back and add at least one skill before finishing.</p>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @elseif($bonuses)
                                         <div class="space-y-5">
-                                            @foreach ($reviewSkills as $index => $skill)
-                                                @php
-                                                    $skillName = $skill['card_skill_name'] ?? $skill->card_skill_name ?? 'Untitled Skill';
-                                                    $skillType = $skill['card_skill_type'] ?? $skill->card_skill_type ?? 'Not set';
-                                                    $skillElement = $skill['card_skill_element'] ?? $skill->card_skill_element ?? 'None';
-                                                    $skillCondition = $skill['card_skill_condition'] ?? $skill->card_skill_condition ?? 'Not set';
-                                                    $energyCost = $skill['card_skill_energy_cost'] ?? $skill->card_skill_energy_cost ?? 0;
-                                                    $cooldown = $skill['card_skill_cooldown'] ?? $skill->card_skill_cooldown ?? 0;
-                                                    $range = $skill['card_skill_range'] ?? $skill->card_skill_range ?? 'Not set';
-                                                    $description = $skill['card_skill_description'] ?? $skill->card_skill_description ?? 'No description added.';
-                                                @endphp
+                                            @foreach ($bonuses as $bonus)
 
                                                 <article class="overflow-hidden rounded-3xl border border-gray-200 bg-gray-50">
                                                     <div class="flex flex-col gap-4 border-b border-gray-200 bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
                                                         <div>
-                                                            <p class="text-xs font-black uppercase tracking-[0.2em] text-indigo-600">
-                                                                Skill {{ $index + 1 }}
-                                                            </p>
+                                                
                                                             <h4 class="mt-1 text-xl font-black text-gray-950">
-                                                                {{ $skillName }}
+                                                                {{ $bonus }}
                                                             </h4>
                                                         </div>
-
-                                                        <div class="flex flex-wrap gap-2">
-                                                            <span class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/20">
-                                                                {{ $skillType }}
-                                                            </span>
-                                                            <span class="rounded-full bg-purple-50 px-3 py-1 text-xs font-bold text-purple-700 ring-1 ring-inset ring-purple-600/20">
-                                                                {{ $skillElement }}
-                                                            </span>
-                                                        </div>
                                                     </div>
-
-                                                    <div class="grid gap-4 p-5 sm:grid-cols-2 xl:grid-cols-4">
-                                                        <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100">
-                                                            <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Condition</p>
-                                                            <p class="mt-1 text-sm font-black text-gray-900">{{ $skillCondition }}</p>
-                                                        </div>
-
-                                                        <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100">
-                                                            <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Energy Cost</p>
-                                                            <p class="mt-1 text-sm font-black text-gray-900">{{ $energyCost }}</p>
-                                                        </div>
-
-                                                        <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100">
-                                                            <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Cooldown</p>
-                                                            <p class="mt-1 text-sm font-black text-gray-900">{{ $cooldown }}</p>
-                                                        </div>
-
-                                                        <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100">
-                                                            <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Range</p>
-                                                            <p class="mt-1 text-sm font-black text-gray-900">{{ $range }}</p>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="px-5 pb-5">
-                                                        <div class="rounded-2xl border border-gray-200 bg-white p-4">
-                                                            <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Description</p>
-                                                            <p class="mt-2 text-sm leading-6 text-gray-600">{{ $description }}</p>
-                                                        </div>
-                                                    </div>
-
-                                                    @foreach ($card_skills as $skill)
-                                                        <input type="hidden" name="card_skill_name" value="{{$skill->card_skill_name }}">
-                                                    @endforeach
                                                 </article>
                                             @endforeach
                                         </div>
+
                                     @else
                                         <div class="flex min-h-64 items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-gray-50 p-8 text-center">
                                             <div>
                                                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
                                                 </svg>
-                                                <h3 class="mt-4 text-lg font-black text-gray-900">No skills found</h3>
+                                                <h3 class="mt-4 text-lg font-black text-gray-900">No Skills or Bonuses found</h3>
                                                 <p class="mt-2 text-sm text-gray-500">Go back and add at least one skill before finishing.</p>
                                             </div>
                                         </div>
