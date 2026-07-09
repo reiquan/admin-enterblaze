@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->get('user', function (Request $request) {
 Route::post('loginSubscriber', [AuthApiController::class, 'loginSubscriber']);
 Route::post('registerSubscriber', [AuthApiController::class, 'registerSubscriber']);
 Route::get('getUniverses', [ApiController::class, 'getUniverses']);
+Route::get('getCards', [ApiController::class, 'getCards']);
 Route::get('getBooks', [ApiController::class, 'getBooks']);
 Route::post('logoutSubscriber', [AuthApiController::class, 'logoutSubscriber']);
 Route::get('getChapters', [ApiController::class, 'getChapters']);

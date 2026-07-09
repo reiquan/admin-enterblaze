@@ -13,6 +13,7 @@ use App\Services\ValidationService;
 use App\Services\SubscriptionService;
 use App\Models\IssuePage;
 use App\Models\Book;
+use App\Models\Card;
 use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\EventRegistrationAttendance;
@@ -492,6 +493,62 @@ class ApiController extends Controller
         }
  
      }
+
+     public function getCards(Request $request){
+
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
+        
+            $card = null;
+            $cards = null;
+            // dd($request->all());
+            if(isset($request->card_id)){
+
+                $card = Card::find($request->card_id)->load(['tier','era','skills','character','type']);
+            } else {
+                $cards = Card::whereNull('deleted_at')->where('card_is_active', 1)->with(['tier','era','skills','character','type'])->get();
+            }
+
+            $data = $request->all();
+    
+            if($card && $card->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $card,
+                    ], 
+                    200
+                );
+            } else if($cards && $cards->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $cards,
+                    ], 
+                    200
+                );
+            } else {
+                return response()
+                    ->json([
+                        'status' => 'error',
+                        'message' => 'Could Not Find Any Cards',
+                        'data' => $data,
+                    ], 
+                    400
+                );
+            }
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'data' => 'Unauthorized Request',
+                ], 
+                400
+            );
+        }
+ 
+     }
+
+     
 
      public function checkRegistrationLimit(Request $request){
         
