@@ -130,6 +130,36 @@
                 </svg>
             </div>
         </a>
+        <a href="{{ route('webisodes.index', $universe->id) }}"
+           class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-xl">
+            <div class="flex items-start justify-between gap-4">
+                <div class="rounded-2xl bg-green-50 p-3 text-green-700 ring-1 ring-green-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
+                    </svg>
+
+                </div>
+
+                <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-gray-500 transition group-hover:bg-green-700 group-hover:text-white">
+                    Video Tools
+                </span>
+            </div>
+
+            <h2 class="mt-5 text-2xl font-black text-gray-900">
+                Your Webisodes
+            </h2>
+
+            <p class="mt-3 text-sm leading-6 text-gray-600">
+                Build characters, skills, locations, items, tiers, eras, and collectible cards tied to your universe.
+            </p>
+
+            <div class="mt-6 inline-flex items-center text-sm font-bold text-green-700">
+                Manage Web Series
+                <svg class="ml-2 h-4 w-4 transition group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5 10a.75.75 0 0 1 .75-.75h6.638L10.23 7.29a.75.75 0 1 1 1.04-1.08l3.5 3.25a.75.75 0 0 1 0 1.08l-3.5 3.25a.75.75 0 1 1-1.04-1.08l2.158-1.96H5.75A.75.75 0 0 1 5 10Z" clip-rule="evenodd" />
+                </svg>
+            </div>
+        </a>
     </div>
 
     {{-- Coming Soon Modules --}}

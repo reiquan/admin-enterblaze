@@ -46,7 +46,7 @@ class CardSeries extends Model
 
     public function universe()
     {
-        return $this->belongsTo(Universe::Class, 'card_series_universe_id');
+        return $this->belongsTo(Universe::class, 'card_series_universe_id');
     }
 
     public function book()
