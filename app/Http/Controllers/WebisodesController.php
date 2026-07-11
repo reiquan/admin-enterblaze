@@ -21,12 +21,11 @@ class WebisodesController extends Controller
     public function index(REQUEST $request, Universe $universe_id)
     {
         // //
-       
-        $webisodes = Webisode::where('webisode_universe_id', $universe_id->id)->get();
+      
+        $webisodes = Webisode::where('webisode_universe_id', $universe_id->id)->where('deleted_at', null)->get();
        
         $universe = Universe::find($universe_id->id);
-    
-      
+
         return view('universe/webisodes/index', compact('universe', 'webisodes'));
     }
 
@@ -56,7 +55,7 @@ class WebisodesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Universe $universe_id)
     {
           //validate info
         
@@ -69,8 +68,8 @@ class WebisodesController extends Controller
                     
                 ]);
       
-                //save book
-                        $webisode->webisode_universe_id = $request->webisode_universe_id;
+                //save webisode
+                        $webisode->webisode_universe_id = $universe_id->id;
                         $webisode->webisode_title = $request->webisode_title;
                         $webisode->webisode_description = $request->webisode_description;
                         $webisode->webisode_genre = $request->webisode_genre;
@@ -78,13 +77,14 @@ class WebisodesController extends Controller
                         $webisode->webisode_logline = $webisode->webisode_logline ?? 1;
                         $webisode->webisode_rating = $request->webisode_rating;
                         $webisode->webisode_tags = $request->webisode_tags;
+                        $webisode->webisode_release_date = $request->webisode_release_date;
                         $webisode->webisode_slug = strtolower(str_replace(" ","_",  $request->webisode_title));
                         $webisode->webisode_price = $request->webisode_price;
                     $webisode->save();
 
             }
 
-            $universe = $webisode->universe;
+            $universe = $universe_id;
             //if request->step == 4
             if($request->step == 3){
                
@@ -111,33 +111,33 @@ class WebisodesController extends Controller
   /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $id)
+    public function show(Request $request, Universe $universe_id, Webisode $webisode_id)
     {
         //
      
-        $book = Book::find($request->b_id ?? $request->book_id);
-        $issue = Issue::find($request->issue_id);
-        $pages = $issue->pages->sortBy('issue_page_number');
+        $webisode = Webisode::find($webisode_id)->first();
+        // dd($webisode->toArray());
+        $universe = $webisode->universe;
+    
 
 
         // dd($issue->pages->toArray());
       
-        return view('universe/books/issues/show', compact('book', 'issue', 'pages'));
+        return view('universe/webisodes/show', compact('webisode', 'universe'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request)
+    public function edit(Request $request, Universe $universe_id, Webisode $webisode_id)
     {
         //
 
         $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
-        $issue = Issue::find($request->i_id ?? $request->issue_id);
-        $book_id = $request->b_id ?? $request->book_id;
-        $universe_id = $request->u_id ?? $request->universe_id;
+        $webisode = Webisode::find($webisode_id)->first();
+        $universe = $webisode->universe;
 
-        return view('universe/books/issues/create', compact('issue', 'step', 'book_id', 'universe_id'));
+        return view('universe/webisodes/create', compact('webisode', 'step','universe'));
     }
 
     /**
@@ -237,32 +237,20 @@ class WebisodesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request, Universe $universe_id, Webisode $webisode_id)
     {
         // dd($request->all());
-        $request->validate([
-            'issue_id' => ['required'],
-                 
-        ]);
-        $issue= Issue::find($request->issue_id);
-        if($issue){
+        $webisode= Webisode::find($webisode_id)->first();
+        if($webisode){
              // Delete file from S3
-            if($issue->issue_image_cover){
-                Storage::disk('s3-public')->delete($issue->issue_image_cover);
+            if($webisode->webisode_cover_image){
+                Storage::disk('s3-public')->delete($webisode->webisode_cover_image);
             }
                
-            if($issue->pages) {
-                foreach($issue->pages as $page){
-                    if (Storage::disk('s3-public')->exists($page->issue_page_url)) {
-                        Storage::disk('s3-public')->delete($page->issue_page_url);
-                        $page->delete();
-                    }
-                }
-            }
-
-                $issue->delete();
+                $webisode->deleted_at = now();
+                $webisode->save();
                
-                return response()->json(['success' => 'File deleted successfully.']);
+                return redirect()->route('webisodes.index', ['universe_id' => $universe_id]);
 
             //
         }

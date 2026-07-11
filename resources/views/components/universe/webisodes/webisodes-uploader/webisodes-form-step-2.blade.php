@@ -37,11 +37,11 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium uppercase tracking-wide text-indigo-600">Step {{ $step ?? 2 }}</p>
-                                <h1 class="text-2xl font-bold tracking-tight text-gray-900">Upload Card Series Artwork</h1>
+                                <h1 class="text-2xl font-bold tracking-tight text-gray-900">Upload Webisode Cover</h1>
                             </div>
                         </div>
                         <p class="mt-3 max-w-2xl text-sm leading-6 text-gray-600">
-                            Add the front and back artwork for this card series. Both uploads stay on this page, then the main button below submits the step.
+                            Add the artwork for this webisode series.
                         </p>
                     </div>
 
@@ -76,15 +76,11 @@
                         <div class="mt-6 space-y-3 text-sm text-gray-600">
                             <div class="flex items-center gap-3">
                                 <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
-                                <span>Front image: main artwork shown to users.</span>
+                                <span>Webisode image: main artwork shown to users.</span>
                             </div>
                             <div class="flex items-center gap-3">
                                 <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
-                                <span>Back image: reverse design for card previews.</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
-                                <span>Submit once after both uploads are selected.</span>
+                                <span>Submit once after both upload is selected.</span>
                             </div>
                         </div>
                     </div>
@@ -102,7 +98,7 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <h3 class="text-base font-semibold text-gray-900">Front Card Cover</h3>
+                                            <h3 class="text-base font-semibold text-gray-900">Webisode Cover</h3>
                                             <p class="text-sm text-gray-500">Main display artwork.</p>
                                         </div>
                                     </div>

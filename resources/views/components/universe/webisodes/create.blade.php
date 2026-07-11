@@ -7,7 +7,7 @@
         </div>
 
     @else
-        <form method="POST" action="{{ route('webisodes.store', $universe[0]['id']) }}" class="mx-auto max-w-7xl space-y-8">
+        <form method="POST" action="{{ route('webisodes.store', $universe[0]['id'] ?? $universe->id) }}" class="mx-auto max-w-7xl space-y-8">
             @csrf
             <input type="hidden" name="step" value="1">
             <input type="hidden" name="webisode_id" value="{{ $webisode->id ?? null}}">
@@ -54,53 +54,53 @@
                         <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-6">
                             <div class="sm:col-span-4">
                                 <label for="webisode_title" class="block text-sm font-bold text-gray-900">Series Title</label>
-                                <input type="text" name="webisode_title" id="webisode_title" value="{{ old('webisode_title', $webSeries->webisode_title ?? '') }}" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm" placeholder="Ex: Reiden Tapped In: Origins">
+                                <input type="text" name="webisode_title" id="webisode_title" value="{{ old('webisode_title', $webisode->webisode_title ?? '') }}" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm" placeholder="Ex: Reiden Tapped In: Origins">
                             </div>
 
 
                             <div class="sm:col-span-3">
                                 <label for="webisode_genre" class="block text-sm font-bold text-gray-900">Genre</label>
-                                <input type="text" name="webisode_genre" id="webisode_genre" value="{{ old('webisode_genre', $webSeries->webisode_genre ?? '') }}" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm" placeholder="Action, Fantasy, Drama">
+                                <input type="text" name="webisode_genre" id="webisode_genre" value="{{ old('webisode_genre', $webisode->webisode_genre ?? '') }}" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm" placeholder="Action, Fantasy, Drama">
                             </div>
 
                             <div class="sm:col-span-3">
                                 <label for="webisode_price" class="block text-sm font-bold text-gray-900">Price</label>
-                                <input type="number" name="webisode_price" id="webisode_price" value="{{ old('webisode_price', $webSeries->webisode_price ?? '') }}" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm">
+                                <input type="number" name="webisode_price" id="webisode_price" value="{{ old('webisode_price', $webisode->webisode_price ?? '') }}" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm">
                             </div>
 
                             <div class="sm:col-span-3">
                                 <label for="webisode_rating" class="block text-sm font-bold text-gray-900">Audience Rating</label>
                                 <select id="webisode_rating" name="webisode_rating" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm">
-                                    <option value="everyone" @selected(old('webisode_rating', $webSeries->webisode_rating ?? '') === 'everyone')>Everyone</option>
-                                    <option value="teen" @selected(old('webisode_rating', $webSeries->webisode_rating ?? '') === 'teen')>Teen</option>
-                                    <option value="mature" @selected(old('webisode_rating', $webSeries->webisode_rating ?? '') === 'mature')>Mature</option>
-                                    <option value="adult" @selected(old('webisode_rating', $webSeries->webisode_rating ?? '') === 'adult')>Adult</option>
+                                    <option value="everyone" @selected(old('webisode_rating', $webisode->webisode_rating ?? '') === 'everyone')>Everyone</option>
+                                    <option value="teen" @selected(old('webisode_rating', $webisode->webisode_rating ?? '') === 'teen')>Teen</option>
+                                    <option value="mature" @selected(old('webisode_rating', $webisode->webisode_rating ?? '') === 'mature')>Mature</option>
+                                    <option value="adult" @selected(old('webisode_rating', $webisode->webisode_rating ?? '') === 'adult')>Adult</option>
                                 </select>
                             </div>
 
                             <div class="sm:col-span-3">
                                 <label for="webisode_release_date" class="block text-sm font-bold text-gray-900">Release date</label>
-                                <input type="datetime-local" name="webisode_release_date" id="webisode_release_date" value="{{ old('webisode_release_date', $webSeries->webisode_release_date ?? '') }}" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm" placeholder="Action, Fantasy, Drama">
+                                <input type="datetime-local" name="webisode_release_date" id="webisode_release_date" value="{{ old('webisode_release_date', $webisode->webisode_release_date ?? '') }}" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm" placeholder="Action, Fantasy, Drama">
                             </div>
 
                             <div class="sm:col-span-3">
                                 <label for="webisode_status" class="block text-sm font-bold text-gray-900">Status</label>
                                 <select id="webisode_status" name="webisode_status" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm">
-                                    <option value="draft" @selected(old('webisode_status', $webSeries->webisode_status ?? '') === 'draft')>Draft</option>
-                                    <option value="coming_soon" @selected(old('webisode_status', $webSeries->webisode_status ?? '') === 'coming_soon')>Coming Soon</option>
-                                    <option value="published" @selected(old('webisode_status', $webSeries->webisode_status ?? '') === 'published')>Published</option>
-                                    <option value="featured" @selected(old('webisode_status', $webSeries->webisode_status ?? '') === 'featured')>Featured</option>
+                                    <option value="draft" @selected(old('webisode_status', $webisode->webisode_status ?? '') === 'draft')>Draft</option>
+                                    <option value="coming_soon" @selected(old('webisode_status', $webisode->webisode_status ?? '') === 'coming_soon')>Coming Soon</option>
+                                    <option value="published" @selected(old('webisode_status', $webisode->webisode_status ?? '') === 'published')>Published</option>
+                                    <option value="featured" @selected(old('webisode_status', $webisode->webisode_status ?? '') === 'featured')>Featured</option>
                                 </select>
                             </div>
 
                             <div class="sm:col-span-6">
                                 <label for="webisode_logline" class="block text-sm font-bold text-gray-900">Logline</label>
-                                <input type="text" name="webisode_logline" id="webisode_logline" value="{{ old('webisode_logline', $webSeries->webisode_logline ?? '') }}" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm" placeholder="One powerful sentence that sells the series.">
+                                <input type="text" name="webisode_logline" id="webisode_logline" value="{{ old('webisode_logline', $webisode->webisode_logline ?? '') }}" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm" placeholder="One powerful sentence that sells the series.">
                             </div>
 
                             <div class="sm:col-span-6">
                                 <label for="webisode_description" class="block text-sm font-bold text-gray-900">Series Description</label>
-                                <textarea id="webisode_description" name="webisode_description" rows="6" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm" placeholder="Give readers a strong reason to start this series.">{{ old('webisode_description', $webSeries->webisode_description ?? '') }}</textarea>
+                                <textarea id="webisode_description" name="webisode_description" rows="6" class="mt-2 block w-full rounded-2xl border-0 px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm" placeholder="Give readers a strong reason to start this series.">{{ old('webisode_description', $webisode->webisode_description ?? '') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -161,7 +161,7 @@
                             </section>
 
             <div class="flex flex-col-reverse gap-3 rounded-3xl border border-gray-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-                <a href="{{ route('webisodes.index', $universe[0]['id']) }}" class="rounded-2xl border border-gray-300 bg-white px-5 py-3 text-center text-sm font-black text-gray-700 hover:bg-gray-50">
+                <a href="{{ route('webisodes.index', $universe[0]['id'] ?? $universe->id) }}" class="rounded-2xl border border-gray-300 bg-white px-5 py-3 text-center text-sm font-black text-gray-700 hover:bg-gray-50">
                     Cancel
                 </a>
 

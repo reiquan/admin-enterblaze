@@ -51,4 +51,11 @@ class Webisode extends Model
     {
         return $this->belongsTo(Universe::class, 'webisode_universe_id');
     }
+    // Webisode.php
+    public function videos()
+    {
+        return $this->hasMany(WebisodeVideo::class)
+            ->orderBy('video_sort_order')
+            ->orderBy('video_number');
+    }
 }

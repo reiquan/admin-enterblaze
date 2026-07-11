@@ -90,16 +90,26 @@ Route::middleware([
         Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/finish', 'App\Http\Controllers\CardController@finish')->name('cards.finish');
 
 
-      //Web Series
+      //Webisodes
       Route::get('/universe/{universe_id}/webisodes', 'App\Http\Controllers\WebisodesController@index')->name('webisodes.index');
       Route::get('/universe/{universe_id}/webisodes/create', 'App\Http\Controllers\WebisodesController@create')->name('webisodes.create');
       Route::get('/universe/{universe_id}/webisodes/{webisode_id}/edit', 'App\Http\Controllers\WebisodesController@edit')->name('webisodes.edit');
-      Route::post('/universe/{universe_id}/webisodes/{webisode_id}/update', 'App\Http\Controllers\WebisodesController@update')->name('webisodes.update');
+      Route::post('/universe/{universe_id}/webisodes/update', 'App\Http\Controllers\WebisodesController@update')->name('webisodes.update');
       Route::get('/universe/{universe_id}/webisodes/{webisode_id}/show', 'App\Http\Controllers\WebisodesController@show')->name('webisodes.show');
       Route::post('/universe/{universe_id}/webisodes/{webisode_id}/publish', 'App\Http\Controllers\WebisodesController@publish')->name('webisodes.publish');
       Route::post('/universe/{universe_id}/webisodes/{webisode_id}/delete', 'App\Http\Controllers\WebisodesController@destroy')->name('webisodes.delete');
       Route::post('/universe/{universe_id}/webisodes/store', 'App\Http\Controllers\WebisodesController@store')->name('webisodes.store');
+      
       Route::post('/universe/{universe_id}/webisodes/{webisode_id}/finish', 'App\Http\Controllers\WebisodesController@finish')->name('webisodes.finish');
+
+            //Webisode Videos
+            Route::get('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos', 'App\Http\Controllers\WebisodeVideosController@index')->name('webisode-videos.index');
+            Route::get('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/create', 'App\Http\Controllers\WebisodeVideosController@create')->name('webisode-videos.create');
+            Route::post('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/{webisode_video_id}/update', 'App\Http\Controllers\WebisodeVideosController@update')->name('webisode-videos.update');
+            Route::get('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/{webisode_video_id}/edit', 'App\Http\Controllers\WebisodeVideosController@edit')->name('webisode-videos.edit');
+            Route::get('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/{webisode_video_id}/show', 'App\Http\Controllers\WebisodeVideosController@show')->name('webisode-videos.show');
+            Route::post('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/{webisode_video_id}/delete', 'App\Http\Controllers\WebisodeVideosController@destroy')->name('webisode-videos.delete');
+            Route::post('/universe/{universe_id}/webisodes/{webisode_id}/store', 'App\Http\Controllers\WebisodeVideosController@store')->name('webisode-videos.store');
 
         //Uploader
             Route::get('/uploader', 'App\Http\Controllers\BookController@index')->name('admin.uploader');
