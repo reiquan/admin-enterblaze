@@ -13,6 +13,8 @@ use App\Services\ValidationService;
 use App\Services\SubscriptionService;
 use App\Models\IssuePage;
 use App\Models\Book;
+use App\Models\Webisode;
+use App\Models\WebisodeVideo;
 use App\Models\Card;
 use App\Models\Event;
 use App\Models\EventRegistration;
@@ -548,6 +550,103 @@ class ApiController extends Controller
  
      }
 
+     public function getWebisodes(Request $request){
+
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
+        
+            $webisode = null;
+            $webisodes = null;
+
+            if(isset($request->webisode_id)){
+
+                $webisode = Webisode::find($request->webisode_id)->first()->load(['videos']);
+            } else {
+                $webisodes = Webisode::whereNull('deleted_at')->with(['videos'])->get();
+            }
+
+            $data = $request->all();
+    
+            if($webisode && $webisode->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $webisode,
+                    ], 
+                    200
+                );
+            } else if($webisodes && $webisodes->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $webisodes,
+                    ], 
+                    200
+                );
+            } else {
+                return response()
+                    ->json([
+                        'status' => 'error',
+                        'message' => 'Could Not Find Any Webisodes',
+                        'data' => $data,
+                    ], 
+                    400
+                );
+            }
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'data' => 'Unauthorized Request',
+                ], 
+                400
+            );
+        }
+ 
+     }
+
+     public function getWebisodeVideo(Request $request){
+
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
+        
+            $webisode_video = null;
+        
+
+                $webisode_video = WebisodeVideo::find($request->webisode_video_id) ? WebisodeVideo::find($request->webisode_video_id)->first()->load('webisode') :  null;
+          
+
+            $data = $request->all();
+    
+            if($webisode_video && $webisode_video->toArray()) {
+               
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $webisode_video,
+                    ], 
+                    200
+                );
+            } else {
+                return response()
+                    ->json([
+                        'status' => 'error',
+                        'message' => 'Could Not Find Any Webisodes',
+                        'data' => $data,
+                    ], 
+                    400
+                );
+            }
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'data' => 'Unauthorized Request',
+                ], 
+                400
+            );
+        }
+ 
+     }
+
      
 
      public function checkRegistrationLimit(Request $request){
@@ -575,5 +674,7 @@ class ApiController extends Controller
             );
         }
     }
+
+    
 
 }
