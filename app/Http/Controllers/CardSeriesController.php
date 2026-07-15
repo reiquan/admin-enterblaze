@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\BookController;
 use App\Models\Universe;
 use App\Models\Issue;
-use App\Models\Cardseries;
+use App\Models\CardSeries;
 use App\Services\BookService;
 use App\Models\IssuePage;
 use App\Models\Book;
