@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthApiController;
 use App\Http\Controllers\API\ApiController;
+use App\Http\Controllers\Api\EventLivestreamsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,8 +37,12 @@ Route::post('submitOpenRegistrationAttendance', [ApiController::class, 'submitOp
 Route::post('submitReservation', [ApiController::class, 'submitReservation']);
 Route::get('getBlazeTokenTiers', [ApiController::class, 'getBlazeTokenTiers']);
 Route::get('checkRegistrationLimit', [ApiController::class, 'checkRegistrationLimit']);
+
+//Livestream
+Route::get('/public/livestream/current', [EventLivestreamsController::class, 'current']);
 // Protected routes
 Route::middleware(['auth:sanctum', 'checkTokenExpiration'])->group(function () {
     // Route::get('/profile', 'UserProfileController@show');
 
 });
+

@@ -154,4 +154,17 @@ Route::middleware([
     Route::post('/tokens/tiers/{token_tier_id}/delete', 'App\Http\Controllers\BlazeTokensController@destroy')->name('tokens.tiers.delete');
     Route::post('/tokens/tiers/{token_tier_id}/publish', 'App\Http\Controllers\BlazeTokensController@publish')->name('tokens.tiers.publish');
 
+    //Livestream
+    Route::middleware('frontend.api')->get(
+        '/public/livestream/current','App\Http\Controllers\EventLivestreamsController@current')->name('event.livestream');
+
 });
+// Route::get('/twitch-test', function () {  TTHIS ROUTE IS FUNCTIONING PROPERLY. TESTING IN VALET/DEV IS NOT POSSIBLE. MUST TEST LIVE EVENT ON STAGING
+//     return '
+//     <iframe
+//         src="https://player.twitch.tv/?channel=quandadon_mangaka&parent=localhost"
+//         width="900"
+//         height="600"
+//         allowfullscreen>
+//     </iframe>';
+// });

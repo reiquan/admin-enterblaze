@@ -2,6 +2,8 @@
     $currentStep = (int) ($step ?? request('step', 1));
     $eventModel = $event ?? null;
 
+    $livestreamModel = $eventModel?->livestream;
+
     $inputClass = 'block w-full rounded-2xl border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:border-indigo-500 focus:ring-indigo-500';
     $labelClass = 'mb-2 block text-sm font-bold text-gray-700';
 @endphp
@@ -66,9 +68,13 @@
             </div>
         @else
             @if($eventModel)
-                <form method="POST" action="{{ route('events.update', ['event_id' => $eventModel->id, 'step' => 1]) }}" class="space-y-8">
+                <form method="POST" action="{{ route('events.update', ['event_id' => $eventModel->id, 'step' => 1]) }}" x-data="{
+                    eventType: @js(old('event_type', $eventModel->event_type ?? ''))
+                }" class="space-y-8">
             @else
-                <form method="POST" action="{{ route('events.update') }}" class="space-y-8">
+                <form method="POST" action="{{ route('events.update') }}" x-data="{
+                    eventType: @js(old('event_type', $eventModel->event_type ?? ''))
+                }" class="space-y-8">
                     <input type="hidden" name="step" value="1">
             @endif
                 @csrf
@@ -129,7 +135,10 @@
 
                                         <div>
                                             <label for="event_type" class="{{ $labelClass }}">Event Type</label>
-                                            <select id="event_type" name="event_type" class="{{ $inputClass }}">
+                                            <select id="event_type"
+                                                    name="event_type"
+                                                    x-model="eventType"
+                                                    class="{{ $inputClass }}">
                                                 <option value="">Select event type</option>
                                                 @foreach(['Tradeshow', 'Online Tournament', 'Registration', 'Livestream'] as $type)
                                                     <option value="{{ $type }}" @selected(old('event_type', $eventModel->event_type ?? '') === $type)>{{ $type }}</option>
@@ -152,6 +161,161 @@
                                             <textarea rows="6" name="event_about" id="event_about"
                                                       class="{{ $inputClass }} resize-none"
                                                       placeholder="What is your event about?">{{ old('event_about', $eventModel->event_about ?? '') }}</textarea>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <section
+                                    x-show="eventType === 'Livestream'"
+                                    x-cloak
+                                    x-transition.opacity.duration.200ms
+                                    class="border-t border-gray-200 pt-8"
+                                >
+                                    <div class="rounded-3xl border border-purple-200 bg-purple-50/70 p-6">
+                                        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                                            <div>
+                                                <p class="text-xs font-black uppercase tracking-[0.2em] text-purple-600">
+                                                    Twitch Setup
+                                                </p>
+
+                                                <h4 class="mt-2 text-xl font-black text-gray-950">
+                                                    Livestream Configuration
+                                                </h4>
+
+                                                <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
+                                                    Enterblaze will use these settings to update your Twitch channel and display the broadcast on the event page.
+                                                </p>
+                                            </div>
+
+                                            <span class="inline-flex w-fit items-center rounded-full bg-purple-600 px-3 py-1.5 text-xs font-black uppercase tracking-wider text-white">
+                                                Twitch
+                                            </span>
+                                        </div>
+
+                                        <input
+                                            type="hidden"
+                                            name="event_livestream_platform"
+                                            value="twitch"
+                                            x-bind:disabled="eventType !== 'Livestream'"
+                                        >
+
+                                        <div class="mt-6 space-y-6">
+                                            <div>
+                                                <label for="event_livestream_title" class="{{ $labelClass }}">
+                                                    Twitch Stream Title
+                                                </label>
+
+                                                <input
+                                                    type="text"
+                                                    id="event_livestream_title"
+                                                    name="event_livestream_title"
+                                                    value="{{ old(
+                                                        'event_livestream_title',
+                                                        $livestreamModel->event_livestream_title
+                                                            ?? $eventModel->event_name
+                                                            ?? ''
+                                                    ) }}"
+                                                    maxlength="140"
+                                                    x-bind:disabled="eventType !== 'Livestream'"
+                                                    class="{{ $inputClass }}"
+                                                    placeholder="Enter the title viewers will see on Twitch"
+                                                >
+
+                                                <p class="mt-2 text-xs leading-5 text-gray-500">
+                                                    This value maps to the event_livestream_title column and can be sent to Twitch when the event is saved or synchronized.
+                                                </p>
+                                            </div>
+
+                                            <div>
+                                                <label for="event_livestream_category_id" class="{{ $labelClass }}">
+                                                    Twitch Category
+                                                </label>
+
+                                                <select
+                                                    id="event_livestream_category_id"
+                                                    name="event_livestream_category_id"
+                                                    x-bind:disabled="eventType !== 'Livestream'"
+                                                    class="{{ $inputClass }}"
+                                                >
+                                                    <option value="">Select a Twitch category</option>
+
+                                                    @foreach($twitchCategories ?? [] as $category)
+                                                        <option
+                                                            value="{{ $category['id'] }}"
+                                                            @selected(
+                                                                old(
+                                                                    'event_livestream_category_id',
+                                                                    $livestreamModel->event_livestream_category_id ?? ''
+                                                                ) == $category['id']
+                                                            )
+                                                        >
+                                                            {{ $category['name'] }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+
+                                                @if(empty($twitchCategories))
+                                                    <p class="mt-2 text-xs leading-5 text-amber-700">
+                                                        No Twitch categories were loaded. Pass a $twitchCategories array to this view from your controller.
+                                                    </p>
+                                                @else
+                                                    <p class="mt-2 text-xs leading-5 text-gray-500">
+                                                        Choose the Twitch game or content category that best matches this event.
+                                                    </p>
+                                                @endif
+                                            </div>
+
+                                            <div class="rounded-2xl border border-purple-200 bg-white p-5">
+                                                <p class="text-sm font-black text-purple-950">
+                                                    How the broadcast works
+                                                </p>
+
+                                                <p class="mt-2 text-sm leading-6 text-purple-800">
+                                                    Saving the event prepares the Twitch metadata. At the scheduled time, start OBS using your Twitch stream key. The Enterblaze event page can then embed your live Twitch channel automatically.
+                                                </p>
+                                            </div>
+
+                                            @if(!empty($livestreamModel?->event_livestream_schedule_segment_id))
+                                                <div class="rounded-2xl border border-blue-200 bg-blue-50 p-4">
+                                                    <p class="text-sm font-black text-blue-900">
+                                                        Twitch schedule segment connected
+                                                    </p>
+
+                                                    <p class="mt-1 break-all text-xs text-blue-700">
+                                                        {{ $livestreamModel->event_livestream_schedule_segment_id }}
+                                                    </p>
+                                                </div>
+                                            @endif
+
+                                            @if(!empty($livestreamModel?->event_livestream_status))
+                                                <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+                                                    <p class="text-sm font-black text-emerald-900">
+                                                        Twitch synchronization status
+                                                    </p>
+
+                                                    <p class="mt-1 text-sm text-emerald-700">
+                                                        {{ $livestreamModel->event_livestream_status }}
+                                                        @if(!empty($livestreamModel?->event_livestream_synced_at))
+                                                            <span class="block pt-1 text-xs">
+                                                                Last synced:
+                                                                {{ $livestreamModel->event_livestream_synced_at->format('M j, Y g:i A') }}
+                                                            </span>
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                            @endif
+
+                                            @if(!empty($livestreamModel?->event_livestream_error))
+                                                <div class="rounded-2xl border border-red-200 bg-red-50 p-4">
+                                                    <p class="text-sm font-black text-red-900">
+                                                        Twitch synchronization error
+                                                    </p>
+
+                                                    <p class="mt-1 text-sm leading-6 text-red-700">
+                                                        {{ $livestreamModel->event_livestream_error }}
+                                                    </p>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </section>

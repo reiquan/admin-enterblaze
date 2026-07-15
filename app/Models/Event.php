@@ -31,9 +31,9 @@ class Event extends Model
         'tags',
 
     ];
-    protected $dates = [
-        'event_start_date',
-        'event_end_date',
+    protected $casts = [
+        'event_start_date' => 'datetime',
+        'event_end_date' => 'datetime',
     ];
 
      /**
@@ -44,6 +44,15 @@ class Event extends Model
     public function getEventStartDateAttribute($value)
     {
         return Carbon::parse($value)->isoFormat('lll');
+    }
+         /**
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function livestream()
+    {
+        return $this->hasOne(EventLivestream::Class, 'event_id');
     }
     
 
@@ -57,6 +66,15 @@ class Event extends Model
     public function registrations()
     {
         return $this->hasMany(EventRegistration::Class, 'registration_event_id');
+    }
+    public function getFormattedEventStartDateAttribute()
+    {
+        return $this->event_start_date?->isoFormat('lll');
+    }
+
+    public function getFormattedEventEndDateAttribute()
+    {
+        return $this->event_end_date?->isoFormat('lll');
     }
     
 }

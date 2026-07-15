@@ -48,6 +48,14 @@ return [
                 'secret_key' => env('STRIPE_SECRET')
             ],
     ],
+    'twitch' => [
+        'client_id' => env('TWITCH_CLIENT_ID'),
+        'client_secret' => env('TWITCH_CLIENT_SECRET'),
+        'redirect_uri' => env('TWITCH_REDIRECT_URI'),
+
+        'channel_name' => env('TWITCH_CHANNEL_NAME'),
+        'parent_domain' => env('TWITCH_PARENT_DOMAIN'),
+    ],
 
 
 ];
