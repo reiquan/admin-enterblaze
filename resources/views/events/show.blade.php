@@ -17,10 +17,10 @@
             console.log('here');
             let confirm = document.getElementById(action);
             let id = document.getElementById(registration_event_id);
-            let r_id = id.value;
+           
 
             // Display a confirmation dialog
-            var userConfirmed = window.confirm('Are you sure you want to ' + action + ' registration ' + r_id + '?');
+            var userConfirmed = window.confirm('Are you sure you want to ' + action + ' registration ' + registration_event_id + '?');
 
             // If the user clicks "OK" (true), redirect to another page
             if (userConfirmed) {
