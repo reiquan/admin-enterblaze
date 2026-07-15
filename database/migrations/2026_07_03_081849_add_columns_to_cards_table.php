@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('cards', function (Blueprint $table) {
             //
             $table->unsignedBigInteger('card_location_id')->nullable()->after('card_character_id');
-            $table->unsignedBigInteger('card_faction_id')->nullable()->after('card_skill_id');
+            $table->unsignedBigInteger('card_faction_id')->nullable()->after('card_location_id');
 
 
             $table->foreign('card_location_id')->references('id')->on('card_locations');
