@@ -14,11 +14,8 @@
     </div>
 
     <script>
-        function isVisible(page_id, action) {
+        function isVisible(page_id, action, universe_id, book_id, issue_id) {
             console.log('here');
-            let universe_id = document.getElementById("u_id").value;
-            let book_id = document.getElementById("b_id").value;
-            let issue_id = document.getElementById("i_id").value;
     
 
             // Display a confirmation dialog
@@ -52,11 +49,8 @@
             }
         }
 
-        function confirmDelete(page_id) {
+        function confirmDelete(page_id, universe_id, book_id, issue_id) {
             console.log('here');
-            let universe_id = document.getElementById("u_id").value;
-            let book_id = document.getElementById("b_id").value;
-            let issue_id = document.getElementById("i_id").value;
     
 
             // Display a confirmation dialog
@@ -103,11 +97,12 @@
         // // You can perform other actions based on the selected option here
         // });
 
-        function swapPageNumber(page_id) {
-            console.log('here');
-            let universe_id = document.getElementById("u_id").value;
-            let book_id = document.getElementById("b_id").value;
-            let issue_id = document.getElementById("i_id").value;
+        function swapPageNumber(page_id, universe_id, book_id, issue_id) {
+            // console.log(page_id);
+            
+            // let universe_id = document.getElementById("u_id").value;
+            // let book_id = document.getElementById("b_id").value;
+            // let issue_id = document.getElementById("i_id").value;
             var selectElement = document.getElementById('issue_page_number'+page_id);
             var selectedValue = selectElement.value;
             console.log('Selected page: ' + selectedValue);

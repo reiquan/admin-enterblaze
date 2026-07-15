@@ -30,10 +30,14 @@ class Universe extends Model
     protected $fillable = [
         'universe_name', 'universe_image_url', 'universe_logo'
     ];
-    public function books(){
+    public function books()
+    {
         return $this->hasMany(Book::class, 'book_universe_id');
     }
     public function volumes(){
         return $this->hasMany(Volume::class);
+    }
+    public function cardSeries(){
+        return $this->hasMany(CardSeries::class, 'card_series_universe_id');
     }
 }

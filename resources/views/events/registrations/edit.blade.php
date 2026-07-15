@@ -1,173 +1,368 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Event Registration') }}
-        </h2>
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                    {{ __('Edit Event Registration') }}
+                </h2>
+                <p class="mt-1 text-sm text-gray-500">
+                    Update the registration settings for this event.
+                </p>
+            </div>
+
+            <a
+                href="{{ route('events.index') }}"
+                class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+                Back to events
+            </a>
+        </div>
     </x-slot>
 
-    <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+    @php
+        $registrationTypes = [
+            'Guest',
+            'Special Guest',
+            'Vendor',
+            'Artist',
+            'Mangaka',
+            'Food Vendor',
+            'Tournament',
+        ];
+    @endphp
 
-    <nav class="flex" aria-label="Breadcrumb">
-    <ol role="list" class="flex space-x-4 rounded-md bg-white px-6 shadow">
+    <div class="py-8">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="mb-6 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+                <div class="border-b border-gray-200 px-6 py-5">
+                    <nav aria-label="Breadcrumb">
+                        <ol class="flex flex-wrap items-center gap-2 text-sm">
+                            <li>
+                                <a
+                                    href="{{ route('events.index') }}"
+                                    class="font-medium text-gray-500 transition hover:text-indigo-600"
+                                >
+                                    Events
+                                </a>
+                            </li>
 
-        <li class="flex">
-        <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-            <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <a class="ml-4 text-lg font-medium text-gray-500 hover:text-gray-700">Create an event registration</a>
-        </div>
-        </li>
-        <li class="flex">
-        <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-            <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            @if(isset($event_registration->id))
-            <form method="GET" action="{{ route('events.registrations.edit', ['event_id'=>$event_registration->event->id ,'registration_id' => $event_registration->id]) }}" >
-            @csrf
-            <input type="hidden" name="step" value="1" >
-            <input type="hidden" name="event_id" value="{{ $event_registration->id ?? null }}" >
-            <button class="ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Event Registration Info</button>
-            </form>
-            @else
-            <button class="ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Event Registration Info</button>
+                            <li class="text-gray-300" aria-hidden="true">
+                                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M7.21 14.77a.75.75 0 0 1 .02-1.06L10.94 10 7.23 6.29a.75.75 0 1 1 1.06-1.06l4.24 4.24a.75.75 0 0 1 0 1.06l-4.24 4.24a.75.75 0 0 1-1.08 0Z"
+                                        clip-rule="evenodd"
+                                    />
+                                </svg>
+                            </li>
+
+                            <li>
+                                <span class="font-semibold text-indigo-600">
+                                    Event registration
+                                </span>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            @if ($errors->any())
+                <div class="mb-6 rounded-2xl border border-red-200 bg-red-50 p-5">
+                    <div class="flex gap-3">
+                        <svg
+                            class="mt-0.5 h-5 w-5 flex-none text-red-500"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm0-11.25a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Zm0 6.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+
+                        <div>
+                            <h3 class="text-sm font-semibold text-red-800">
+                                Please correct the following errors:
+                            </h3>
+
+                            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-red-700">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             @endif
-            
+
+            <form
+                method="POST"
+                action="{{ route('events.registrations.update', [
+                    'event_id' => $event_registration->event->id,
+                    'registration_id' => $event_registration->id,
+                ]) }}"
+            >
+                @csrf
+   
+
+                <input
+                    type="hidden"
+                    name="registration_id"
+                    value="{{ $event_registration->id }}"
+                >
+
+                <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+                    <div class="border-b border-gray-200 px-6 py-6 sm:px-8">
+                        <p class="text-xs font-bold uppercase tracking-[0.22em] text-indigo-600">
+                            Registration settings
+                        </p>
+
+                        <h1 class="mt-2 text-2xl font-bold tracking-tight text-gray-900">
+                            Edit event registration
+                        </h1>
+
+                        <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-500">
+                            Update the registration name, audience, availability, dates, and fee.
+                        </p>
+                    </div>
+
+                    <div class="space-y-8 px-6 py-8 sm:px-8">
+                        <div class="grid grid-cols-1 gap-y-8 gap-x-12 lg:grid-cols-2">
+                            <div>
+                                <label
+                                    for="registration_name"
+                                    class="block text-sm font-semibold text-gray-900"
+                                >
+                                    Registration name
+                                </label>
+
+                                <p class="mt-1 text-xs text-gray-500">
+                                    Example: General Admission, Artist Alley, or VIP Guest.
+                                </p>
+
+                                <input
+                                    type="text"
+                                    name="registration_name"
+                                    id="registration_name"
+                                    value="{{ old('registration_name', $event_registration->registration_name) }}"
+                                    class="mt-3 block w-full rounded-xl border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    placeholder="Enter a registration name"
+                                    required
+                                >
+
+                                @error('registration_name')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label
+                                    for="registration_type"
+                                    class="block text-sm font-semibold text-gray-900"
+                                >
+                                    Registration type
+                                </label>
+
+                                <p class="mt-1 text-xs text-gray-500">
+                                    Choose the audience or participant group this registration is for.
+                                </p>
+
+                                <select
+                                    id="registration_type"
+                                    name="registration_type"
+                                    class="mt-3 block w-full rounded-xl border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    required
+                                >
+                                    @foreach ($registrationTypes as $registrationType)
+                                        <option
+                                            value="{{ $registrationType }}"
+                                            @selected(old('registration_type', $event_registration->registration_type) === $registrationType)
+                                        >
+                                            {{ $registrationType }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                @error('registration_type')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label
+                                    for="registration_limit"
+                                    class="block text-sm font-semibold text-gray-900"
+                                >
+                                    Registration limit
+                                </label>
+
+                                <p class="mt-1 text-xs text-gray-500">
+                                    Set the maximum number of registrations available.
+                                </p>
+
+                                <input
+                                    type="number"
+                                    name="registration_limit"
+                                    id="registration_limit"
+                                    value="{{ old('registration_limit', $event_registration->registration_limit) }}"
+                                    min="0"
+                                    class="mt-3 block w-full rounded-xl border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    placeholder="0"
+                                    required
+                                >
+
+                                @error('registration_limit')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label
+                                    for="registration_fee"
+                                    class="block text-sm font-semibold text-gray-900"
+                                >
+                                    Registration fee
+                                </label>
+
+                                <p class="mt-1 text-xs text-gray-500">
+                                    Enter 0 when this registration is free.
+                                </p>
+
+                                <div class="relative mt-3">
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                                        <span class="text-sm text-gray-500">$</span>
+                                    </div>
+
+                                    <input
+                                        type="number"
+                                        name="registration_fee"
+                                        id="registration_fee"
+                                        value="{{ old('registration_fee', $event_registration->registration_fee) }}"
+                                        min="0"
+                                        step="0.01"
+                                        class="block w-full rounded-xl border-gray-300 py-3 pl-10 pr-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        placeholder="0.00"
+                                        required
+                                    >
+                                </div>
+
+                                @error('registration_fee')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                for="registration_description"
+                                class="block text-sm font-semibold text-gray-900"
+                            >
+                                Registration description
+                            </label>
+
+                            <p class="mt-1 text-xs text-gray-500">
+                                Explain who should register and what is included.
+                            </p>
+
+                            <textarea
+                                rows="5"
+                                name="registration_description"
+                                id="registration_description"
+                                class="mt-3 block w-full resize-y rounded-xl border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                placeholder="Describe this registration option..."
+                            >{{ old('registration_description', $event_registration->registration_description) }}</textarea>
+
+                            @error('registration_description')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="border-t border-gray-200 pt-8">
+                            <div class="mb-5">
+                                <h2 class="text-base font-semibold text-gray-900">
+                                    Registration availability
+                                </h2>
+
+                                <p class="mt-1 text-sm text-gray-500">
+                                    Set when attendees can begin and stop registering.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-y-8 gap-x-12 lg:grid-cols-2">
+                                <div>
+                                    <label
+                                        for="registration_start_date"
+                                        class="block text-sm font-semibold text-gray-900"
+                                    >
+                                        Start date and time
+                                    </label>
+
+                                    <input
+                                        type="datetime-local"
+                                        name="registration_start_date"
+                                        id="registration_start_date"
+                                        value="{{ old(
+                                            'registration_start_date',
+                                            optional($event_registration->registration_start_date)->format('Y-m-d\TH:i')
+                                                ?? $event_registration->registration_start_date
+                                        ) }}"
+                                        class="mt-3 block w-full rounded-xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        required
+                                    >
+
+                                    @error('registration_start_date')
+                                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label
+                                        for="registration_end_date"
+                                        class="block text-sm font-semibold text-gray-900"
+                                    >
+                                        End date and time
+                                    </label>
+
+                                    <input
+                                        type="datetime-local"
+                                        name="registration_end_date"
+                                        id="registration_end_date"
+                                        value="{{ old(
+                                            'registration_end_date',
+                                            optional($event_registration->registration_end_date)->format('Y-m-d\TH:i')
+                                                ?? $event_registration->registration_end_date
+                                        ) }}"
+                                        class="mt-3 block w-full rounded-xl border-gray-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                        required
+                                    >
+
+                                    @error('registration_end_date')
+                                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col-reverse gap-3 border-t border-gray-200 bg-gray-50 px-6 py-5 sm:flex-row sm:justify-end sm:px-8">
+                        <a
+                            href="{{ route('events.index') }}"
+                            class="inline-flex items-center justify-center rounded-xl border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                            Update event registration
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
-        </li>
-    </ol>
-    </nav>
-
     </div>
-
-    <div class="bg-gray-200 bg-opacity-25  gap-6 lg:gap-4 p-6 lg:p-8">
-    <!--
-    This example requires some changes to your config:
-
-    ```
-    // tailwind.config.js
-    module.exports = {
-    // ...
-    plugins: [
-    // ...
-    require('@tailwindcss/forms'),
-    ],
-    }
-    ```
-    -->
-
-
-
-    @if($event_registration)
-    <form method="POST" action="{{ route('events.registrations.update',[ 'event_id' => $event_registration->event->id,'registration_id' => $event_registration->id]) }}">
-    <input type="hidden" name="registration_id" value="{{ $event_registration->id }}" >
-    @else
-    <form method="POST" action="{{ route('events.registrations.store', $event_registration->event->id) }}">
-    <input type="hidden" name="event_id" value="{{ $event->id }}" >
-    @endif
-    @csrf
-    <div class="space-y-6 bg-white px-12 py-12">
-    <div>
-        <h1 class="text-lg leading-6 font-medium text-gray-900">Event Registration Settings</h1>
-        <p class="mt-1 text-sm text-gray-500">Let’s get started by filling in the information below to create your new event.</p>
-    </div>
-
-    <div>
-        <label for="registration_name" class="block text-sm font-medium text-gray-700"> Registration Name </label>
-        <div class="mt-1">
-        <input type="text" name="registration_name" value="{{ $event_registration->registration_name ?? '' }}" id="registration_name" class="px-2 py-2 block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
-        </div>
-    </div>
-
-    <div class="py-8">
-        <label for="registration_limit" class="block text-sm font-medium text-gray-700"> Registration Limit </label>
-        <div class="mt-1">
-        <input type="number" name="registration_limit" id="registration_limit" value="{{ $event_registration->registration_limit ?? '' }}" class="px-2 py-2 block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"   min="0" required>
-        </div>
-    </div>
-
-    <div>
-        <label for="registration_description" class="block text-sm font-medium text-gray-700"> Registration Description </label>
-        <div class="mt-1">
-        <textarea rows="3" name="registration_description" id="comment" class="block w-full py-3 border-0 resize-none focus:ring-0 sm:text-sm" placeholder="Who is your registration for?..."> {{ $event_registration->registration_description ?? '' }}</textarea>
-        </div>
-    </div>
-
-    <div>
-        <label for="registration_type" class="block text-sm font-medium text-gray-700"> Registration Type </label>
-        <div class="mt-2">
-            <select id="registration_type" name="registration_type" autocomplete="registration_type" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-            
-             @if(!empty($event_registration))
-                @if($event_registration->registration_type == 'Guest')
-                <option selected>Guest</option>
-                @else
-                <option >Guest</option>
-                @endif
-                @if($event_registration->registration_type == 'Vendor')
-                <option selected>Vendor</option>
-                @else
-                <option >Vendor</option>
-                @endif
-                @if($event_registration->registration_type == 'Artist')
-                <option selected>Artist</option>
-                @else
-                <option >Artist</option>
-                @endif
-                @if($event_registration->registration_type == 'Food Vendor')
-                <option selected>Food Vendor</option>
-                @else
-                <option >Food Vendor</option>
-                @endif
-                @if($event_registration->registration_type == 'Tournament')
-                <option selected>Tournament</option>
-                @else
-                <option >Tournament</option>
-                @endif
-                
-             @else
-             <option>Guest</option>
-             <option>Vendor</option>
-             <option >Artist</option>
-             <option >Food Vendor</option>
-             <option>Tournament</option>
-             @endif
-            
-            </select>
-        </div>
-    </div>  
-
-    <div date-rangepicker class="block text-sm font-medium text-gray-700">
-        <div class="relative">
-        <label for="registration_start_date" class="block text-sm font-medium text-gray-700"> Start Date: <span class="text-xs text-green-700">{{ $event_registration->registration_start_date ?? '' }}</span></label>
-        <br>
-            <input name="registration_start_date" type="datetime-local" value="{{ $event_registration->registration_start_date ?? '' }}" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-2 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start" required>
-        </div>
-        <span class="py-2 mx-4 text-gray-500">to</span>
-  
-        <div class="relative">
-        <label for="registration_end_date" class="block text-sm font-medium text-gray-700"> End Date: <span class="text-xs text-green-700">{{ $event_registration->registration_end_date ?? '' }}</span> </label>
-         <br>
-        <input name="registration_end_date" type="datetime-local" value="{{ $event_registration->registration_end_date ?? '' }}" class="border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-2 block w-2/5 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end" required>
-    </div>
-    <div class="py-8">
-        <label for="registration_fee" class="block text-sm font-medium text-gray-700"> Registration Fee </label>
-        <div class="mt-1">
-        <input type="number" name="registration_fee" id="registration_fee" value="{{ $event_registration->registration_fee ?? '' }}" class="px-2 py-2 block w-2/5 shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"  required>
-        </div>
-    </div>
-
-    <div class="flex justify-end">
-        <a href="{{ route('events.index') }}" type="button" class="bg-white m-2 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">Cancel</a>
-        <button type="submit" name="type" value ="{{ Route::is('events.registrations.edit') ? 'edit' : '' }}" class="bg-green-800 m-2 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">{{ !empty($event_registration) ? 'Update Event Registration' : 'Save Event Registration'}} </button>
-    </div>
-    </div>
-
-    </form>
-
-
-
-    </div>
-
 </x-app-layout>

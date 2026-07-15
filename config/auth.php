@@ -115,5 +115,8 @@ return [
     'api' => [
         'token' => env('APP_API_TOKEN'),
     ],
+    'blaze_tokens' => [
+        'exchange' => env('BLAZE_TOKEN_EXCHANGE'),
+    ],
 
 ];

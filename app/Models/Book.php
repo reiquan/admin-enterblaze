@@ -35,6 +35,7 @@ class Book extends Model
         'book_image_path',
         'book_slug_name',
         'book_type',
+        'book_universe_id',
         'book_price'
 
     ];
@@ -47,7 +48,8 @@ class Book extends Model
         return $this->hasMany(Issue::class, 'issue_book_id');
     }
 
-    public function universe(){
+    public function universe()
+    {
         return $this->belongsTo(Universe::class, 'book_universe_id');
     }
 }
