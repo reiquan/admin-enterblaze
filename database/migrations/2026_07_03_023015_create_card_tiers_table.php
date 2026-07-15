@@ -20,16 +20,16 @@ return new class extends Migration
 
         });
         DB::table('card_tiers')->insert([
-            ['card_tier_name' => 'Civilian', 'card_tier_is_active' => 1,'100', 'created_at' => now()],
-            ['card_tier_name' => 'Fighter', 'card_tier_is_active' => 1,'300', 'created_at' => now()],
-            ['card_tier_name' => 'Elite', 'card_tier_is_active' => 1,'500', 'created_at' => now()],
-            ['card_tier_name' => 'Champion', 'card_tier_is_active' => 1,'700', 'created_at' => now()],
-            ['card_tier_name' => 'Hero', 'card_tier_is_active' => 1,'900', 'created_at' => now()],
-            ['card_tier_name' => 'Legendary', 'card_tier_is_active' => 1,'1100', 'created_at' => now()],
-            ['card_tier_name' => 'Mythic', 'card_tier_is_active' => 1,'1300', 'created_at' => now()],
-            ['card_tier_name' => 'Divine', 'card_tier_is_active' => 1,'1500', 'created_at' => now()],
-            ['card_tier_name' => 'Cosmic', 'card_tier_is_active' => 1,'1700', 'created_at' => now()],
-            ['card_tier_name' => 'Omniversal', 'card_tier_is_active' => 1,'2000', 'created_at' => now()],
+            ['card_tier_name' => 'Civilian', 'card_tier_is_active' => 1, 'card_tier_skill_points' =>'100', 'created_at' => now()],
+            ['card_tier_name' => 'Fighter', 'card_tier_is_active' => 1, 'card_tier_skill_points' =>'300', 'created_at' => now()],
+            ['card_tier_name' => 'Elite', 'card_tier_is_active' => 1, 'card_tier_skill_points' =>'500', 'created_at' => now()],
+            ['card_tier_name' => 'Champion', 'card_tier_is_active' => 1, 'card_tier_skill_points' =>'700', 'created_at' => now()],
+            ['card_tier_name' => 'Hero', 'card_tier_is_active' => 1, 'card_tier_skill_points' =>'900', 'created_at' => now()],
+            ['card_tier_name' => 'Legendary', 'card_tier_is_active' => 1, 'card_tier_skill_points' =>'1100', 'created_at' => now()],
+            ['card_tier_name' => 'Mythic', 'card_tier_is_active' => 1, 'card_tier_skill_points' =>'1300', 'created_at' => now()],
+            ['card_tier_name' => 'Divine', 'card_tier_is_active' => 1, 'card_tier_skill_points' =>'1500', 'created_at' => now()],
+            ['card_tier_name' => 'Cosmic', 'card_tier_is_active' => 1, 'card_tier_skill_points' =>'1700', 'created_at' => now()],
+            ['card_tier_name' => 'Omniversal', 'card_tier_is_active' => 1, 'card_tier_skill_points' =>'2000', 'created_at' => now()],
         ]);
     }
 
