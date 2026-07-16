@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthApiController;
 use App\Http\Controllers\API\ApiController;
-use App\Http\Controllers\Api\EventLivestreamsController;
+use App\Http\Controllers\API\EventLivestreamsController;
 
 /*
 |--------------------------------------------------------------------------
