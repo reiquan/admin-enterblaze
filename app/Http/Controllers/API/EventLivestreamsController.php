@@ -17,21 +17,21 @@ class EventLivestreamsController extends Controller
             ->join('events', 'events.id', '=', 'event_livestreams.event_id')
             ->where('events.is_active', true)
             ->where('events.event_is_livestream', true)
-            ->where('event_livestreams.event_livestream_platform', 'twitch')
-            ->where(function ($query) {
-                $query->whereNull('events.event_end_date')
-                    ->orWhere('events.event_end_date', '>=', now());
-            })
-            ->where(
-                'events.event_start_date',
-                '<=',
-                now()->addDays(7)
-            )
-            ->select([
-                'events.*',
-                'event_livestreams.*',
-            ])
-            ->orderBy('events.event_start_date')
+            // ->where('event_livestreams.event_livestream_platform', 'twitch')
+            // ->where(function ($query) {
+            //     $query->whereNull('events.event_end_date')
+            //         ->orWhere('events.event_end_date', '>=', now());
+            // })
+            // ->where(
+            //     'events.event_start_date',
+            //     '<=',
+            //     now()->addDays(7)
+            // )
+            // ->select([
+            //     'events.*',
+            //     'event_livestreams.*',
+            // ])
+            // ->orderBy('events.event_start_date')
             ->first();
 
     
