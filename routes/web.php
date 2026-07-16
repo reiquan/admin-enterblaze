@@ -156,7 +156,7 @@ Route::middleware([
 
     //Livestream
     Route::middleware('frontend.api')->get(
-        '/public/livestream/current','App\Http\Controllers\EventLivestreamsController@current')->name('event.livestream');
+        '/public/livestream/current','App\Http\Controllers\Api\EventLivestreamsController@current')->name('event.livestream');
 
 });
 // Route::get('/twitch-test', function () {  TTHIS ROUTE IS FUNCTIONING PROPERLY. TESTING IN VALET/DEV IS NOT POSSIBLE. MUST TEST LIVE EVENT ON STAGING
