@@ -186,7 +186,7 @@
 
                                 <div class="p-5">
                                     @if($reviewSkills)
-                                        @if ($reviewSkills->isNotEmpty)
+                                        @if ($reviewSkills->isNotEmpty())
                                             <div class="space-y-5">
                                                 @foreach ($reviewSkills as $index => $skill)
                                                     @php
