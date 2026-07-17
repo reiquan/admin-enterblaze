@@ -36,15 +36,6 @@ class Event extends Model
         'event_end_date' => 'datetime',
     ];
 
-     /**
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function getEventStartDateAttribute($value)
-    {
-        return Carbon::parse($value)->isoFormat('lll');
-    }
          /**
      *
      * @param  string  $value
