@@ -62,6 +62,6 @@ class CardSeriesUpload extends Component
     }
     public function render()
     {
-        return view('livewire.card-upload');
+        return view('livewire.card-series-upload');
     }
 }
