@@ -63,6 +63,7 @@ class BookController extends Controller
         ]);
         //save info
             if(isset($request->step) and $request->step == 1){
+                // dd($request->all());
                
                 //save book
                     $book = isset($request->book_id) ? Book::find($request->book_id) : new Book;
@@ -73,7 +74,8 @@ class BookController extends Controller
                         $book->book_published_at = $request->book_published_at;
                         $book->book_universe_id = $request->universe_id;
                         $book->book_type = $request->book_type;
-                        $book->book_price = $request->book_price;
+                        $book->book_price = intval($request->book_price);
+                     
                         if(isset($request->book_subtitle)){
                             $book->book_subtitle = $request->book_subtitle;
                         }
@@ -88,6 +90,7 @@ class BookController extends Controller
                         //     $book->volume_number = $request->volume_number;
                         // }
                     $book->save();
+
 
             }
 

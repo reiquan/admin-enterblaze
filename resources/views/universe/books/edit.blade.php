@@ -175,6 +175,21 @@
                                                    @endforeach
                                                 </select>
                                             </div>
+                                            <div class="relative">
+                                                <label for="book_audience" class="block text-sm font-bold text-gray-900">Book Price</label>
+                                                <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm font-bold text-gray-400">$</span>
+                                                <input
+                                                    type="number"
+                                                    name="book_price"
+                                                    id="book_price"
+                                                    autocomplete="book_price"
+                                                    min="5.00"
+                                                    step="0.01"
+                                                    value="{{ $book->book_price ?? '' }}"
+                                                    class="block w-full rounded-2xl border-0 bg-white py-3 pl-8 pr-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                                                    placeholder="25.00"
+                                                >
+                                            </div>
                                         </div>
                                     </div>
 
