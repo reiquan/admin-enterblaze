@@ -131,8 +131,6 @@ class CardController extends Controller
                         'card_type_id' => ['required'],
                         'card_bio' => ['required'],
                         'card_rarity' => ['required'],
-        
-                        
                     ]);
                   }
                
@@ -163,7 +161,7 @@ class CardController extends Controller
             $step = $request->type == 'edit' ? $request->step : $request->step += 1;
          
             if($request->step == 3){
-              
+           
                 $card_type = CardType::where('id',$card->card_type_id )->first();
              
                 $card_type_form = strtolower($card_type->card_type_name).'-form';
@@ -305,11 +303,14 @@ class CardController extends Controller
 
     public function updateCardSkill(Request $request)
     {
+        $card = Card::find($request->card_id);
+        $bonuses = null;
+
         if(isset($request->type) && $request->type){ 
             
             
-            $card = Card::find($request->card_id);
-            $bonuses = null;
+           
+            
             if(isset($card->location->card_location_bonuses)){
                 $bonuses = json_decode($card->location->card_location_bonuses) ?? "[]";
 
@@ -337,7 +338,7 @@ class CardController extends Controller
    
 
         } else {
-             // dd($request->all());
+            //  dd($request->all());
           
     
 
@@ -376,11 +377,6 @@ class CardController extends Controller
           
               $cardSkillTwo->save();
           }
-  
-          
-          $card->card_character_id =  $request->card_character_id;
-          $card->save();
-  
           $universe_id = $request->card_character_universe_id;
           $card_id = $card->id ?? $request->card_id;
           $card_series_id = $card->card_series_id;
@@ -395,12 +391,12 @@ class CardController extends Controller
               $card_skill_types = CardSkillType::all();
               
   
-              return view('universe.card-series.cards.finish', compact('step', 'card_skills', 'card_skill_types','universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
+              return view('universe.card-series.cards.finish', compact('step', 'bonuses','card_skills', 'card_skill_types','universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
   
           }
           
              
-              return view('universe.card-series.cards.create', compact('step', 'universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
+              return view('universe.card-series.cards.create', compact('step', 'bonuses', 'universe_id','card_series_id', 'card_id', 'card','card_type', 'card_type_form', 'card_tier_skill_points'));
         }
        
     }

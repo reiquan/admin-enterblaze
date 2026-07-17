@@ -204,7 +204,7 @@
                                         -
                                     </button>
 
-                                    <input type="range" min="0" max="100" name="{{ 'card_character_'. $key }}"  value="{{ $card->character->{'card_character_' . $key} ?? 0 }}"  class="skill-slider w-full">
+                                    <input type="range" min="0" max="{{ $card_tier_skill_points}}" name="{{ 'card_character_'. $key }}"  value="{{ $card->character->{'card_character_' . $key} ?? 0 }}"  class="skill-slider w-full">
 
                                     <button type="button" class="plus-btn rounded-xl bg-indigo-600 px-4 py-2 font-bold text-white hover:bg-indigo-700">
                                         +
