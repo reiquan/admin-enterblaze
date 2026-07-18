@@ -63,6 +63,7 @@ class BookController extends Controller
         ]);
         //save info
             if(isset($request->step) and $request->step == 1){
+                // dd($request->all());
                
                 //save book
                     $book = isset($request->book_id) ? Book::find($request->book_id) : new Book;
@@ -73,7 +74,8 @@ class BookController extends Controller
                         $book->book_published_at = $request->book_published_at;
                         $book->book_universe_id = $request->universe_id;
                         $book->book_type = $request->book_type;
-                        $book->book_price = $request->book_price;
+                        $book->book_price = intval($request->book_price);
+                     
                         if(isset($request->book_subtitle)){
                             $book->book_subtitle = $request->book_subtitle;
                         }
@@ -88,6 +90,7 @@ class BookController extends Controller
                         //     $book->volume_number = $request->volume_number;
                         // }
                     $book->save();
+
 
             }
 
@@ -133,10 +136,12 @@ class BookController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request)
+    public function edit(Request $request, $universe_id, $book_id)
     {
         //
-        $book = Book::find($request->book_id);
+
+        $book = Book::find($request->book_id ?? $book_id);
+
         $step=isset($request->step) ? $request->step : 1;;
         return view('universe/books/edit', compact('book', 'step'));
     }
@@ -203,7 +208,7 @@ class BookController extends Controller
      */
     public function destroy(Request $request)
     {
-        //  dd($request->all());
+        
          $request->validate([
             'book_id' => ['required'],
                  
@@ -212,7 +217,8 @@ class BookController extends Controller
         $issues= $book->issues;
         if($issues){
             foreach($issues as $issue) {
-                 // Delete file from S3
+                if($issue->issue_image_cover){
+                     // Delete file from S3
                 if (Storage::disk('s3-public')->exists($issue->issue_image_cover)) {
                     Storage::disk('s3-public')->delete($issue->issue_image_cover);
                     if($issue->pages) {
@@ -223,6 +229,8 @@ class BookController extends Controller
                             }
                         }
                     }
+
+                }
 
                 }
 

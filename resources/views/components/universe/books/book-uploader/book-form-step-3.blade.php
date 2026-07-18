@@ -1,5 +1,5 @@
 <!-- component -->
-<!-- <form method="POST" action="{{ route('books.store', $universe_id) }}" > -->
+
   @csrf
   <div class="bg-gray-500 sm:px-8 md:px-16 sm:py-8">
         <main class="container mx-auto max-w-screen-lg h-full">
@@ -45,6 +45,21 @@
               <button id="submit" class="rounded-sm px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none">
                 Upload now
               </button>
+              <form action="{{ route('books.index', [
+                                                'universe_id' => $book->book_universe_id,
+                                                'book_id' => $book->id
+                                            ]) }}" method="GET">
+
+                                                <input type="hidden" name="step" value="3">
+
+                                                <button
+                                                    type="submit"
+                                                    class="rounded-2xl border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-700 shadow-sm hover:bg-gray-50">
+                                                    Keep Existing Cover & Continue
+                                                </button>
+
+                                            </form>
+              
               <button id="cancel" class="ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
                 Cancel
               </button>
@@ -226,8 +241,8 @@ function sendImage(objURL, file) {
     // Create FormData and append the Blob
     var formData = new FormData();
     formData.append("file", blob, file.name);
-    var u_id = "<?php echo $universe->id; ?>";
-    var b_id = "<?php echo $book_id; ?>";
+    var u_id = "<?php echo $book->book_universe_id; ?>";
+    var b_id = "<?php echo $book->id; ?>";
     formData.append("universe_id",u_id);
     formData.append("book_id",b_id);
     // Perform the AJAX request using jQuery
@@ -281,8 +296,8 @@ document.getElementById("submit").onclick = (e) => {
 
   var formData = new FormData();
   var fileInput = document.getElementById('hidden-input');
-  var u_id = "<?php echo $universe->id; ?>";
-  var b_id = "<?php echo $book_id; ?>";
+  var u_id = "<?php echo $book->book_universe_id; ?>";
+  var b_id = "<?php echo $book->id; ?>";
   console.log( '/universe/' + u_id + '/books/' + b_id + '/update');
 
   // Check if a file is selected

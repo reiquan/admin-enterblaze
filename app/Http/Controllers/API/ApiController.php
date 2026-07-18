@@ -13,6 +13,9 @@ use App\Services\ValidationService;
 use App\Services\SubscriptionService;
 use App\Models\IssuePage;
 use App\Models\Book;
+use App\Models\Webisode;
+use App\Models\WebisodeVideo;
+use App\Models\Card;
 use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\EventRegistrationAttendance;
@@ -154,10 +157,11 @@ class ApiController extends Controller
     }
 
     public function getEvents(Request $request){
+
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
         
             if(isset($request->event_id) && $request->event_id){
-                $event = Event::where('id', $request->event_id)->where('event_end_date','>=', now())->where('is_active', 1)->get()
+                $event = Event::find($request->event_id)
                 ->load(['registrations' => function ($query) {
                         $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
                     }]);
@@ -377,7 +381,11 @@ class ApiController extends Controller
             }
 
             $reservation->price = $request->price;
-            // $reservation->user_id = $request->user_id;
+            if(is_integer($request->user_id)){
+                $reservation->user_id = $request->user_id;
+            } else {
+                $reservation->stripe_user_id = $request->user_id;
+            }
             $reservation->email = $request->email;
             $reservation->reservation_number = $request->reservation_number;
             $reservation->address_line_1 = $request->address_line_1;
@@ -393,7 +401,7 @@ class ApiController extends Controller
 
                 $book = Book::find($reservation->book_id);
                 $alertInfo = $this->alertService->createBody($book, 'reservation');
-                $this->alertService->processAlert($alertInfo, $request['email']);
+                $this->alertService->processAlert($alertInfo, $request->email);
 
             } else if(isset($request->issue_id) && !empty($request->issue_id)) {
 
@@ -404,7 +412,7 @@ class ApiController extends Controller
            
                 //IMPORTANT: this method will fail when testing IN sandbox
                     // TO DO: VERIFY TASKS WITH MAILGUN TO SEND EMAILS OUT 
-                $this->alertService->processAlert($alertInfo, $request['email']);
+                $this->alertService->processAlert($alertInfo, $request->email);
 
             } else {
                 return response()
@@ -488,6 +496,159 @@ class ApiController extends Controller
  
      }
 
+     public function getCards(Request $request){
+
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
+        
+            $card = null;
+            $cards = null;
+            // dd($request->all());
+            if(isset($request->card_id)){
+
+                $card = Card::find($request->card_id)->load(['tier','era','skills','character','type']);
+            } else {
+                $cards = Card::whereNull('deleted_at')->where('card_is_active', 1)->with(['tier','era','skills','character','type'])->get();
+            }
+
+            $data = $request->all();
+    
+            if($card && $card->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $card,
+                    ], 
+                    200
+                );
+            } else if($cards && $cards->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $cards,
+                    ], 
+                    200
+                );
+            } else {
+                return response()
+                    ->json([
+                        'status' => 'error',
+                        'message' => 'Could Not Find Any Cards',
+                        'data' => $data,
+                    ], 
+                    400
+                );
+            }
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'data' => 'Unauthorized Request',
+                ], 
+                400
+            );
+        }
+ 
+     }
+
+     public function getWebisodes(Request $request){
+
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
+        
+            $webisode = null;
+            $webisodes = null;
+
+            if(isset($request->webisode_id)){
+
+                $webisode = Webisode::find($request->webisode_id)->first()->load(['videos']);
+            } else {
+                $webisodes = Webisode::whereNull('deleted_at')->with(['videos'])->get();
+            }
+
+            $data = $request->all();
+    
+            if($webisode && $webisode->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $webisode,
+                    ], 
+                    200
+                );
+            } else if($webisodes && $webisodes->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $webisodes,
+                    ], 
+                    200
+                );
+            } else {
+                return response()
+                    ->json([
+                        'status' => 'error',
+                        'message' => 'Could Not Find Any Webisodes',
+                        'data' => $data,
+                    ], 
+                    400
+                );
+            }
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'data' => 'Unauthorized Request',
+                ], 
+                400
+            );
+        }
+ 
+     }
+
+     public function getWebisodeVideo(Request $request){
+
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
+        
+            $webisode_video = null;
+        
+
+                $webisode_video = WebisodeVideo::find($request->webisode_video_id) ? WebisodeVideo::find($request->webisode_video_id)->first()->load('webisode') :  null;
+          
+
+            $data = $request->all();
+    
+            if($webisode_video && $webisode_video->toArray()) {
+               
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $webisode_video,
+                    ], 
+                    200
+                );
+            } else {
+                return response()
+                    ->json([
+                        'status' => 'error',
+                        'message' => 'Could Not Find Any Webisodes',
+                        'data' => $data,
+                    ], 
+                    400
+                );
+            }
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'data' => 'Unauthorized Request',
+                ], 
+                400
+            );
+        }
+ 
+     }
+
+     
+
      public function checkRegistrationLimit(Request $request){
         
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
@@ -513,5 +674,7 @@ class ApiController extends Controller
             );
         }
     }
+
+    
 
 }

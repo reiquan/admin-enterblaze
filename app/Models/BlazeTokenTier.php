@@ -27,7 +27,10 @@ class BlazeTokenTier extends Model
         'token_tier_description',
         'token_tier_amount',
         'token_tier_usd_price',
-        'token_tier_is_active'
+        'token_tier_is_active',
+        'tag',
+        'perks',
+        'featured'
     ];
 
    

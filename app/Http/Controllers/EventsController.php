@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\EventRegistrationAttendance;
 use App\Models\EventRegistration;
+use App\Models\EventLivestream;
+use Illuminate\Validation\Rule;
 
 use App\Models\User;
 use Carbon\Carbon;
@@ -31,7 +33,7 @@ class EventsController extends Controller
         // }
         
         $events = Event::all();
-
+        
 
 
         return view('events/index', compact('events'));
@@ -45,6 +47,8 @@ class EventsController extends Controller
         $attendances = EventRegistrationAttendance::
                                 leftJoin('event_registrations', 'event_registration_attendances.event_registration_id','event_registrations.id' )
                                  ->where('event_registrations.registration_event_id', $event->id)->get();
+
+        
         // dd($attendances->toArray());
         $event->revenue = 0;
         foreach($attendances as $attendance){
@@ -89,10 +93,11 @@ class EventsController extends Controller
     public function edit(Request $request, string $id)
     {
         //
+        
         $step=isset($request->step) ? $request->step : 1;
         $event = Event::find($id);
         $event_id = $event->id;
-    
+        
             $event->event_start_date = Carbon::parse($event->event_start_date)->toDateTime();
            
             $event->event_end_date = Carbon::parse($event->event_end_date)->toDateTime();
@@ -105,10 +110,63 @@ class EventsController extends Controller
     public function update(Request $request){
         
     //   dd($request->all());
+
+
+        $validated = $request->validate([
+            // Existing rules...
+
+            'event_is_livestream' => [
+                'nullable',
+                'boolean',
+            ],
+
+            'event_livestream_platform' => [
+                Rule::requiredIf(
+                    $request->boolean('event_is_livestream')
+                ),
+                'nullable',
+                Rule::in(['twitch']),
+            ],
+
+            'event_twitch_title' => [
+                Rule::requiredIf(
+                    $request->boolean('event_is_livestream')
+                ),
+                'nullable',
+                'string',
+                'max:140',
+            ],
+
+            'event_twitch_category_id' => [
+                'nullable',
+                'string',
+                'max:50',
+            ],
+        ]);
+
+        $validated['event_is_livestream'] = $request->boolean(
+            'event_is_livestream'
+        );
+
+
+
+
        if($request->event_id){
             $event = Event::find($request->event_id);
                 $event->event_name = $request->event_name;
+                
+                $event->subtitle = $request->subtitle;
+                $event->price = $request->price;
+                if($request->eventt_type){
+                    $event->event_type = $request->event_type;
+                }
+                if($request->event_audience){
+                    $event->event_audience = $request->event_audience;
+                }
+                $event->venue = $request->venue;
+            
                 $event->event_type = $request->event_type;
+                $event->event_is_livestream = $request->event_is_livestream;
                 $event->event_about = $request->event_about;
                 $event->host_user_id = auth()->user()->id;
                 $event->event_address_line_1 = $request->event_address_line_1;
@@ -116,15 +174,29 @@ class EventsController extends Controller
                 $event->event_city = $request->event_city;
                 $event->event_state = $request->event_state;
                 $event->event_zip = $request->event_zip;
-                $event->event_start_date = $request->event_start_date;
-                $event->event_end_date = $request->event_end_date;
+                if($request->event_start_date){
+                    $event->event_start_date = $request->event_start_date;
+                }
+                if($request->event_end_date){
+                    $event->event_end_date = $request->event_end_date;
+                }
                 $event->is_active = 1;
-                // $event->tags = json_encode($request->tags);
+                if($request->event_tags){
+                    $event->tags = $request->event_tags ?? null;
+                }
+            
             $event->save();
         
        } else {
             $event = new Event;
                 $event->event_name = $request->event_name;
+
+                $event->subtitle = $request->subtitle;
+                $event->price = $request->price;
+                $event->event_type = $request->event_type;
+                $event->event_audience = $request->event_audience;
+                $event->venue = $request->venue;
+                $event->event_is_livestream = $request->event_is_livestream;
                 $event->event_type = $request->event_type;
                 $event->event_about = $request->event_about;
                 $event->host_user_id = auth()->user()->id;
@@ -137,20 +209,17 @@ class EventsController extends Controller
                 $event->event_end_date = $request->event_end_date;
                 $event->attendees = json_encode($request->attendees);
                 $event->is_active = 1;
-                // $event->tags = json_encode($request->tags);
+                $event->tags = $request->event_tags ?? null;
             $event->save();
-            //Autmatically add host/candidate
-            // if(isset(auth()->user()->candidate->id)){
-            //     // $host = Candidate::find(intval(auth()->user()->candidate->id));
-            //     $this->candidateSubmit($host->id,$event->id);
-            // }
-            // if(isset($request->attendees)){
-            //     // dd($request->attendees);
-            //     foreach($request->attendees as $attendee){
-            //         $this->candidateSubmit($attendee, $event->id);
-            //     }
-            // }
        }
+
+       $livestream = EventLivestream::findOrNew($request->event_livestream_id);
+            $livestream->event_id = $event->id;
+            $livestream->event_livestream_platform = $request->event_livestream_platform;
+            $livestream->event_livestream_title = $request->event_livestream_title;
+            $livestream->event_livestream_category_id = $request->event_livestream_category_id;
+        $livestream->save();
+
          //if request->step == 4
          if($request->step == 4){
         

@@ -1,227 +1,220 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-red-800 leading-tight">
-            {{ __('Create Your Story') }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <h2 class="text-xl font-black leading-tight text-gray-900">
+                {{ __('Create Your Story') }}
+            </h2>
+        </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+    <div class="py-10">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="space-y-8">
 
+                {{-- Hero --}}
+                <div class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+                    <div class="relative isolate p-8 sm:p-10">
+                        <div class="absolute right-0 top-0 -z-10 h-40 w-40 rounded-full bg-indigo-100 blur-3xl"></div>
+                        <div class="absolute bottom-0 left-0 -z-10 h-32 w-32 rounded-full bg-purple-100 blur-3xl"></div>
 
-               
+                        <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                            <div>
+                                <p class="text-xs font-black uppercase tracking-[0.35em] text-indigo-600">Enterblaze Story Builder</p>
+                                <h1 class="mt-4 text-3xl font-black tracking-tight text-gray-950 sm:text-4xl">
+                                    Create Your Story
+                                </h1>
+                                <p class="mt-3 max-w-2xl text-sm leading-6 text-gray-600">
+                                    Launch your manga, comic, novel, or web series inside your Enterblaze universe. Start with the core book details, then continue to cover art and publishing.
+                                </p>
+                            </div>
 
+                            <div class="flex flex-wrap gap-3">
+                                <span class="inline-flex items-center rounded-2xl border border-indigo-100 bg-indigo-50 px-4 py-2 text-sm font-bold text-indigo-700">
+                                    Step {{ $step ?? 1 }} of 3
+                                </span>
+                                @isset($book->universe)
+                                    <span class="inline-flex items-center rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm font-bold text-gray-700 shadow-sm">
+                                        Universe #{{ $book->universe->id }}
+                                    </span>
+                                @endisset
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                {{-- Progress --}}
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <div class="rounded-3xl border {{ ($step ?? 1) >= 1 ? 'border-indigo-200 bg-indigo-50' : 'border-gray-200 bg-white' }} p-5 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="flex h-11 w-11 items-center justify-center rounded-2xl {{ ($step ?? 1) >= 1 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500' }} text-sm font-black">1</div>
+                            <div>
+                                <p class="text-sm font-black text-gray-950">Story Details</p>
+                                <p class="mt-1 text-xs text-gray-500">Title, creator, audience</p>
+                            </div>
+                        </div>
+                    </div>
 
-<div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+                    <div class="rounded-3xl border {{ ($step ?? 1) >= 2 ? 'border-indigo-200 bg-indigo-50' : 'border-gray-200 bg-white' }} p-5 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="flex h-11 w-11 items-center justify-center rounded-2xl {{ ($step ?? 1) >= 2 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500' }} text-sm font-black">2</div>
+                            <div>
+                                <p class="text-sm font-black text-gray-950">Cover Art</p>
+                                <p class="mt-1 text-xs text-gray-500">Upload your book image</p>
+                            </div>
+                        </div>
+                    </div>
 
-<nav class="flex" aria-label="Breadcrumb">
-      <ol role="list" class="flex space-x-4 rounded-md bg-white px-6 shadow">
+                    <div class="rounded-3xl border {{ ($step ?? 1) >= 3 ? 'border-indigo-200 bg-indigo-50' : 'border-gray-200 bg-white' }} p-5 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="flex h-11 w-11 items-center justify-center rounded-2xl {{ ($step ?? 1) >= 3 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500' }} text-sm font-black">3</div>
+                            <div>
+                                <p class="text-sm font-black text-gray-950">Submit</p>
+                                <p class="mt-1 text-xs text-gray-500">Review and publish</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="h-full w-6 flex-shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <a class="ml-4 text-lg font-medium text-gray-500 hover:text-gray-700">Create a Story</a>
-          </div>
-        </li>
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="{{ $step == 1 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <form method="GET" action="{{ route('books.edit',  [$book->universe->id, $book->id] ) }}" >
-              @csrf
-              <input type="hidden" name="step" value="1" >
-              <input type="hidden" name="universe_id" value="{{ $book->universe->id }}" >
-              <button class="{{ $step == 1 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 1 - Book Info</button>
-            </form>
-            
-          </div>
-        </li>
-        
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="{{ $step == 2 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <form method="GET" action="{{ route('books.edit', [$book->universe->id, $book->id]) }}" >
-              @csrf
-              <input type="hidden" name="step" value="2" >
-              <input type="hidden" name="universe_id" value="{{ $book->universe->id }}" >
-              <button class="{{ $step == 2 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 2 - Book Cover</button>
-            </form>
-          </div>
-        </li>
-        <li class="flex">
-          <div class="flex items-center">
-            <svg class="{{ $step == 4 ? 'h-full w-6 flex-shrink-0 text-red-700' : 'h-full w-6 flex-shrink-0 text-gray-700' }}" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
-              <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
-            </svg>
-            <form method="GET" action="{{ route('books.index', $book->universe->id) }}" >
-              @csrf
-              <input type="hidden" name="step" value="4" >
-              <input type="hidden" name="universe_id" value="{{ $book->universe->id }}" >
-              <button class="{{ $step == 4 ? 'ml-4 text-lg font-medium text-red-700 hover:text-red-400' : 'ml-4 text-sm font-medium text-gray-500 hover:text-gray-700'}}" aria-current="page">Step 4 - Submit</button>
-            </form>
-          </div>
-        </li>
-      </ol>
-    </nav>
+                @if($step !== 1)
+                    <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm lg:p-8">
+                        @include('components.universe.books.book-uploader.book-form-step-'.$step)
+                    </div>
+                @else
+                    <form method="POST" action="{{ route('books.store', $book->universe->id) }}" class="space-y-8">
+                        @csrf
+                        <input type="hidden" name="step" value="1">
+                        <input type="hidden" name="universe_id" value="{{ $book->universe->id }}">
+                        <input type="hidden" name="book_id" value="{{ $book->id ?? null}}">
 
-</div>
+                        @if ($errors->any())
+                            <div class="rounded-3xl border border-red-200 bg-red-50 p-6 shadow-sm">
+                                <div class="flex gap-4">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-red-100 text-red-700">
+                                        !
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-black text-red-900">Please fix the following before continuing:</h3>
+                                        <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-red-700">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
-<div class="bg-gray-200 bg-opacity-25  gap-6 lg:gap-4 p-6 lg:p-8">
-<!--
-This example requires some changes to your config:
+                        <div class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+                            <div class="border-b border-gray-100 p-6 sm:p-8">
+                                <p class="text-xs font-black uppercase tracking-[0.3em] text-indigo-600">Step 1</p>
+                                <h2 class="mt-3 text-2xl font-black tracking-tight text-gray-950">Book Information</h2>
+                                <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
+                                    This information will be shown publicly on your Enterblaze storefront and story pages.
+                                </p>
+                            </div>
 
-```
-// tailwind.config.js
-module.exports = {
-// ...
-plugins: [
-  // ...
-  require('@tailwindcss/forms'),
-],
-}
-```
--->
-@if($step > 1)
+                            <div class="grid grid-cols-1 gap-8 p-6 sm:p-8 lg:grid-cols-3">
+                                <div class="lg:col-span-2">
+                                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                        <div class="sm:col-span-2">
+                                            <label for="book_title" class="block text-sm font-bold text-gray-900">Book Title</label>
+                                            <input type="text" name="book_title" value="{{ $book->book_title ?? null}}" id="book_title" autocomplete="book_title" placeholder="Example: Reiden Tapped In" class="mt-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        </div>
 
-@include('components.universe.books.book-uploader.book-form-step-'.$step)
+                                        <div class="sm:col-span-2">
+                                            <label for="book_subtitle" class="block text-sm font-bold text-gray-900">Subtitle</label>
+                                            <input type="text" name="book_subtitle" value="{{ $book->book_subtitle ?? null}}" id="book_subtitle" autocomplete="book_subtitle" placeholder="A short hook for this book" class="mt-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        </div>
 
-@else
-<form method="POST" action="{{ route('books.store', $book->universe->id) }}" >
-@csrf
-<input type="hidden" name="step" value="1" >
-<input type="hidden" name="universe_id" value="{{ $book->universe->id }}" >
-@if(isset($book->id))
-<input type="hidden" name="book_id" value="{{ $book->id }}" >
-@endif
-<div class="">
-  @if ($errors->any())
-      <div class="alert alert-danger">
-          <ul>
-              @foreach ($errors->all() as $error)
-                  <li><strong>*{{ $error }}</strong></li>
-              @endforeach
-          </ul>
-      </div>
-  @endif
-  <br>
-  <div class="border-b border-gray-900/10 pb-12">
+                                        <div>
+                                            <label for="book_creator" class="block text-sm font-bold text-gray-900">Creator</label>
+                                            <input type="text" value="{{ $book->book_creator ?? null}}" name="book_creator" id="book_creator" autocomplete="book_creator" placeholder="Creator name" class="mt-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        </div>
 
-    <h2 class="text-base font-semibold leading-7 text-gray-900">Publish Your Book</h2>
-    <p class="mt-1 text-sm leading-6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
+                                        <div>
+                                            <label for="book_published_at" class="block text-sm font-bold text-gray-900">Publication Date</label>
+                                            <input type="date" name="book_published_at" value="{{ $book->book_published_at ?? null}}" id="book_published_at" autocomplete="book_published_at" class="mt-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        </div>
 
-    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-      <div class="sm:col-span-4">
-        <label for="book_title" class="block text-sm font-medium leading-6 text-gray-900">Book Title</label>
-        <div class="mt-2">
-          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-            <input type="text" name="book_title" id="book_title" value="{{ $book->book_title }}" autocomplete="book_title" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
-          </div>
-        </div>
-      </div>
-      <div class="sm:col-span-4">
-        <label for="book_subtitle" class="block text-sm font-medium leading-6 text-gray-900">Subtitle</label>
-        <div class="mt-2">
-          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-            <input type="text" name="book_subtitle" id="book_subtitle" autocomplete="book_subtitle" value="{{ $book->book_subtitle }}" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
-          </div>
-        </div>
-      </div>
+                                        <div class="sm:col-span-2">
+                                            <label for="book_description" class="block text-sm font-bold text-gray-900">Story Synopsis</label>
+                                            <textarea id="book_description" value="{{ $book->book_description ?? null}}" name="book_description" rows="7" placeholder="Write a few sentences that introduce the world, conflict, and why readers should care." class="mt-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ $book->book_description ?? null}}</textarea>
+                                            <p class="mt-2 text-xs text-gray-500">Keep it strong, clear, and exciting. This is your reader-facing pitch.</p>
+                                        </div>
+                                    </div>
+                                </div>
 
-      <div class="sm:col-span-4">
-        <label for="book_price" class="block text-sm font-medium leading-6 text-gray-900">Book Reservation Price  <p class="mt-1 text-sm leading-6 text-gray-400">Set future Price for your book once it drops.</p></label>
-        <div class="mt-2">
-          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-            <input type="number" name="book_price" id="book_price" autocomplete="book_price" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" min="5.00" placeholder="25.00">
-          </div>
-        </div>
-      </div>
+                                <div class="space-y-6">
+                                    <div class="rounded-3xl border border-gray-200 bg-gray-50 p-6">
+                                        <h3 class="text-sm font-black text-gray-950">Publishing Settings</h3>
+                                        <p class="mt-1 text-xs leading-5 text-gray-500">Classify this book so it appears correctly across your platform.</p>
 
-      <div class="sm:col-span-4">
-        <label for="book_creator" class="block text-sm font-medium leading-6 text-gray-900">Creator</label>
-        <div class="mt-2">
-          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-            <input type="text" name="book_creator" id="book_creator" value="{{ $book->book_creator }}"autocomplete="book_creator" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
-          </div>
-        </div>
-      </div>
+                                        <div class="mt-6 space-y-5">
+                                            <div>
+                                                <label for="book_type" class="block text-sm font-bold text-gray-900">Book Type</label>
+                                                <select id="book_type" name="book_type" autocomplete="book_type" class="mt-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                                @foreach(['Manga', 'Web Comic', 'Comic Book'] as $b)
+                                                   @if($b == $book->book_type)
+                                                    <option selected>{{$b}}</option>
+                                                   @else
+                                                   <option>{{$b}}</option>
+                                                   @endif
+                                                   @endforeach
+                                                </select>
+                                            </div>
 
-      <div class="sm:col-span-4">
-        <label for="book_published_at" class="block text-sm font-medium leading-6 text-gray-900">Publication Date</label>
-        <div class="mt-2">
-          <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-            <input type="date" name="book_published_at" id="book_published_at" value="{{ $book->book_published_at }}" autocomplete="book_published_at" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith">
-          </div>
-        </div>
-      </div>
+                                            <div>
+                                                <label for="book_audience" class="block text-sm font-bold text-gray-900">Audience</label>
+                                                <select id="book_audience" name="book_audience" autocomplete="book_audience" class="mt-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                                @foreach(['Teens', 'Mature Audience', 'Adults Only'] as $b)
+                                                   @if($b == $book->book_audience)
+                                                    <option selected>{{$b}}</option>
+                                                   @else
+                                                   <option>{{$b}}</option>
+                                                   @endif
+                                                   @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="relative">
+                                                <label for="book_audience" class="block text-sm font-bold text-gray-900">Book Price</label>
+                                                <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm font-bold text-gray-400">$</span>
+                                                <input
+                                                    type="number"
+                                                    name="book_price"
+                                                    id="book_price"
+                                                    autocomplete="book_price"
+                                                    min="5.00"
+                                                    step="0.01"
+                                                    value="{{ $book->book_price ?? '' }}"
+                                                    class="block w-full rounded-2xl border-0 bg-white py-3 pl-8 pr-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                                                    placeholder="25.00"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
 
-      <div class="">
-        <label for="book_type" class="block text-sm font-medium leading-6 text-gray-900">Book Type</label>
-        <div class="mt-2">
-          <select id="book_type" name="book_type" autocomplete="book_type" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-            <option>Web Comic</option>
-            <option>Manga</option>
-          </select>
-        </div>
-      </div>
+                                    <div class="rounded-3xl border border-indigo-100 bg-indigo-50 p-6">
+                                        <p class="text-xs font-black uppercase tracking-[0.25em] text-indigo-600">Creator Tip</p>
+                                        <p class="mt-3 text-sm leading-6 text-indigo-950">
+                                            A strong title, subtitle, and synopsis will make your story easier to promote across Enterblaze, events, cards, and future reader campaigns.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-      
+                        <div class="flex flex-col-reverse gap-3 rounded-3xl border border-gray-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+                            <a href="{{ url()->previous() }}" class="inline-flex items-center justify-center rounded-2xl border border-gray-300 bg-white px-5 py-3 text-sm font-black text-gray-700 shadow-sm hover:bg-gray-50">
+                                Cancel
+                            </a>
 
-      <div class="">
-        <label for="book_audience" class="block text-sm font-medium leading-6 text-gray-900">Audience</label>
-        <div class="mt-2">
-          <select id="book_audience" name="book_audience" autocomplete="book_audience" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-            <option>Teens</option>
-            <option>Mature Audience</option>
-            <option>Adults Only</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="col-span-full">
-        <label for="book_description" class="block text-sm font-medium leading-6 text-gray-900">Book Summary</label>
-        <div class="mt-2">
-          <textarea id="book_description" name="book_description"  rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">{{ $book->book_description }}</textarea>
-        </div>
-        <p class="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about your universe.</p>
-      </div>
-
-      <!-- <div class="col-span-full">
-        <label for="photo" class="block text-sm font-medium leading-6 text-gray-900">Universe Photo</label>
-        <div class="mt-2 flex items-center gap-x-3">
-          <svg class="h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
-          </svg>
-          <button type="button" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Change</button>
-        </div>
-      </div> -->
-    </div>
-  </div>
-
-    
-
-  
-
-      
-</div>
-
-<div class="mt-6 flex items-center justify-end gap-x-6">
-  <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
-  <button type="submit" name="type" value ="{{ Route::is('books.edit') ? 'edit' : '' }}" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
-</div>
-
-</form>
-@endif
-
-
-</div>
-              
+                            <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-black text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                Save & Continue
+                                <span class="ml-2">→</span>
+                            </button>
+                        </div>
+                    </form>
+                @endif
             </div>
         </div>
     </div>

@@ -1,122 +1,280 @@
-<div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-    <x-application-logo class="block h-12 w-auto" />
+<div class="min-h-screen bg-gray-50">
+    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 
-</div>
-<div class="px-4 sm:px-6 lg:px-8">
-<form type="button" action="{{ route('events.registrations.create', $event->id) }}" method="GET" class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                  @csrf
-                  <input type="hidden" name="event_id" value="{{ $event->id }}">
-                  <button type="submit">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6" />
-                      </svg>
-                      
-                      
-                      <span class="mt-2 block text-sm font-semibold text-gray-900">Create a new Registration</span>
-                  </button>
-                </form>
-  <div class="relative bg-white">
-    <img class="h-56 w-full bg-gray-50 object-cover lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-1/2" src="{{ Storage::disk('s3-public')->url($event->event_promo_image) }}" alt="">
-    <div class="mx-auto grid max-w-7xl lg:grid-cols-2">
-      <div class="px-6 pb-24 pt-16 sm:pb-32 sm:pt-20 lg:col-start-2 lg:px-8 lg:pt-32">
-        <div class="mx-auto max-w-2xl lg:mr-0 lg:max-w-lg">
-          <h2 class="text-base font-semibold leading-8 text-indigo-600">{{ $event->event_start_date }} - {{ $event->event_end_date }}</h2>
-          <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{{ $event->event_name }}</p>
-          <p class="mt-6 text-lg leading-8 text-gray-600">{{ $event->event_about }}.</p>
-          <dl class="mt-16 grid max-w-xl grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 xl:mt-16">
-            <div class="flex flex-col gap-y-3 border-l border-gray-900/10 pl-6">
-              <dt class="text-sm leading-6 text-gray-600">Registered Guests</dt>
-              <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900">{{ $event->registered }}</dd>
+        {{-- Top Header --}}
+        <div class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+            <div class="border-b border-gray-100 px-6 py-5 sm:px-8">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <x-application-logo class="block h-11 w-auto" />
+
+                        <div>
+                            <p class="text-xs font-black uppercase tracking-[0.3em] text-indigo-600">
+                                Enterblaze Events
+                            </p>
+                            <h1 class="mt-1 text-2xl font-black tracking-tight text-gray-950">
+                                Event Overview
+                            </h1>
+                        </div>
+                    </div>
+
+                    <a
+                        href="{{ route('events.index') }}"
+                        class="hidden rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm font-bold text-gray-700 shadow-sm transition hover:bg-gray-50 sm:inline-flex"
+                    >
+                        Back to Events
+                    </a>
+                </div>
             </div>
 
-            <!-- <div class="flex flex-col gap-y-3 border-l border-gray-900/10 pl-6">
-              <dt class="text-sm leading-6 text-gray-600">Registered Vendors</dt>
-              <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900">99.9%</dd>
-            </div> -->
-            <div class="flex flex-col gap-y-3 border-l border-gray-900/10 pl-6">
-              <dt class="text-sm leading-6 text-gray-600">Total Revenue</dt>
-              <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900">${{ $event->revenue }}</dd>
+            {{-- Event Hero --}}
+            <div class="grid gap-0 lg:grid-cols-2">
+                <div class="relative min-h-[280px] bg-gray-100">
+                    @if(!empty($event->event_promo_image))
+                        <img
+                            class="absolute inset-0 h-full w-full object-cover"
+                            src="{{ Storage::disk('s3-public')->url($event->event_promo_image) }}"
+                            alt="{{ $event->event_name ?? 'Event promo image' }}"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-950/70 via-gray-950/20 to-transparent"></div>
+                    @else
+                        <div class="flex h-full min-h-[280px] items-center justify-center bg-gradient-to-br from-indigo-50 to-gray-100">
+                            <div class="text-center">
+                                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-white text-indigo-600 shadow-sm ring-1 ring-gray-200">
+                                    <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3.75 8.25h16.5M4.5 6.75h15A1.5 1.5 0 0 1 21 8.25v10.5A1.5 1.5 0 0 1 19.5 20.25h-15A1.5 1.5 0 0 1 3 18.75V8.25A1.5 1.5 0 0 1 4.5 6.75Z" />
+                                    </svg>
+                                </div>
+                                <p class="mt-4 text-sm font-bold text-gray-500">No promo image uploaded</p>
+                            </div>
+                        </div>
+                    @endif
+
+                    <div class="absolute bottom-5 left-5">
+                        @if($event->is_active ?? false)
+                            <span class="inline-flex rounded-full bg-green-100 px-4 py-2 text-xs font-black uppercase tracking-widest text-green-700 ring-1 ring-green-200">
+                                Published
+                            </span>
+                        @else
+                            <span class="inline-flex rounded-full bg-orange-100 px-4 py-2 text-xs font-black uppercase tracking-widest text-orange-700 ring-1 ring-orange-200">
+                                Draft
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
+                    <p class="text-sm font-black uppercase tracking-[0.25em] text-indigo-600">
+                        {{ $event->event_start_date ?? 'Start Date' }}
+                        @if(!empty($event->event_end_date))
+                            <span class="text-gray-300">/</span> {{ $event->event_end_date }}
+                        @endif
+                    </p>
+
+                    <h2 class="mt-4 text-3xl font-black tracking-tight text-gray-950 sm:text-4xl">
+                        {{ $event->event_name ?? 'Untitled Event' }}
+                    </h2>
+
+                    @if(!empty($event->subtitle))
+                        <p class="mt-3 text-base font-semibold text-gray-600">
+                            {{ $event->subtitle }}
+                        </p>
+                    @endif
+
+                    @if(!empty($event->event_about))
+                        <p class="mt-5 line-clamp-5 text-sm leading-7 text-gray-500">
+                            {{ $event->event_about }}
+                        </p>
+                    @endif
+
+                    <div class="mt-8 grid gap-4 sm:grid-cols-2">
+                        <div class="rounded-3xl border border-gray-200 bg-gray-50 p-5">
+                            <p class="text-xs font-black uppercase tracking-widest text-gray-400">Registered Guests</p>
+                            <p class="mt-2 text-3xl font-black text-gray-950">{{ $event->registered ?? 0 }}</p>
+                        </div>
+
+                        <div class="rounded-3xl border border-gray-200 bg-gray-50 p-5">
+                            <p class="text-xs font-black uppercase tracking-widest text-gray-400">Total Revenue</p>
+                            <p class="mt-2 text-3xl font-black text-gray-950">${{ $event->revenue ?? 0 }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </dl>
         </div>
-      </div>
+
+        {{-- Registration CTA --}}
+        <form
+            action="{{ route('events.registrations.create', $event->id) }}"
+            method="GET"
+            class="mt-8"
+        >
+            @csrf
+            <input type="hidden" name="event_id" value="{{ $event->id }}">
+
+            <button
+                type="submit"
+                class="group block w-full rounded-3xl border-2 border-dashed border-gray-300 bg-white p-10 text-center shadow-sm transition hover:border-indigo-400 hover:bg-indigo-50"
+            >
+                <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-700 transition group-hover:bg-indigo-600 group-hover:text-white">
+                    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                    </svg>
+                </span>
+
+                <span class="mt-4 block text-lg font-black text-gray-950">
+                    Create a New Registration
+                </span>
+
+                <span class="mt-2 block text-sm text-gray-500">
+                    Add tickets, vendor passes, guest registrations, or event access types.
+                </span>
+            </button>
+        </form>
+
+        {{-- Registrations --}}
+        <div class="mt-8 rounded-3xl border border-gray-200 bg-white shadow-sm">
+            <div class="border-b border-gray-100 px-6 py-5 sm:px-8">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-[0.3em] text-indigo-600">
+                            Registration Library
+                        </p>
+                        <h3 class="mt-2 text-2xl font-black tracking-tight text-gray-950">
+                            Event Registrations
+                        </h3>
+                    </div>
+
+                    <p class="text-sm font-bold text-gray-500">
+                        {{ isset($event->registrations) ? $event->registrations->count() : 0 }} total
+                    </p>
+                </div>
+            </div>
+
+            @if(isset($event->registrations) && $event->registrations->count())
+                <div class="grid gap-5 p-6 sm:p-8 lg:grid-cols-2">
+                    @foreach($event->registrations as $registration)
+                        <div class="rounded-3xl border border-gray-200 bg-gray-50 p-5 transition hover:-translate-y-1 hover:bg-white hover:shadow-md">
+                            <div class="flex items-start justify-between gap-4">
+                                <div>
+                                    <p class="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
+                                        Registration #{{ $registration->id }}
+                                    </p>
+
+                                    <h4 class="mt-2 text-xl font-black text-gray-950">
+                                        {{ $registration->registration_name }}
+                                    </h4>
+
+                                    <p class="mt-2 text-sm font-semibold text-gray-500">
+                                        {{ $registration->registration_type }}
+                                    </p>
+                                </div>
+
+                                @if($registration->registration_is_active)
+                                    <span class="rounded-full bg-green-100 px-3 py-1 text-xs font-black uppercase tracking-widest text-green-700">
+                                        Published
+                                    </span>
+                                @else
+                                    <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-black uppercase tracking-widest text-orange-700">
+                                        Draft
+                                    </span>
+                                @endif
+                            </div>
+
+                            <div class="mt-5 rounded-2xl border border-gray-200 bg-white p-4">
+                                <p class="text-xs font-black uppercase tracking-widest text-gray-400">Registration Window</p>
+                                <p class="mt-1 text-sm font-bold text-gray-900">
+                                    {{ $registration->registration_start_date ?? 'No start date' }}
+                                    @if(!empty($registration->registration_end_date))
+                                        - {{ $registration->registration_end_date }}
+                                    @endif
+                                </p>
+                            </div>
+
+                            <div class="mt-5 grid gap-3 sm:grid-cols-4">
+                                @if($registration->registration_is_active)
+                                    <button
+                                        id="unpublish{{ $registration->id }}"
+                                        onclick="publishAction('unpublish', '{{ $registration->id }}', '{{ $event->id }}')"
+                                        type="button"
+                                        class="rounded-2xl bg-yellow-100 px-4 py-3 text-sm font-black text-yellow-800 transition hover:bg-yellow-200"
+                                    >
+                                        Unpublish
+                                    </button>
+                                @else
+                                    <button
+                                        id="publish{{ $registration->id }}"
+                                        onclick="publishAction('publish', '{{ $registration->id }}', '{{ $event->id }}')"
+                                        type="button"
+                                        class="rounded-2xl bg-green-100 px-4 py-3 text-sm font-black text-green-800 transition hover:bg-green-200"
+                                    >
+                                        Publish
+                                    </button>
+                                @endif
+
+                                <form action="{{ route('events.registrations.edit', ['event_id' => $event->id, 'registration_id' => $registration->id]) }}" method="GET">
+                                    <input type="hidden" id="registration_id{{ $registration->id }}" name="registration_id" value="{{ $registration->id }}">
+
+                                    <button
+                                        type="submit"
+                                        class="w-full rounded-2xl bg-indigo-50 px-4 py-3 text-sm font-black text-indigo-700 transition hover:bg-indigo-100"
+                                    >
+                                        Edit
+                                    </button>
+                                </form>
+
+                                <a
+                                    href="{{ route('events.registrations.show', ['event_id' => $event->id, 'registration_id' => $registration->id, 'event_registration_id' => $registration->id]) }}"
+                                    class="rounded-2xl bg-white px-4 py-3 text-center text-sm font-black text-gray-800 ring-1 ring-gray-200 transition hover:bg-gray-100"
+                                >
+                                    View
+                                </a>
+
+                                <button
+                                    onclick="confirmDelete('{{ $registration->id }}', '{{ $event->id }}')"
+                                    type="button"
+                                    class="rounded-2xl bg-red-50 px-4 py-3 text-sm font-black text-red-700 transition hover:bg-red-100"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="p-8">
+                    <div class="rounded-3xl border border-dashed border-gray-300 bg-gray-50 p-12 text-center">
+                        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-gray-500 shadow-sm ring-1 ring-gray-200">
+                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.25a8.25 8.25 0 1 1 15 0v.75H4.5v-.75Z" />
+                            </svg>
+                        </div>
+
+                        <h3 class="mt-5 text-xl font-black text-gray-950">
+                            No Registrations Yet
+                        </h3>
+
+                        <p class="mt-2 text-sm text-gray-500">
+                            Create your first registration option for this event.
+                        </p>
+
+                        <form
+                            action="{{ route('events.registrations.create', $event->id) }}"
+                            method="GET"
+                            class="mt-6"
+                        >
+                            @csrf
+                            <input type="hidden" name="event_id" value="{{ $event->id }}">
+
+                            <button
+                                type="submit"
+                                class="inline-flex rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-black text-white shadow-sm transition hover:bg-indigo-700"
+                            >
+                                Create Registration
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @endif
+        </div>
     </div>
 </div>
-    <!-- <div class="sm:flex sm:items-center">
-      <div class="sm:flex-auto">
-        <h1 class="text-base font-semibold leading-6 text-gray-900">Users</h1>
-        <p class="mt-2 text-sm text-gray-700">A list of all the users in your account including their name, title, email and role.</p>
-      </div>
-      <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-        <button type="button" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add user</button>
-      </div>
-    </div> -->
-    <div class="mt-8 flow-root w-full overflow-x-auto">
-      <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            @if(isset ($event->registrations) && !empty($event->registrations->toArray()))
-            <table class="min-w-full divide-y divide-gray-300">
-                <thead>
-                  <tr>
-                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Registration Name</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Date</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Type</th>
-                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
-                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                      <span class="sr-only">Edit</span>
-                    </th>
-                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                      <span class="sr-only">Delete</span>
-                    </th>
-                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                      <span class="sr-only">View</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                  @foreach($event->registrations as $registration)
-                    <tr>
-                      <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{{ $registration->registration_name }}</td>
-                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $registration->registration_start_date }} - {{ $registration->registration_end_date }}</td>
-                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $registration->registration_type }}</td>
-                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <input type="hidden" id="{{ $registration->id }}" value="{{ $registration->id }}">
-                          @if($registration->registration_is_active)
-                              <button id="unpublish{{ $registration->id }}" onclick="publishAction('unpublish', '{{ $registration->id }}', '{{ $event->id }}')" class="block w-full rounded-md bg-green-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" aria-current="page">
-
-                                      <span>Published</span>
-                                      <p class="text-xs">Click to unpublish</p>
-                              
-                              </button>
-                          @else
-                              <button id="publish{{ $registration->id }}" onclick="publishAction('publish', '{{ $registration->id }}', '{{ $event->id }}')"class="block w-full rounded-md bg-orange-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" aria-current="page">
-                                  <span>Un-published</span>
-                                  <p class="text-xs">Click to publish</p>
-                          
-                              </button>
-                          @endif
-                      </td>
-                      <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                        <form action="{{ route('events.registrations.edit', ['event_id' => $event->id, 'registration_id' => $registration->id]) }}" method="GET">
-                            <input type="hidden" id ="registration_id{{ $registration->id }}" name="registration_id" value="{{ $registration->id }}">
-                            <button class="text-green-600 hover:text-green-900">Edit<span class="sr-only">, Lindsay Walton</span></button>
-                        </form>
-                      </td>
-                      <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                        <button onclick="confirmDelete('{{ $registration->id }}', '{{ $event->id }}')" class="text-red-600 hover:text-red-900">Delete<span class="sr-only">, Lindsay Walton</span></button>
-                      </td>
-                      <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                        <a href="{{ route('events.registrations.show', ['event_id' => $event->id, 'registration_id' => $registration->id, 'event_registration_id' => $registration->id]) }}" class="text-indigo-600 hover:text-indigo-900">View<span class="sr-only">, Lindsay Walton</span></a>
-                      </td>
-                    </tr>
-                  @endforeach
-
-                  <!-- More people... -->
-                </tbody>
-              </table>
-            @else
-              <h1>No Registrations</h1>
-            @endif
-          </div>
-      </div>
-    </div>

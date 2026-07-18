@@ -44,6 +44,7 @@ Route::middleware([
         Route::post('/universe/{universe_id}/books/{book_id}/publish', 'App\Http\Controllers\BookController@publish')->name('books.publish');
         Route::post('/universe/{universe_id}/books/{book_id}/delete', 'App\Http\Controllers\BookController@destroy')->name('books.delete');
         Route::post('/universe/{universe_id}/books/store', 'App\Http\Controllers\BookController@store')->name('books.store');
+        
     //Issues
         Route::get('/universe/{universe_id}/books/{book_id}/issues', 'App\Http\Controllers\IssuesController@index')->name('issues.index');
         Route::get('/universe/{universe_id}/books/{book_id}/issues/create', 'App\Http\Controllers\IssuesController@create')->name('issues.create');
@@ -63,6 +64,52 @@ Route::middleware([
     Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/addPage', 'App\Http\Controllers\IssuePagesController@addPage')->name('issue_pages.addPage');
     Route::get('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/organizePages', 'App\Http\Controllers\IssuePagesController@organizePages')->name('issue_pages.organizePages');
     Route::post('/universe/{universe_id}/books/{book_id}/issues/{issue_id}/StoreOrganizedPages', 'App\Http\Controllers\IssuePagesController@StoreOrganizedPages')->name('issue_pages.StoreOrganizedPages');
+
+      //Card Series
+      Route::get('/universe/{universe_id}/card-series', 'App\Http\Controllers\CardSeriesController@index')->name('card-series.index');
+      Route::get('/universe/{universe_id}/card-series/create', 'App\Http\Controllers\CardSeriesController@create')->name('card-series.create');
+      Route::get('/universe/{universe_id}/card-series/{card_series_id}/edit', 'App\Http\Controllers\CardSeriesController@edit')->name('card-series.edit');
+      Route::post('/universe/{universe_id}/card-series/{card_series_id}/update', 'App\Http\Controllers\CardSeriesController@update')->name('card-series.update');
+      Route::get('/universe/{universe_id}/card-series/{card_series_id}/show', 'App\Http\Controllers\CardSeriesController@show')->name('card-series.show');
+      Route::post('/universe/{universe_id}/card-series/{card_series_id}/publish', 'App\Http\Controllers\CardSeriesController@publish')->name('card-series.publish');
+      Route::post('/universe/{universe_id}/card-series/{card_series_id}/delete', 'App\Http\Controllers\CardSeriesController@destroy')->name('card-series.delete');
+      Route::post('/universe/{universe_id}/card-series/store', 'App\Http\Controllers\CardSeriesController@store')->name('card-series.store');
+      Route::post('/universe/{universe_id}/card-series/{card_series_id}/finish', 'App\Http\Controllers\CardSeriesController@finish')->name('card-series.finish');
+
+            //Card 
+        Route::get('/universe/{universe_id}/card-series/{card_series_id}/cards/index', 'App\Http\Controllers\CardController@index')->name('cards.index');
+        Route::get('/universe/{universe_id}/card-series/{card_series_id}/cards/create', 'App\Http\Controllers\CardController@update')->name('cards.create');
+        Route::get('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/edit', 'App\Http\Controllers\CardController@edit')->name('cards.edit');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/updateCardTier', 'App\Http\Controllers\CardController@updateCardTier')->name('cards.updateCardTier');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/updateCardSkill', 'App\Http\Controllers\CardController@updateCardSkill')->name('cards.updateCardSkill');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/updateCardLocation', 'App\Http\Controllers\CardController@updateCardLocation')->name('cards.updateCardLocation');
+        Route::get('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/show', 'App\Http\Controllers\CardController@show')->name('cards.show');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/publish', 'App\Http\Controllers\CardController@publish')->name('cards.publish');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/delete', 'App\Http\Controllers\CardController@destroy')->name('cards.delete');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/store', 'App\Http\Controllers\CardController@store')->name('cards.store');
+        Route::post('/universe/{universe_id}/card-series/{card_series_id}/cards/{card_id}/finish', 'App\Http\Controllers\CardController@finish')->name('cards.finish');
+
+
+      //Webisodes
+      Route::get('/universe/{universe_id}/webisodes', 'App\Http\Controllers\WebisodesController@index')->name('webisodes.index');
+      Route::get('/universe/{universe_id}/webisodes/create', 'App\Http\Controllers\WebisodesController@create')->name('webisodes.create');
+      Route::get('/universe/{universe_id}/webisodes/{webisode_id}/edit', 'App\Http\Controllers\WebisodesController@edit')->name('webisodes.edit');
+      Route::post('/universe/{universe_id}/webisodes/update', 'App\Http\Controllers\WebisodesController@update')->name('webisodes.update');
+      Route::get('/universe/{universe_id}/webisodes/{webisode_id}/show', 'App\Http\Controllers\WebisodesController@show')->name('webisodes.show');
+      Route::post('/universe/{universe_id}/webisodes/{webisode_id}/publish', 'App\Http\Controllers\WebisodesController@publish')->name('webisodes.publish');
+      Route::post('/universe/{universe_id}/webisodes/{webisode_id}/delete', 'App\Http\Controllers\WebisodesController@destroy')->name('webisodes.delete');
+      Route::post('/universe/{universe_id}/webisodes/store', 'App\Http\Controllers\WebisodesController@store')->name('webisodes.store');
+      
+      Route::post('/universe/{universe_id}/webisodes/{webisode_id}/finish', 'App\Http\Controllers\WebisodesController@finish')->name('webisodes.finish');
+
+            //Webisode Videos
+            Route::get('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos', 'App\Http\Controllers\WebisodeVideosController@index')->name('webisode-videos.index');
+            Route::get('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/create', 'App\Http\Controllers\WebisodeVideosController@create')->name('webisode-videos.create');
+            Route::post('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/{webisode_video_id}/update', 'App\Http\Controllers\WebisodeVideosController@update')->name('webisode-videos.update');
+            Route::get('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/{webisode_video_id}/edit', 'App\Http\Controllers\WebisodeVideosController@edit')->name('webisode-videos.edit');
+            Route::get('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/{webisode_video_id}/show', 'App\Http\Controllers\WebisodeVideosController@show')->name('webisode-videos.show');
+            Route::post('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/{webisode_video_id}/delete', 'App\Http\Controllers\WebisodeVideosController@destroy')->name('webisode-videos.delete');
+            Route::post('/universe/{universe_id}/webisodes/{webisode_id}/store', 'App\Http\Controllers\WebisodeVideosController@store')->name('webisode-videos.store');
 
         //Uploader
             Route::get('/uploader', 'App\Http\Controllers\BookController@index')->name('admin.uploader');
@@ -107,4 +154,17 @@ Route::middleware([
     Route::post('/tokens/tiers/{token_tier_id}/delete', 'App\Http\Controllers\BlazeTokensController@destroy')->name('tokens.tiers.delete');
     Route::post('/tokens/tiers/{token_tier_id}/publish', 'App\Http\Controllers\BlazeTokensController@publish')->name('tokens.tiers.publish');
 
+    //Livestream
+    Route::middleware('frontend.api')->get(
+        '/public/livestream/current','App\Http\Controllers\Api\EventLivestreamsController@current')->name('event.livestream');
+
 });
+// Route::get('/twitch-test', function () {  TTHIS ROUTE IS FUNCTIONING PROPERLY. TESTING IN VALET/DEV IS NOT POSSIBLE. MUST TEST LIVE EVENT ON STAGING
+//     return '
+//     <iframe
+//         src="https://player.twitch.tv/?channel=quandadon_mangaka&parent=localhost"
+//         width="900"
+//         height="600"
+//         allowfullscreen>
+//     </iframe>';
+// });

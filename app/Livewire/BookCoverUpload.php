@@ -16,15 +16,21 @@ class BookCoverUpload extends Component
     public $book_id;
     public $logo;
     public $type;
+    public $current;
 
-    public function mount($universe_id, $book_id, $logo, $type)
+    public function mount($universe_id, $book_id, $current = null,$logo, $type)
     {
         $this->universe_id = $universe_id;
         $this->book_id = $book_id;
         $this->logo = $logo;
         $this->type = $type;
+        $this->current = $current;
  
     }
+
+    protected $rules = [
+        'photo' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+    ];
 
     public function saveBookCover()
     {

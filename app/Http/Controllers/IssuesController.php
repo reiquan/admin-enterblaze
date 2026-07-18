@@ -253,23 +253,23 @@ class IssuesController extends Controller
         $issue= Issue::find($request->issue_id);
         if($issue){
              // Delete file from S3
-            if (Storage::disk('s3-public')->exists($issue->issue_image_cover)) {
+            if($issue->issue_image_cover){
                 Storage::disk('s3-public')->delete($issue->issue_image_cover);
-                if($issue->pages) {
-                    foreach($issue->pages as $page){
-                        if (Storage::disk('s3-public')->exists($page->issue_page_url)) {
-                            Storage::disk('s3-public')->delete($page->issue_page_url);
-                            $page->delete();
-                        }
+            }
+               
+            if($issue->pages) {
+                foreach($issue->pages as $page){
+                    if (Storage::disk('s3-public')->exists($page->issue_page_url)) {
+                        Storage::disk('s3-public')->delete($page->issue_page_url);
+                        $page->delete();
                     }
                 }
+            }
 
                 $issue->delete();
                
                 return response()->json(['success' => 'File deleted successfully.']);
-            } else {
-                return response()->json(['Error' => 'File Not Found']);
-            }
+
             //
         }
     }

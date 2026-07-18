@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthApiController;
 use App\Http\Controllers\API\ApiController;
+use App\Http\Controllers\API\EventLivestreamsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,9 @@ Route::middleware('auth:sanctum')->get('user', function (Request $request) {
 Route::post('loginSubscriber', [AuthApiController::class, 'loginSubscriber']);
 Route::post('registerSubscriber', [AuthApiController::class, 'registerSubscriber']);
 Route::get('getUniverses', [ApiController::class, 'getUniverses']);
+Route::get('getCards', [ApiController::class, 'getCards']);
+Route::get('getWebisodes', [ApiController::class, 'getWebisodes']);
+Route::get('getWebisodeVideo', [ApiController::class, 'getWebisodeVideo']);
 Route::get('getBooks', [ApiController::class, 'getBooks']);
 Route::post('logoutSubscriber', [AuthApiController::class, 'logoutSubscriber']);
 Route::get('getChapters', [ApiController::class, 'getChapters']);
@@ -33,8 +37,12 @@ Route::post('submitOpenRegistrationAttendance', [ApiController::class, 'submitOp
 Route::post('submitReservation', [ApiController::class, 'submitReservation']);
 Route::get('getBlazeTokenTiers', [ApiController::class, 'getBlazeTokenTiers']);
 Route::get('checkRegistrationLimit', [ApiController::class, 'checkRegistrationLimit']);
+
+//Livestream
+Route::get('/public/livestream/current', [EventLivestreamsController::class, 'current']);
 // Protected routes
 Route::middleware(['auth:sanctum', 'checkTokenExpiration'])->group(function () {
     // Route::get('/profile', 'UserProfileController@show');
 
 });
+

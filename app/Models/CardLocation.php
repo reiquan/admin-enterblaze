@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class CardLocation extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $table = 'card_locations';
+
+    protected $fillable = [
+        'card_location_name',
+        'card_location_universe_id',
+        'card_location_environment',
+        'card_location_region',
+        'card_location_bonuses',
+
+    ];
+
+    
+   
+    protected $dates = ['deleted_at'];
+
+     /**
+     * Get the user's first name.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function universe()
+    {
+        return $this->belongsTo(Universe::Class, 'card_location_universe_id');
+    }
+
+    public function cards()
+    {
+        return $this->hasMany(Card::class, 'card_location_id', 'id');
+    }
+
+}

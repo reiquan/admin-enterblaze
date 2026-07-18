@@ -1,12 +1,13 @@
 <div>
     <form wire:submit.prevent="saveBookCover">
 
-         @if ($photo)
-         
-           Photo Preview:
-            <img src="{{ $photo->temporaryUrl() }}">
-         
-        @endif
+    @if ($photo)
+    <img src="{{ $photo->temporaryUrl() }}" class="aspect-[4/5] w-full rounded-3xl object-cover">
+@elseif ($current)
+    <img src="{{ $current }}" class="aspect-[4/5] w-full rounded-3xl object-cover">
+@else
+    <div class="aspect-[4/5] w-full rounded-3xl border-2 border-dashed border-gray-300 bg-gray-50"></div>
+@endif
 
         <input type="file" wire:model="photo">
 
