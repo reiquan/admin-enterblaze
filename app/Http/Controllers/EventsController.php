@@ -109,9 +109,7 @@ class EventsController extends Controller
 
     public function update(Request $request){
         
-    //   dd($request->all());
-
-
+      
         $validated = $request->validate([
             // Existing rules...
 
@@ -157,8 +155,11 @@ class EventsController extends Controller
                 
                 $event->subtitle = $request->subtitle;
                 $event->price = $request->price;
-                if($request->eventt_type){
+                if($request->event_type){
                     $event->event_type = $request->event_type;
+                    if($request->event_type == 'Livestream'){
+                        $event->event_is_livestream = $request->event_is_livestream = 1;
+                    }
                 }
                 if($request->event_audience){
                     $event->event_audience = $request->event_audience;
@@ -166,7 +167,7 @@ class EventsController extends Controller
                 $event->venue = $request->venue;
             
                 $event->event_type = $request->event_type;
-                $event->event_is_livestream = $request->event_is_livestream;
+                $event->is_active = $request->is_active;
                 $event->event_about = $request->event_about;
                 $event->host_user_id = auth()->user()->id;
                 $event->event_address_line_1 = $request->event_address_line_1;
@@ -180,7 +181,6 @@ class EventsController extends Controller
                 if($request->event_end_date){
                     $event->event_end_date = $request->event_end_date;
                 }
-                $event->is_active = 1;
                 if($request->event_tags){
                     $event->tags = $request->event_tags ?? null;
                 }
@@ -194,9 +194,12 @@ class EventsController extends Controller
                 $event->subtitle = $request->subtitle;
                 $event->price = $request->price;
                 $event->event_type = $request->event_type;
+                if($request->event_type == 'Livestream'){
+                    $event->event_is_livestream = $request->event_is_livestream = 1;
+                }
                 $event->event_audience = $request->event_audience;
+                $event->is_active = $request->is_active;
                 $event->venue = $request->venue;
-                $event->event_is_livestream = $request->event_is_livestream;
                 $event->event_type = $request->event_type;
                 $event->event_about = $request->event_about;
                 $event->host_user_id = auth()->user()->id;
@@ -208,7 +211,6 @@ class EventsController extends Controller
                 $event->event_start_date = $request->event_start_date;
                 $event->event_end_date = $request->event_end_date;
                 $event->attendees = json_encode($request->attendees);
-                $event->is_active = 1;
                 $event->tags = $request->event_tags ?? null;
             $event->save();
        }
