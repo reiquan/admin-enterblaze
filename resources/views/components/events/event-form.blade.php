@@ -147,6 +147,19 @@
                                         </div>
 
                                         <div>
+                                            <label for="event_type" class="{{ $labelClass }}">Active</label>
+                                            <select id="is_active"
+                                                    name="is_active"
+                                                    x-model="is_active"
+                                                    class="{{ $inputClass }}">
+                                               
+                                                @foreach(['1' => 'Active', '0' => 'Not Active'] as $key => $value)
+                                                    <option value="{{ $key }}" @selected(old('is_active', $eventModel->is_active ?? '') === $value)>{{ $value }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div>
                                             <label for="event_audience" class="{{ $labelClass }}">Audience</label>
                                             <select id="event_audience" name="event_audience" class="{{ $inputClass }}">
                                                 <option value="">Select audience</option>
