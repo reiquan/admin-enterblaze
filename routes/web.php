@@ -120,7 +120,7 @@ Route::middleware([
     Route::get('/events/{event_id}}/edit', 'App\Http\Controllers\EventsController@edit')->name('events.edit');
     Route::get('/events/store', 'App\Http\Controllers\EventsController@store')->name('events.store');
     Route::post('/events/update', 'App\Http\Controllers\EventsController@update')->name('events.update');
-    Route::get('/events/show', 'App\Http\Controllers\EventsController@show')->name('events.show');
+    Route::get('/events/{event_id}/show', 'App\Http\Controllers\EventsController@show')->name('events.show');
     Route::post('/events/{event_id}/publish', 'App\Http\Controllers\EventsController@publish')->name('events.publish');
     Route::post('/events/{event_id}/delete', 'App\Http\Controllers\EventsController@destroy')->name('events.delete');
 
