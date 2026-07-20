@@ -38,18 +38,19 @@ class EventsController extends Controller
 
         return view('events/index', compact('events'));
     }
-    public function show(Request $request){
+    public function show(Request $request, Event $event_id){
     
-       
-        $event = Event::find($request->event_id);
+
+        $event = Event::where('id',$event_id->id)->get()->first();
+     
         $registration = EventRegistration::where('registration_event_id', $event->id)->get();
-        // dd($registration[0]['registration_event_id']);
+
         $attendances = EventRegistrationAttendance::
                                 leftJoin('event_registrations', 'event_registration_attendances.event_registration_id','event_registrations.id' )
                                  ->where('event_registrations.registration_event_id', $event->id)->get();
 
         
-        // dd($attendances->toArray());
+
         $event->revenue = 0;
         foreach($attendances as $attendance){
             $event->revenue += intval($attendance->attendee_charge);
