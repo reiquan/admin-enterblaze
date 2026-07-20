@@ -1,5 +1,5 @@
 <div class="min-h-screen bg-gray-50 px-4 py-8 sm:px-6 lg:px-8">
-    <form method="POST" action="" class="mx-auto max-w-7xl">
+    <form method="GET" action="{{ route('events.show', $event->id) }}" class="mx-auto max-w-7xl">
         @csrf
         <input type="hidden" name="step" value="{{ $step }}">
 
