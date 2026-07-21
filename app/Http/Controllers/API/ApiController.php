@@ -39,7 +39,7 @@ class ApiController extends Controller
                     return response()
                     ->json(Universe::where('universe_is_active', 1)
                     ->where('id', $request->universe_id)
-                    ->with('books.issues')
+                    ->with('books.issues', 'webisodes.videos', 'cardSeries.cards')
                     ->get()
                     ->makeHidden(
                         [
