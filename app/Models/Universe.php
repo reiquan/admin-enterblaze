@@ -34,6 +34,10 @@ class Universe extends Model
     {
         return $this->hasMany(Book::class, 'book_universe_id');
     }
+    public function webisodes()
+    {
+        return $this->hasMany(Webisode::class, 'webisode_universe_id');
+    }
     public function volumes(){
         return $this->hasMany(Volume::class);
     }
