@@ -13,7 +13,7 @@
             @csrf
 
             <input type="hidden" name="step" value="1">
-            <input type="hidden" name="webisode_id" value="{{ $webisode->id ?? request('webisode_id') }}">
+            <input type="hidden" name="webisode_id" value="{{ $webisode->id }}">
             <input type="hidden" name="webisode_video_id" value="{{ $webisodeVideo->id ?? null }}">
 
             <div class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">

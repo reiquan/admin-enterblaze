@@ -110,6 +110,7 @@ Route::middleware([
             Route::get('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/{webisode_video_id}/show', 'App\Http\Controllers\WebisodeVideosController@show')->name('webisode-videos.show');
             Route::post('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/{webisode_video_id}/delete', 'App\Http\Controllers\WebisodeVideosController@destroy')->name('webisode-videos.delete');
             Route::post('/universe/{universe_id}/webisodes/{webisode_id}/store', 'App\Http\Controllers\WebisodeVideosController@store')->name('webisode-videos.store');
+            Route::post('/universe/{universe_id}/webisodes/{webisode_id}/webisode-videos/{webisode_video_id}/publishAction', 'App\Http\Controllers\WebisodeVideosController@publishAction')->name('webisode-videos.publishAction');
 
         //Uploader
             Route::get('/uploader', 'App\Http\Controllers\BookController@index')->name('admin.uploader');

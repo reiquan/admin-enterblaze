@@ -611,7 +611,7 @@ class ApiController extends Controller
             $webisode_video = null;
         
 
-                $webisode_video = WebisodeVideo::find($request->webisode_video_id) ? WebisodeVideo::find($request->webisode_video_id)->first()->load('webisode') :  null;
+                $webisode_video = WebisodeVideo::find($request->webisode_video_id)->get() ? WebisodeVideo::where('id',$request->webisode_video_id)->get()->first()->load('webisode') :  null;
           
 
             $data = $request->all();
