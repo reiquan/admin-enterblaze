@@ -166,6 +166,23 @@
                                 </div>
 
                                 <div class="mt-3 flex gap-3">
+                                    <form method="POST" action="{{ route('webisodes.publish',['universe_id' => $universe[0]['id'] ?? $universe->id, 'webisode_id' => $series->id]) }}" onsubmit="return confirm('Ae you sure?');" class="w-full">
+                                        @csrf
+                                       
+                                      @if($series->webisode_is_active)
+
+                                        <button type="submit" class="w-full rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-black text-green-700 hover:bg-green-100">
+                                            Published
+                                        </button>
+                                      @else
+                                        <button type="submit" class="w-full rounded-2xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm font-black text-yellow-700 hover:bg-yellow-100">
+                                            Unpublished
+                                        </button>
+                                      @endif
+                                    </form>
+                                </div>
+
+                                <div class="mt-3 flex gap-3">
                                     <form method="POST" action="{{ route('webisodes.delete',['universe_id' => $universe[0]['id'] ?? $universe->id, 'webisode_id' => $series->id]) }}" onsubmit="return confirm('Delete this web series? This cannot be undone.');" class="w-full">
                                         @csrf
                                        
