@@ -37,9 +37,10 @@ class WebisodeVideosController extends Controller
     public function create(REQUEST $request, Universe $universe_id, Webisode $webisode_id)
     {
         //
-        // dd($webisode_id->id);
+       
         $step = $request->step ?? 1;
-        $webisode = Webisode::find($webisode_id->id)->first();
+        $webisode = Webisode::where('id',$webisode_id->id)->first();
+     
         $webisode_video = WebisodeVideo::find($request->webisode_video_id);
         $universe = Universe::find($universe_id->id)->first();
  
@@ -55,11 +56,10 @@ class WebisodeVideosController extends Controller
     public function store(Request $request, Universe $universe_id, Webisode $webisode_id, WebisodeVideo $webisode_video_id = null)
     {
           //validate info
-       
-
+  
         $webisode = $request->webisode_id ? Webisode::find($request->webisode_id) : new webisode;
         //save info
-       
+      
             if(isset($request->step) and $request->step == 1){
                 $validated = $request->validate([
                     'video_title' => ['required', 'string', 'max:255'],
@@ -82,7 +82,9 @@ class WebisodeVideosController extends Controller
                     }
                 }
                 if(isset($request->webisode_video_id) && $request->webisode_video_id){
-                    $webisode_video = WebisodeVideo::find($request->webisode_video_id)->first();
+                
+                    $webisode_video = WebisodeVideo::where('id', $request->webisode_video_id)->first();
+                
                     $webisode_video->update([
                     'webisode_id' => $webisode_id->id,
             
@@ -216,6 +218,8 @@ class WebisodeVideosController extends Controller
      */
     public function update(Request $request, Universe $universe_id, Webisode $webisode_id, WebisodeVideo $webisode_video_id)
     {
+
+     
       if(!$webisode_video_id->video_path) {
             $validated = $request->validate([
                 'video_file' => [
@@ -238,28 +242,28 @@ class WebisodeVideosController extends Controller
                 'video_duration_seconds.max' => 'Videos cannot be longer than five minutes.',
             ]);
      
-            $webisode_video = $request->webisode_video_id ? WebisodeVideo::find($webisode_video_id->id)->first() : null;
+            $webisode_video = $request->webisode_video_id ? WebisodeVideo::where('webisode_id',$request->webisode_id)->first() : null;
 
             $videoPath = $request->file('video_file')->store(
-                '/universe/'. $universe_id->id .'/webisodes/'.$webisode_id->id.'/webisode-videos/'.$webisode_video->id,
+                '/universe/'. $universe_id->id .'/webisodes/'.$request->webisode_id.'/webisode-videos/'.$webisode_video->id,
                 's3-public'
             );
         
             $thumbnailPath = $request->file('video_thumbnail')->store(
-                '/universe/'. $universe_id->id .'/webisodes/'.$webisode_id->id.'/webisode-videos/'.$webisode_video->id.'/thumbnails',
+                '/universe/'. $universe_id->id .'/webisodes/'.$request->webisode_id.'/webisode-videos/'.$webisode_video->id.'/thumbnails',
                 's3-public'
             );
         
             $webisode_video->update([
                 'video_path' => $videoPath,
                 'video_thumbnail' => $thumbnailPath,
+
                 'video_duration_seconds' => $validated['video_duration_seconds'],
                 'video_mime_type' => $request->file('video_file')->getMimeType(),
                 'video_file_size' => $request->file('video_file')->getSize(),
             ]);
         }
-        
-        // dd($webisode_video->toArray());
+
         $step = $request->step += 1;
         $universe = $universe_id;
         $webisode = $webisode_id;

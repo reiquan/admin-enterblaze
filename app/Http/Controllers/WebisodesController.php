@@ -116,7 +116,7 @@ class WebisodesController extends Controller
         //
      
         $webisode = Webisode::find($webisode_id)->first();
-        // dd($webisode->toArray());
+        
         $universe = $webisode->universe;
     
 
@@ -132,6 +132,7 @@ class WebisodesController extends Controller
     public function edit(Request $request, Universe $universe_id, Webisode $webisode_id)
     {
         //
+        // dd($request->all());
 
         $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
         $webisode = Webisode::find($webisode_id)->first();
@@ -199,39 +200,15 @@ class WebisodesController extends Controller
          /**
      * Show the form for publishing the specified resource.
      */
-    public function publish(Request $request)
+    public function publish(Request $request, Universe $universe_id, Webisode $webisode_id)
     {
         //
-        $issue = Issue::find($request->issue_id);
-        if($request->action == 'publish'){
-            $issue->issue_is_locked = 1;
-            $issue->save();
-        } else {
-            $issue->issue_is_locked = 0;
-            $issue->save();
-        }
-       $universe_id =  $issue->book->universe->id;
 
-        return response()->json(['success' => 'Issue Updated Succesfully', 'issue_id' => $issue->id]);
-    }
-
-             /**
-     * Show the form for publishing the specified resource.
-     */
-    public function pageIsVisible(Request $request, string $id)
-    {
-        //
-     
-        $request->validate([
-            'issue_page_id' => ['required']
-                 
-        ]);
-        $issue_page = IssuePage::find($request->page_id);
        
-            $issue_page->issue_page_is_locked =  $issue_page->issue_page_is_locked == 1 ? 0 : 1;
-            $issue_page->save();
+            $webisode_id->webisode_is_active ? $webisode_id->webisode_is_active = 0 : $webisode_id->webisode_is_active = 1;
+            $webisode_id->save();
        
-        return response()->json(['success' => 'Page Updated  Succesfully']);
+            return redirect()->route('webisodes.index', ['universe_id' => $universe_id->id]);
     }
 
     /**
