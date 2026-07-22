@@ -559,9 +559,17 @@ class ApiController extends Controller
 
             if(isset($request->webisode_id)){
 
-                $webisode = Webisode::find($request->webisode_id)->first()->load(['videos']);
+                $webisode = Webisode::with([
+                    'videos' => function ($query) {
+                        $query
+                            ->where('video_is_published', true)
+                            ->orderBy('video_sort_order')
+                            ->orderBy('video_number');
+                    },
+                    'universe',
+                ])->findOrFail($request->webisode_id);
             } else {
-                $webisodes = Webisode::whereNull('deleted_at')->with(['videos'])->get();
+                $webisodes = Webisode::whereNull('deleted_at')->where('webisode_is_active', 1)->with(['videos'])->get();
             }
 
             $data = $request->all();
