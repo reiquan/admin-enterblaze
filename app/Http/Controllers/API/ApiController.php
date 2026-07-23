@@ -16,6 +16,7 @@ use App\Models\Book;
 use App\Models\Webisode;
 use App\Models\WebisodeVideo;
 use App\Models\Card;
+use App\Models\CardSeries;
 use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\EventRegistrationAttendance;
@@ -505,7 +506,7 @@ class ApiController extends Controller
             // dd($request->all());
             if(isset($request->card_id)){
 
-                $card = Card::find($request->card_id)->load(['tier','era','skills','character','type']);
+                $card = Card::find($request->card_id)->load(['tier','era','skills','character','type','series.cards']);
             } else {
                 $cards = Card::whereNull('deleted_at')->where('card_is_active', 1)->with(['tier','era','skills','character','type'])->get();
             }
@@ -525,6 +526,59 @@ class ApiController extends Controller
                     ->json([
                         'status' => 'success',
                         'data' => $cards,
+                    ], 
+                    200
+                );
+            } else {
+                return response()
+                    ->json([
+                        'status' => 'error',
+                        'message' => 'Could Not Find Any Cards',
+                        'data' => $data,
+                    ], 
+                    400
+                );
+            }
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'data' => 'Unauthorized Request',
+                ], 
+                400
+            );
+        }
+ 
+     }
+     public function getCardSeries(Request $request){
+
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
+        
+            $cardSeries = null;
+       
+            // dd($request->all());
+            if(isset($request->card_series_id)){
+
+                $cardSeries = CardSeries::where('id',$request->card_series_id)->where('card_series_is_active', 1)->get()->load(['cards']);
+            } else {
+                $cardSeries = CardSeries::where('card_series_is_active', 1)->get()->load(['cards']);
+            }
+
+            $data = $request->all();
+    
+            if($cardSeries && $cardSeries->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $cardSeries,
+                    ], 
+                    200
+                );
+            } else if($cardSeriess && $cardSeries->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $cardSeries,
                     ], 
                     200
                 );
