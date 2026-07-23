@@ -38,8 +38,10 @@ class BannerUpload extends Component
             //         Storage::disk('s3-public')->delete($universe->universe_image_url);
             //     }
             // }
-            $universe->universe_image_url = $fileUrl;
-            $universe->save();
+            if($fileUrl){
+                $universe->universe_image_url = $fileUrl;
+                $universe->save();
+            }
         } else {
             abort(500, 'Something went wrong. Our developers are on it!');
         }
