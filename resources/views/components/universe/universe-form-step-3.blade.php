@@ -71,6 +71,12 @@
                                 ])
                             @endif
                         </div>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <a href="{{ route('universe.index')}}"
+                                class="rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-black text-white shadow-sm hover:bg-indigo-500">
+                                Skip This Step
+                            </a>
+                        </div>
 
                         <div class="mt-5 grid gap-3 text-sm text-slate-600 sm:grid-cols-2">
                             <div class="rounded-xl bg-white p-4 ring-1 ring-slate-200">
