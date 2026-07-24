@@ -23,7 +23,7 @@ class WebisodesController extends Controller
         // //
       
         $webisodes = Webisode::where('webisode_universe_id', $universe_id->id)->where('deleted_at', null)->get();
-       
+
         $universe = Universe::find($universe_id->id);
 
         return view('universe/webisodes/index', compact('universe', 'webisodes'));
@@ -58,13 +58,21 @@ class WebisodesController extends Controller
     public function store(Request $request, Universe $universe_id)
     {
           //validate info
-        
+        // dd($request->all());
 
         $webisode = $request->webisode_id ? Webisode::find($request->webisode_id) : new webisode;
         //save info
             if(isset($request->step) and $request->step == 1){
                 $request->validate([
-                    'webisode_title',
+                    'webisode_title' => 'required',
+                    'webisode_genre' => 'required',
+                    'webisode_price' => 'required',
+                    'webisode_rating' => 'required',
+                    'webisode_release_date' => 'required',
+                    'webisode_status' => 'required',
+                    'webisode_logline' => 'required',
+                    'webisode_description' => 'required',
+                    'webisode_tags' => 'required',
                     
                 ]);
       
@@ -88,7 +96,7 @@ class WebisodesController extends Controller
             //if request->step == 4
             if($request->step == 3){
                
-                $webisodes = Webisode::where('webisode_universe_id', $universe->id)->get();
+                $webisodes = Webisode::where('webisode_universe_id', $universe_id->id)->where('deleted_at', null)->get();
                 // dd($webisodes->toArray());
        
                 return view('universe.webisodes.index', compact('universe','webisodes'));
@@ -216,8 +224,9 @@ class WebisodesController extends Controller
      */
     public function destroy(Request $request, Universe $universe_id, Webisode $webisode_id)
     {
-        // dd($request->all());
-        $webisode= Webisode::find($webisode_id)->first();
+        // dd($webisode_id->toArray());
+        $webisode= Webisode::find($webisode_id->id);
+        // dd($webisode->toArray());
         if($webisode){
              // Delete file from S3
             if($webisode->webisode_cover_image){

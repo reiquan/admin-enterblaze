@@ -26,6 +26,7 @@ Route::post('loginSubscriber', [AuthApiController::class, 'loginSubscriber']);
 Route::post('registerSubscriber', [AuthApiController::class, 'registerSubscriber']);
 Route::get('getUniverses', [ApiController::class, 'getUniverses']);
 Route::get('getCards', [ApiController::class, 'getCards']);
+Route::get('getCardSeries', [ApiController::class, 'getCardSeries']);
 Route::get('getWebisodes', [ApiController::class, 'getWebisodes']);
 Route::get('getWebisodeVideo', [ApiController::class, 'getWebisodeVideo']);
 Route::get('getBooks', [ApiController::class, 'getBooks']);

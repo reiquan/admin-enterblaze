@@ -56,7 +56,7 @@ class WebisodeVideosController extends Controller
     public function store(Request $request, Universe $universe_id, Webisode $webisode_id, WebisodeVideo $webisode_video_id = null)
     {
           //validate info
-  
+//   dd($request->all());
         $webisode = $request->webisode_id ? Webisode::find($request->webisode_id) : new webisode;
         //save info
       
@@ -64,12 +64,12 @@ class WebisodeVideosController extends Controller
                 $validated = $request->validate([
                     'video_title' => ['required', 'string', 'max:255'],
                     'video_number' => ['required', 'integer', 'min:1'],
-                    'video_sort_order' => ['nullable', 'integer'],
-                    'video_rating' => ['nullable', 'string'],
-                    'video_publish_at' => ['nullable', 'date'],
-                    'video_description' => ['nullable', 'string'],
-                    'video_price' => ['nullable', 'numeric'],
-                    'video_tags' => ['nullable'],
+                    'video_sort_order' => ['required', 'integer'],
+                    'video_rating' => ['required', 'string'],
+                    'video_publish_at' => ['required', 'date'],
+                    'video_description' => ['required', 'string'],
+                    'video_price' => ['required', 'numeric'],
+                    'video_tags' => ['required'],
                 ]);
             
                 $tags = [];
