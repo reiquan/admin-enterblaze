@@ -24,6 +24,15 @@
                             <p class="mt-3 max-w-2xl text-sm leading-6 text-gray-600">
                                 Add the core details for your Enterblaze web series. You can upload cover art and episodes in the next steps.
                             </p>
+                            @if ($errors->any())
+                                <div class="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+                                    <ul class="space-y-1">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="rounded-2xl border border-indigo-100 bg-indigo-50 px-5 py-4 text-sm">
