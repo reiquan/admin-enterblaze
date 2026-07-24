@@ -276,9 +276,9 @@
                                                                 class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
                                                                 @foreach($books as $book)
                                                                       @if($book->id == $card_series->card_series_book_id)
-                                                                      <option value="{{$book['id']}}" @selected(old('card_series_book_id') === '') selected>{{$book['book_name']}}</option>
+                                                                      <option value="{{$book['id']}}" @selected(old('card_series_book_id') === '') selected>{{$book['book_title']}}</option>
                                                                       @else
-                                                                      <option value="{{$book['id']}}" @selected(old('card_series_book_id') === '')>{{$book['book_name']}}</option>
+                                                                      <option value="{{$book['id']}}" @selected(old('card_series_book_id') === '')>{{$book['book_title']}}</option>
                                                                       @endif
                                                                 @endforeach
                                                         </select>

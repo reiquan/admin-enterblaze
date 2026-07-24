@@ -56,7 +56,6 @@ class CardSeriesController extends Controller
      */
     public function store(Request $request)
     {
-       
           //validate info
           if($request->step == 1){
             $request->validate([
@@ -65,6 +64,7 @@ class CardSeriesController extends Controller
                 'card_series_published_at' => ['required'],
                 'card_series_era_id' => ['required'],
                 'card_series_description' => ['required'],
+                'card_series_price' => ['required'],
                 
             ]);
           }
@@ -93,7 +93,6 @@ class CardSeriesController extends Controller
 
             }
 
-           
             //if request->step == 4
             if($request->step == 3){
               
@@ -155,6 +154,7 @@ class CardSeriesController extends Controller
         $eras = CardEra::all();
         $formattedDate = Carbon::parse($card_series->card_series_published_at)->format('Y-m-d');
         $books = Book::where('book_universe_id', $universe->id)->get();
+
         return view('universe/card-series/edit', compact('card_series', 'step','eras','books', 'universe', 'formattedDate'));
     }
 
@@ -163,7 +163,7 @@ class CardSeriesController extends Controller
      */
     public function update(Request $request)
     {
-       
+        dd($request->all());
         $request->validate([
             'card_series_id' => ['required'],
             'universe_id' => ['required'],
