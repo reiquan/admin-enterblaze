@@ -32,6 +32,15 @@
                         <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
                             Add a wide banner image that sets the visual tone for this universe across landing pages, headers, and featured admin previews.
                         </p>
+                        @if ($errors->any())
+                            <div class="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+                                <ul class="space-y-1">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-slate-200 shadow-sm backdrop-blur">

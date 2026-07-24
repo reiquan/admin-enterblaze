@@ -58,6 +58,7 @@ class BookController extends Controller
             'book_audience' => ['required'],
             'book_description' => ['required'],
             'book_type' => ['required'],
+            'book_price' => ['required'],
             // 'book_genres' => ['required'],
             
         ]);

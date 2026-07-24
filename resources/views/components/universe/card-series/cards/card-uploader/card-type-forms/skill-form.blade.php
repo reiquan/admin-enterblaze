@@ -33,6 +33,12 @@
         @endif
 
         <input type="hidden" name="card_id" value="{{ $card->id }}">
+        <input
+            type="hidden"
+            name="has_second_skill"
+            id="has_second_skill"
+            value="0"
+        >
         @if($cardSkills ?? $card_skills)
             <div class="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
                 <div class="mb-8 flex items-start justify-between gap-6">
@@ -48,6 +54,15 @@
                         <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-500">
                             Add up to 2 skills before submitting this card. Skills can be attacks, passive abilities, transformations, or special techniques.
                         </p>
+                        @if ($errors->any())
+                            <div class="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+                                <ul class="space-y-1">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="hidden rounded-2xl bg-indigo-50 px-4 py-3 text-center sm:block">
@@ -701,7 +716,7 @@
 
             addBtn.addEventListener('click', () => {
                 const currentCount = wrapper.querySelectorAll('.skill-card').length;
-
+                document.getElementById('has_second_skill').value = '1';
                 if (currentCount >= maxSkills) {
                     return;
                 }
@@ -713,7 +728,7 @@
 
             wrapper.addEventListener('click', event => {
                 const removeBtn = event.target.closest('.remove-skill');
-
+                document.getElementById('has_second_skill').value = '0';
                 if (!removeBtn) {
                     return;
                 }

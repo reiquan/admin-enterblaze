@@ -303,6 +303,18 @@ class CardController extends Controller
 
     public function updateCardSkill(Request $request)
     {
+        // dd($request->all());
+        $validated = $request->validate([
+            'skills.0.card_skill_name' => 'required|string|max:255',
+            'skills.0.card_skill_type_id' => 'required',
+            'skills.0.card_skill_element' => 'required',
+            'skills.0.card_skill_energy_cost' => 'required',
+            'skills.0.card_skill_cooldown' => 'required',
+            'skills.0.card_skill_range' => 'required',
+            'skills.0.card_skill_condition' => 'required',
+            'skills.0.card_skill_description' => 'required',
+        ]);
+
         $card = Card::find($request->card_id);
         $bonuses = null;
 
@@ -374,8 +386,13 @@ class CardController extends Controller
                       $cardTypeTwo = CardType::find($request->skills[1]['card_skill_type_id']);
                   $cardSkillTwo->card_skill_type_id = $cardTypeTwo->id ?? null;
                   $cardSkillTwo->card_skill_character_id = $request->card_character_id ?? null;
-          
-              $cardSkillTwo->save();
+            
+                  //dont run 2nd if anything is null
+                  $two = collect($cardSkillTwo);
+                if(!$two->contains(null)){
+                    $cardSkillTwo->save();
+                }
+             
           }
           $universe_id = $request->card_character_universe_id;
           $card_id = $card->id ?? $request->card_id;
