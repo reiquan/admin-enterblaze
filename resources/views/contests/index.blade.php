@@ -154,16 +154,20 @@
                                 </dl>
 
                                 <div class="mt-6 flex flex-wrap gap-3">
-                                    @if(Route::has('contestant.show'))
+                                    @if(Route::has('contestant.show') )
                                         <a href="{{ route('contestant.show', $submission) }}"
                                            class="inline-flex flex-1 items-center justify-center rounded-2xl bg-gray-950 px-4 py-3 text-sm font-black text-white transition hover:bg-gray-800">
                                             View Submission
                                         </a>
                                     @endif
 
+
                                     @if($submission->submission_status === \App\Models\ContestSubmission::STATUS_DRAFT
                                         && (int) $submission->user_id === (int) auth()->id()
-                                        && Route::has('contestant.edit'))
+                                        && Route::has('contestant.edit')
+                                        && (auth()->user()->current_team_id = 2 
+                                        || auth()->user()->id == $submission->user_id )
+                                        )
                                         <a href="{{ route('contestant.edit', $submission) }}"
                                            class="inline-flex flex-1 items-center justify-center rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm font-black text-gray-800 transition hover:bg-gray-50">
                                             Continue Draft

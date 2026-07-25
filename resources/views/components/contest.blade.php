@@ -49,8 +49,16 @@
                             href="{{ route('contestant.create', $event->id) }}"
                             class="inline-flex items-center justify-center rounded-xl bg-gray-950 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-gray-800"
                         >
-                            View Contest
+                            Enter Contest
                         </a>
+                        @if(auth()->user()->current_team_id == 2)
+                        <a
+                            href="{{ route('contestant.index', $event->id ) }}"
+                            class="inline-flex items-center justify-center rounded-xl bg-orange-800 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-gray-800"
+                        >
+                            Manage Entries
+                        </a>
+                        @endif
      
 
                     <button

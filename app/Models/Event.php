@@ -58,6 +58,18 @@ class Event extends Model
     {
         return $this->hasMany(EventRegistration::Class, 'registration_event_id');
     }
+
+
+     /**
+     * Get the user's first name.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function submissions()
+    {
+        return $this->hasMany(ContestSubmission::Class);
+    }
     public function getFormattedEventStartDateAttribute()
     {
         return $this->event_start_date?->isoFormat('lll');

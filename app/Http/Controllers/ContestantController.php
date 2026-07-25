@@ -14,6 +14,57 @@ use Illuminate\Support\Collection;
 class ContestantController extends Controller
 {
     //
+    
+    public function index(Request $request, $event_id ): View|RedirectResponse {
+        abort_if(
+           auth()->user()->current_team_id !== 2,
+            403
+        );
+    
+        $submissions  = ContestSubmission::whereNull('deleted_at')->where('event_id', $event_id)->get();
+        $contest_submission_event_id = $submissions[0]['event_id'] ?? $event_id;
+// dd($submissions->toArray());
+
+    
+        return view('contests.index', compact('submissions', 'contest_submission_event_id'));
+    }
+    public function edit(Request $request, ContestSubmission $contest_submission): View|RedirectResponse {
+        if (
+            auth()->user()->current_team_id != 2 &&
+            $contest_submission->user_id != auth()->id()
+        ) {
+            abort(403);
+        }
+
+
+        return view('contests.create', [
+            'contest_submission' => $contest_submission,
+            'event' => $contest_submission->event,
+            'universes' => auth()->user()->universes,
+            'step' => $request->integer('step', 1),
+        ]);
+    }
+
+    public function show(ContestSubmission $contest_submission)
+    {
+        if (
+            auth()->user()->current_team_id != 2 &&
+            $contest_submission->user_id != auth()->id()
+        ) {
+            abort(403);
+        }
+
+        $contest_submission->load([
+            'user',
+            'primaryThumbnail',
+            'files',
+        ]);
+
+        return view(
+            'contests.show',
+            compact('contest_submission')
+        );
+    }
 
     public function create(Request $request, $event_id){
     
@@ -413,6 +464,51 @@ class ContestantController extends Controller
         }
     
         $contestFile->delete();
+    }
+    public function unpublish(
+        ContestSubmission $contest_submission
+    ) {
+        if (
+            auth()->user()->current_team_id != 2 &&
+            $contest_submission->user_id != auth()->id()
+        ) {
+            abort(403);
+        }
+    
+        $contest_submission->submission_status =
+            ContestSubmission::STATUS_DRAFT;
+    
+        $contest_submission->submitted_at = null;
+    
+        $contest_submission->save();
+    
+        return back()->with(
+            'success',
+            'Submission moved back to Draft.'
+        );
+    }
+    public function destroy($event_id,
+        ContestSubmission $contest_submission
+    ) {
+        if (
+            auth()->user()->current_team_id != 2 &&
+            $contest_submission->user_id != auth()->id()
+        ) {
+            abort(403);
+        }
+    
+        foreach ($contest_submission->files as $file) {
+            $this->deleteStoredContestFile($file);
+        }
+    
+        $contest_submission->delete();
+    
+        return redirect()
+            ->route('contestant.index', $event_id)
+            ->with(
+                'success',
+                'Contest submission deleted.'
+            );
     }
 
 }
