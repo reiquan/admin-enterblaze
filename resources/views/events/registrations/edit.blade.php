@@ -23,6 +23,7 @@
         $registrationTypes = [
             'Guest',
             'Special Guest',
+            'Contestant',
             'Vendor',
             'Artist',
             'Mangaka',

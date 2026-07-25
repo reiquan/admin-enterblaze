@@ -140,7 +140,7 @@
                                                     x-model="eventType"
                                                     class="{{ $inputClass }}">
                                                 <option value="">Select event type</option>
-                                                @foreach(['Tradeshow', 'Online Tournament', 'Registration', 'Livestream'] as $type)
+                                                @foreach(['Tradeshow', 'Online Tournament', 'Registration', 'Livestream', 'Contest'] as $type)
                                                     <option value="{{ $type }}" @selected(old('event_type', $eventModel->event_type ?? '') === $type)>{{ $type }}</option>
                                                 @endforeach
                                             </select>
