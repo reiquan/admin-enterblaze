@@ -31,7 +31,7 @@
         @endif
     </div>
 </div>
-
+@include('components.contest')
 <div class="bg-gray-200 bg-opacity-25 p-6 lg:p-8">
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <a href="{{ route('universe.index') }}" class="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-red-200 hover:shadow-md">

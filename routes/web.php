@@ -22,9 +22,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
 
     //Universe
         Route::get('/universe', 'App\Http\Controllers\UniverseController@index')->name('universe.index');
@@ -154,6 +152,19 @@ Route::middleware([
     Route::post('/tokens/tiers/{token_tier_id}/update', 'App\Http\Controllers\BlazeTokensController@update')->name('tokens.tiers.update');
     Route::post('/tokens/tiers/{token_tier_id}/delete', 'App\Http\Controllers\BlazeTokensController@destroy')->name('tokens.tiers.delete');
     Route::post('/tokens/tiers/{token_tier_id}/publish', 'App\Http\Controllers\BlazeTokensController@publish')->name('tokens.tiers.publish');
+    
+    //Contest
+    Route::get('/contest', 'App\Http\Controllers\ContestController@index')->name('contest.index');
+    Route::get('/contestant/{event_id}/create', 'App\Http\Controllers\ContestantController@create')->name('contestant.create');
+    Route::post('/contestant/store', 'App\Http\Controllers\ContestantController@store')->name('contestant.store');
+    Route::post(
+        '/contestant/{contest_submission}/submit',
+        'App\Http\Controllers\ContestantController@submit', 'submit'
+    )->name('contestant.submit');
+    Route::patch('/contestant/{contest_submission}/update',
+       'App\Http\Controllers\ContestantController@update',
+        'update',
+    )->name('contestant.update');
 
     //Livestream
     Route::middleware('frontend.api')->get(
