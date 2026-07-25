@@ -157,6 +157,7 @@
                     </a>
                 </div>
             @endif
+            @include('components.universe.managed_universes')
         </div>
     </div>
 </div>

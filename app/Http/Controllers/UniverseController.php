@@ -17,11 +17,18 @@ class UniverseController extends Controller
     public function index()
     {
         //
+        $other_universes = null;
+        if(auth()->user()->current_team_id == 2){
+            $other_universes = Universe::where('universe_user_id', '!=', auth()->user()->id)->whereNull('deleted_at')->get();
+        } 
+        // dd($other_universes->toArray());
         $universes = Universe::where('universe_user_id', auth()->user()->id)
-                                ->whereNull('deleted_at')->get();
+        ->whereNull('deleted_at')->get();
+    
+       
         // dd($universes->toArray());
       
-        return view('universe/index', compact('universes'));
+        return view('universe/index', compact('universes', 'other_universes'));
     }
 
     /**
@@ -126,6 +133,7 @@ class UniverseController extends Controller
     public function publish(Request $request, string $id)
     {
         //
+       
         $universe = Universe::find($id);
         if($request->action == 'publish'){
             $universe->universe_is_active = 1;
@@ -135,7 +143,7 @@ class UniverseController extends Controller
             $universe->save();
         }
        
-        return redirect()->route('universe.index');
+        // return redirect()->route('universe.index');
     }
 
   /**
@@ -170,6 +178,7 @@ class UniverseController extends Controller
             // 'book_genres' => ['required'],
             
         ]);
+       
         $universe = Universe::find($request->universe_id);
         $universe->deleted_at = now();
         $universe->save();

@@ -559,9 +559,9 @@ class ApiController extends Controller
             // dd($request->all());
             if(isset($request->card_series_id)){
 
-                $cardSeries = CardSeries::where('id',$request->card_series_id)->where('card_series_is_active', 1)->get()->load(['cards']);
+                $cardSeries = CardSeries::where('id',$request->card_series_id)->where('deleted_at', null)->where('card_series_is_active', 1)->get()->load(['cards']);
             } else {
-                $cardSeries = CardSeries::where('card_series_is_active', 1)->get()->load(['cards']);
+                $cardSeries = CardSeries::where('card_series_is_active', 1)->where('deleted_at', null)->get()->load(['cards']);
             }
 
             $data = $request->all();
