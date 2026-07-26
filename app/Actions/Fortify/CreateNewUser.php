@@ -48,6 +48,7 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
                 'creator_community_opt_in' => isset($input['creator_community_opt_in']) && $input['creator_community_opt_in'] ? 1 : 0,
+                'current_team_id' => 4,
             ]), function (User $user) {
                 $this->createTeam($user);
             });

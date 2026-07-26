@@ -20,9 +20,11 @@
     </div>
 
     <div class="mt-6 flex flex-col gap-3 sm:flex-row">
-        <a href="{{ route('universe.index') }}" class="inline-flex items-center justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-            Open My Universe
-        </a>
+        @if(auth()->check() && auth()->user()->current_team_id == 2 || auth()->user()->current_team_id == 3)
+            <a href="{{ route('universe.index') }}" class="inline-flex items-center justify-center rounded-md bg-gray-800 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                Open My Universe
+            </a>
+        @endif
 
         @if(auth()->check() && auth()->user()->current_team_id == 2)
             <a href="{{ route('events.index') }}" class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2">
@@ -33,66 +35,67 @@
 </div>
 @include('components.contest')
 <div class="bg-gray-200 bg-opacity-25 p-6 lg:p-8">
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <a href="{{ route('universe.index') }}" class="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-red-200 hover:shadow-md">
-            <div class="flex items-center">
-                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-red-800 ring-1 ring-red-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
-                    </svg>
+    @if(auth()->check() && auth()->user()->current_team_id == 2 || auth()->user()->current_team_id == 3)
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <a href="{{ route('universe.index') }}" class="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-red-200 hover:shadow-md">
+                <div class="flex items-center">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-red-800 ring-1 ring-red-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                        </svg>
+                    </div>
+
+                    <h2 class="ml-4 text-lg font-semibold text-gray-900 group-hover:text-red-800">
+                        My Universe
+                    </h2>
                 </div>
 
-                <h2 class="ml-4 text-lg font-semibold text-gray-900 group-hover:text-red-800">
-                    My Universe
-                </h2>
-            </div>
+                <p class="mt-4 text-sm leading-relaxed text-gray-500">
+                    Organize your worlds, books, characters, settings, and lore in one structured creative workspace.
+                </p>
 
-            <p class="mt-4 text-sm leading-relaxed text-gray-500">
-                Organize your worlds, books, characters, settings, and lore in one structured creative workspace.
-            </p>
+                <div class="mt-5 text-sm font-semibold text-red-800">
+                    Manage universe &rarr;
+                </div>
+            </a>
 
-            <div class="mt-5 text-sm font-semibold text-red-800">
-                Manage universe &rarr;
-            </div>
-        </a>
+            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                <div class="flex items-center">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-50 text-gray-700 ring-1 ring-gray-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </div>
 
-        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-            <div class="flex items-center">
-                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-50 text-gray-700 ring-1 ring-gray-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
+                    <h2 class="ml-4 text-lg font-semibold text-gray-900">
+                        Production Flow
+                    </h2>
                 </div>
 
-                <h2 class="ml-4 text-lg font-semibold text-gray-900">
-                    Production Flow
-                </h2>
+                <p class="mt-4 text-sm leading-relaxed text-gray-500">
+                    Keep your publishing pipeline simple: create the book, build the shop, package the EPUB, and launch.
+                </p>
             </div>
 
-            <p class="mt-4 text-sm leading-relaxed text-gray-500">
-                Keep your publishing pipeline simple: create the book, build the shop, package the EPUB, and launch.
-            </p>
+            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                <div class="flex items-center">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-50 text-gray-700 ring-1 ring-gray-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5A1.125 1.125 0 0 1 9.375 10.5h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5ZM13.5 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5Z" />
+                        </svg>
+                    </div>
+
+                    <h2 class="ml-4 text-lg font-semibold text-gray-900">
+                        Shop Tools
+                    </h2>
+                </div>
+
+                <p class="mt-4 text-sm leading-relaxed text-gray-500">
+                    Prepare products, bundles, digital downloads, and launch assets without cluttering the dashboard.
+                </p>
+            </div>
         </div>
-
-        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-            <div class="flex items-center">
-                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-50 text-gray-700 ring-1 ring-gray-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5A1.125 1.125 0 0 1 9.375 10.5h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5ZM13.5 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5Z" />
-                    </svg>
-                </div>
-
-                <h2 class="ml-4 text-lg font-semibold text-gray-900">
-                    Shop Tools
-                </h2>
-            </div>
-
-            <p class="mt-4 text-sm leading-relaxed text-gray-500">
-                Prepare products, bundles, digital downloads, and launch assets without cluttering the dashboard.
-            </p>
-        </div>
-    </div>
-
+    @endif
     @if(auth()->check() && auth()->user()->current_team_id == 2)
         <div class="mt-8 border-t border-gray-200 pt-8">
             <div class="mb-5 flex items-end justify-between gap-4">

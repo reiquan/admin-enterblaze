@@ -165,7 +165,8 @@ class ApiController extends Controller
                 $event = Event::find($request->event_id)
                 ->load(['registrations' => function ($query) {
                         $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
-                    }]);
+                    },'submissions.files'
+                ]);
                     $data = $request->all();
 
                     return response()
@@ -180,7 +181,7 @@ class ApiController extends Controller
                     ->get()
                     ->load(['registrations' => function ($query) {
                         $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
-                    }]);
+                    },'submissions.files']);
                     $data = $request->all();
             
                     return response()
