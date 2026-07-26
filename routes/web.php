@@ -166,10 +166,10 @@ Route::middleware([
        'App\Http\Controllers\ContestantController@update',
         'update',
     )->name('contestant.update');
-    Route::get('/contestant/{contest_submission}/edit',
-    'App\Http\Controllers\ContestantController@edit',
-     'edit',
- )->name('contestant.edit');
+    Route::get(
+        '/contestant/{contest_submission}/edit',
+        'App\Http\Controllers\ContestantController@edit', 'edit'
+    )->name('contestant.edit');
     Route::patch(
         '/contestant/{contest_submission}/unpublish',
        'App\Http\Controllers\ContestantController@unpublish', 'unpublish'

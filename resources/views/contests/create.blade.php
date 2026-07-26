@@ -81,6 +81,7 @@
 
                         <input type="hidden" name="step" value="1">
                         <input type="hidden" name="submission_status" value="draft">
+                        <input type="hidden" name="contest_submission_id" value="{{ $contest_submission->id ?? null}}">
                         
 
                         @isset($event)

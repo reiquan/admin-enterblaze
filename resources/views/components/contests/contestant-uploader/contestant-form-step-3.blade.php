@@ -8,6 +8,16 @@
     @csrf
     @method('PATCH')
 
+    @php
+        $existingPages = $contest_submission
+            ->files
+            ->where('file_type', \App\Models\ContestSubmissionFile::TYPE_IMAGE)
+            ->sortBy('sort_order')
+            ->values();
+
+        $hasExistingPages = $existingPages->isNotEmpty();
+    @endphp
+
     <input type="hidden" name="step" value="3">
     <input
         type="hidden"
@@ -40,8 +50,9 @@
             </h2>
 
             <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
-                Upload your entry pages in the order they should be viewed.
-                You may submit between 1 and 5 pages.
+                {{ $hasExistingPages
+                    ? 'Your previously uploaded pages are shown below. Upload a new set only when you want to replace them, or keep the current pages and continue.'
+                    : 'Upload your entry pages in the order they should be viewed. You may submit between 1 and 5 pages.' }}
             </p>
         </div>
 
@@ -50,7 +61,7 @@
                 for="contest_files"
                 class="block text-sm font-black text-gray-900"
             >
-                Submission Pages
+                {{ $hasExistingPages ? 'Replace Submission Pages' : 'Submission Pages' }}
             </label>
 
             <div
@@ -73,7 +84,7 @@
                 </svg>
 
                 <p class="mt-4 text-sm font-black text-gray-900">
-                    Select up to 5 page images
+                    {{ $hasExistingPages ? 'Choose up to 5 replacement pages' : 'Select up to 5 page images' }}
                 </p>
 
                 <p class="mt-1 text-sm text-gray-500">
@@ -93,7 +104,7 @@
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
                     multiple
-                    required
+                    @required(!$hasExistingPages)
                     class="sr-only"
                 >
             </div>
@@ -110,6 +121,18 @@
                 </p>
             @enderror
 
+            @if($hasExistingPages)
+                <div class="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                    <p class="text-sm font-bold text-amber-900">
+                        Uploading new pages will replace all currently saved pages.
+                    </p>
+
+                    <p class="mt-1 text-sm leading-6 text-amber-800">
+                        Leave the upload field empty and use “Keep Current & Continue” to preserve the pages already attached to this submission.
+                    </p>
+                </div>
+            @endif
+
             <div class="mt-6 flex items-center justify-between">
                 <p class="text-sm font-bold text-gray-700">
                     Selected pages
@@ -119,7 +142,7 @@
                     id="contest-page-count"
                     class="rounded-full bg-gray-100 px-3 py-1 text-xs font-black text-gray-600"
                 >
-                    0 / 5
+                    {{ $existingPages->count() }} / 5
                 </p>
             </div>
 
@@ -127,6 +150,42 @@
                 id="contest-pages-error"
                 class="mt-3 hidden rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700"
             ></div>
+
+            @if($hasExistingPages)
+                <div id="existing-contest-pages" class="mt-4">
+                    <p class="mb-3 text-xs font-black uppercase tracking-[0.2em] text-gray-500">
+                        Current Pages
+                    </p>
+
+                    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                        @foreach($existingPages as $index => $page)
+                            <div class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+                                <div class="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                                    <img
+                                        src="{{ Storage::disk('s3-public')->url($page->file_path) }}"
+                                        alt="Current submission page {{ $index + 1 }}"
+                                        class="h-full w-full object-cover"
+                                    >
+
+                                    <div class="absolute left-3 top-3 rounded-full bg-black/75 px-3 py-1 text-xs font-black text-white">
+                                        Page {{ $index + 1 }}
+                                    </div>
+                                </div>
+
+                                <div class="p-4">
+                                    <p class="truncate text-sm font-black text-gray-900">
+                                        {{ $page->file_name }}
+                                    </p>
+
+                                    <p class="mt-1 text-xs text-gray-500">
+                                        Current upload
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             <div
                 id="contest-pages-preview"
@@ -139,8 +198,8 @@
                 </p>
 
                 <p class="mt-3 text-sm leading-6 text-indigo-950">
-                    Pages will be stored in the same order that you select them.
-                    Rename your files before uploading, such as
+                    New pages will be stored in the same order that you select them
+                    and will replace the current page set. Rename your files before uploading, such as
                     <strong>page-1.jpg</strong>, <strong>page-2.jpg</strong>,
                     and so on.
                 </p>
@@ -156,20 +215,39 @@
             Back
         </a>
 
-        <button
-            type="submit"
-            id="contest-pages-submit"
-            class="inline-flex items-center justify-center rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-black text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-gray-400"
-        >
-            Save Pages & Continue
-            <span class="ml-2">→</span>
-        </button>
+        <div class="flex flex-col gap-3 sm:flex-row">
+            @if($hasExistingPages)
+                <button
+                    type="submit"
+                    name="skip_step"
+                    value="1"
+                    formnovalidate
+                    class="inline-flex items-center justify-center rounded-2xl border border-indigo-200 bg-indigo-50 px-6 py-3 text-sm font-black text-indigo-700 shadow-sm transition hover:bg-indigo-100"
+                >
+                    Keep Current & Continue
+                    <span class="ml-2">→</span>
+                </button>
+            @endif
+
+            <button
+                type="submit"
+                name="save_step"
+                value="1"
+                id="contest-pages-submit"
+                class="inline-flex items-center justify-center rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-black text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+            >
+                {{ $hasExistingPages ? 'Replace Pages & Continue' : 'Save Pages & Continue' }}
+                <span class="ml-2">→</span>
+            </button>
+        </div>
     </div>
 </form>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const maximumPages = 5;
+        const hasExistingPages = @json($hasExistingPages);
+        const existingPageCount = {{ $existingPages->count() }};
 
         const form = document.getElementById('contest-pages-form');
         const fileInput = document.getElementById('contest_files');
@@ -177,6 +255,7 @@
         const pageCount = document.getElementById('contest-page-count');
         const errorContainer = document.getElementById('contest-pages-error');
         const submitButton = document.getElementById('contest-pages-submit');
+        const existingPagesContainer = document.getElementById('existing-contest-pages');
 
         let previewUrls = [];
 
@@ -199,7 +278,8 @@
             fileInput.value = '';
             clearPreviewUrls();
             previewContainer.innerHTML = '';
-            pageCount.textContent = `0 / ${maximumPages}`;
+            pageCount.textContent = `${existingPageCount} / ${maximumPages}`;
+            existingPagesContainer?.classList.remove('hidden');
         };
 
         fileInput?.addEventListener('change', () => {
@@ -238,6 +318,12 @@
             }
 
             pageCount.textContent = `${files.length} / ${maximumPages}`;
+
+            if (files.length > 0) {
+                existingPagesContainer?.classList.add('hidden');
+            } else {
+                existingPagesContainer?.classList.remove('hidden');
+            }
 
             files.forEach((file, index) => {
                 const previewUrl = URL.createObjectURL(file);
@@ -278,13 +364,29 @@
 
         form?.addEventListener('submit', (event) => {
             const files = Array.from(fileInput.files ?? []);
+            const submitter = event.submitter;
+            const isSkipping = submitter?.name === 'skip_step';
 
             clearError();
 
-            if (files.length < 1) {
+            if (isSkipping) {
+                return;
+            }
+
+            if (files.length < 1 && !hasExistingPages) {
                 event.preventDefault();
 
                 displayError('Please select at least one submission page.');
+
+                return;
+            }
+
+            if (files.length < 1 && hasExistingPages) {
+                event.preventDefault();
+
+                displayError(
+                    'Choose replacement pages or use “Keep Current & Continue.”'
+                );
 
                 return;
             }

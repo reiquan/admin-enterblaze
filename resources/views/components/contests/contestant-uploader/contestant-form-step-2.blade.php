@@ -7,6 +7,11 @@
     @csrf
     @method('PATCH')
 
+    @php
+        $existingThumbnail = $contest_submission->primaryThumbnail;
+        $hasExistingThumbnail = filled($existingThumbnail);
+    @endphp
+
     <input type="hidden" name="step" value="2">
     <input
         type="hidden"
@@ -47,8 +52,9 @@
             </h2>
 
             <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
-                Upload the main promotional image for your contest entry. This uses
-                the same file system that will handle your submission assets in Step 3.
+                {{ $hasExistingThumbnail
+                    ? 'Your current thumbnail is shown below. Upload a new image only when you want to replace it, or skip this step and keep the current image.'
+                    : 'Upload the main promotional image for your contest entry. This uses the same file system that will handle your submission assets in Step 3.' }}
             </p>
         </div>
 
@@ -58,7 +64,7 @@
                     for="contest_file"
                     class="block text-sm font-black text-gray-900"
                 >
-                    Thumbnail Image
+                    {{ $hasExistingThumbnail ? 'Replace Thumbnail Image' : 'Thumbnail Image' }}
                 </label>
 
                 <input
@@ -66,7 +72,7 @@
                     name="contest_file"
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
-                    required
+                    @required(!$hasExistingThumbnail)
                     class="mt-3 block w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm
                            file:mr-4 file:rounded-xl file:border-0 file:bg-indigo-600
                            file:px-5 file:py-2 file:text-sm file:font-black file:text-white
@@ -78,6 +84,12 @@
                         {{ $message }}
                     </p>
                 @enderror
+
+                @if($hasExistingThumbnail)
+                    <p class="mt-3 text-sm leading-6 text-gray-500">
+                        Leave this field empty to keep the thumbnail already attached to this submission.
+                    </p>
+                @endif
 
                 <div class="mt-6 rounded-3xl border border-indigo-100 bg-indigo-50 p-6">
                     <p class="text-xs font-black uppercase tracking-[0.25em] text-indigo-600">
@@ -100,15 +112,22 @@
 
                 <div
                     id="contest-file-preview-container"
-                    class="mt-3 flex aspect-video items-center justify-center overflow-hidden rounded-3xl border-2 border-dashed border-gray-300 bg-gray-100"
+                    class="relative mt-3 flex aspect-video items-center justify-center overflow-hidden rounded-3xl border-2 border-dashed border-gray-300 bg-gray-100"
                 >
-                    @if($contest_submission->primaryThumbnail)
+                    @if($hasExistingThumbnail)
                         <img
                             id="contest-file-preview"
-                            src="{{ Storage::disk('s3-public')->url($contest_submission->primaryThumbnail->file_path) }}"
+                            src="{{ Storage::disk('s3-public')->url($existingThumbnail->file_path) }}"
                             alt="{{ $contest_submission->submission_title }}"
                             class="h-full w-full object-cover"
                         >
+
+                        <span
+                            id="current-thumbnail-badge"
+                            class="absolute left-4 top-4 rounded-full bg-black/75 px-3 py-1.5 text-xs font-black uppercase tracking-[0.15em] text-white"
+                        >
+                            Current Thumbnail
+                        </span>
 
                         <div
                             id="contest-file-placeholder"
@@ -163,13 +182,30 @@
             Back
         </a>
 
-        <button
-            type="submit"
-            class="inline-flex items-center justify-center rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-black text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-            Save & Continue
-            <span class="ml-2">→</span>
-        </button>
+        <div class="flex flex-col gap-3 sm:flex-row">
+            @if($hasExistingThumbnail)
+                <button
+                    type="submit"
+                    name="skip_step"
+                    value="1"
+                    formnovalidate
+                    class="inline-flex items-center justify-center rounded-2xl border border-indigo-200 bg-indigo-50 px-6 py-3 text-sm font-black text-indigo-700 shadow-sm transition hover:bg-indigo-100"
+                >
+                    Keep Current & Skip
+                    <span class="ml-2">→</span>
+                </button>
+            @endif
+
+            <button
+                type="submit"
+                name="save_step"
+                value="1"
+                class="inline-flex items-center justify-center rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-black text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+                {{ $hasExistingThumbnail ? 'Save Changes & Continue' : 'Save & Continue' }}
+                <span class="ml-2">→</span>
+            </button>
+        </div>
     </div>
 </form>
 
@@ -178,6 +214,7 @@
         const fileInput = document.getElementById('contest_file');
         const preview = document.getElementById('contest-file-preview');
         const placeholder = document.getElementById('contest-file-placeholder');
+        const currentThumbnailBadge = document.getElementById('current-thumbnail-badge');
 
         fileInput?.addEventListener('change', function () {
             const file = this.files?.[0];
@@ -192,6 +229,7 @@
             preview.alt = file.name;
             preview.classList.remove('hidden');
             placeholder?.classList.add('hidden');
+            currentThumbnailBadge?.classList.add('hidden');
 
             preview.onload = () => {
                 URL.revokeObjectURL(previewUrl);

@@ -28,21 +28,34 @@ class ContestantController extends Controller
     
         return view('contests.index', compact('submissions', 'contest_submission_event_id'));
     }
-    public function edit(Request $request, ContestSubmission $contest_submission): View|RedirectResponse {
-        if (
-            auth()->user()->current_team_id != 2 &&
-            $contest_submission->user_id != auth()->id()
-        ) {
-            abort(403);
-        }
-
-
-        return view('contests.create', [
-            'contest_submission' => $contest_submission,
-            'event' => $contest_submission->event,
-            'universes' => auth()->user()->universes,
-            'step' => $request->integer('step', 1),
+    public function edit(
+        ContestSubmission $contest_submission,
+        Request $request
+    ): View {
+    
+        abort_if(
+            $contest_submission->user_id !== auth()->id(),
+            403
+        );
+    
+        $contest_submission->load([
+            'event',
+            'files',
+            'primaryThumbnail',
         ]);
+    
+        $event = $contest_submission->event;
+    
+        $step = (int) $request->input('step', 1);
+    
+        return view(
+            'contests.create',
+            compact(
+                'contest_submission',
+                'event',
+                'step'
+            )
+        );
     }
 
     public function show(ContestSubmission $contest_submission)
@@ -79,6 +92,7 @@ class ContestantController extends Controller
 
     public function store(Request $request): View|RedirectResponse
     {
+     
         $validated = $request->validate([
             'event_id' => ['required', 'exists:events,id'],
 
@@ -91,23 +105,28 @@ class ContestantController extends Controller
             'original_work_confirmed' => ['accepted'],
             'public_display_permission' => ['accepted'],
         ]);
-
-        $contest_submission = ContestSubmission::create([
-            'event_id' => $validated['event_id'],
-            'user_id' => auth()->id(),
-            'universe_id' => $validated['universe_id'] ?? null,
-
-            'submission_title' => $validated['submission_title'],
-            'submission_category' => $validated['submission_category'],
-            'submission_description' => $validated['submission_description'],
-            'submission_url' => $validated['submission_url'] ?? null,
-
-            'submission_status' => ContestSubmission::STATUS_DRAFT,
-
-            'rules_accepted' => true,
-            'original_work_confirmed' => true,
-            'public_display_permission' => true,
-        ]);
+        $contest_submission = null;
+        
+        if($request->contest_submission_id){
+            $contest_submission = ContestSubmission::find($request->contest_submission_id);
+        }else {
+            $contest_submission = ContestSubmission::create([
+                'event_id' => $validated['event_id'],
+                'user_id' => auth()->id(),
+    
+                'submission_title' => $validated['submission_title'],
+                'submission_category' => $validated['submission_category'],
+                'submission_description' => $validated['submission_description'],
+                'submission_url' => $validated['submission_url'] ?? null,
+    
+                'submission_status' => ContestSubmission::STATUS_DRAFT,
+    
+                'rules_accepted' => true,
+                'original_work_confirmed' => true,
+                'public_display_permission' => true,
+            ]);
+        }
+        
 
         $step = 2;
 
@@ -123,62 +142,33 @@ class ContestantController extends Controller
     public function update(
         Request $request,
         ContestSubmission $contest_submission
-    ): View|RedirectResponse {
+    ): RedirectResponse {
         abort_if(
             $contest_submission->user_id !== auth()->id(),
             403
         );
-
-        $step = (int) $request->input('step');
-
+    
+        $step = (int) $request->input('step', 1);
+    
         switch ($step) {
+    
             case 2:
-                $this->storeContestFile(
-                    request: $request,
-                    contestSubmission: $contest_submission,
-                    fileType: ContestSubmissionFile::TYPE_THUMBNAIL,
-                    isPrimary: true,
-                    replaceExisting: true
+                return $this->updateThumbnailStep(
+                    $request,
+                    $contest_submission
                 );
-            
-                $step = 3;
-                break;
-            
+    
             case 3:
-                $this->storeContestFiles(
-                    request: $request,
-                    contestSubmission: $contest_submission,
-                    fileType: ContestSubmissionFile::TYPE_IMAGE,
-                    replaceExisting: true
+                return $this->updatePagesStep(
+                    $request,
+                    $contest_submission
                 );
-            
-                $step = 4;
-            
-                break;
-
+    
             default:
                 return back()->withErrors([
-                    'step' => 'The submitted contest step is invalid.',
+                    'step' => 'Invalid contest step.',
                 ]);
         }
-
-        $contest_submission->load([
-            'event',
-            'files',
-            'primaryThumbnail',
-        ]);
-
-        $event = $contest_submission->event;
-
-    
-        return view(
-            'contests.create',
-            compact(
-                'contest_submission',
-                'event',
-                'step'
-            )
-        );
     }
     private function storeContestFiles(
         Request $request,
@@ -487,6 +477,54 @@ class ContestantController extends Controller
             'Submission moved back to Draft.'
         );
     }
+    private function updateThumbnailStep(
+        Request $request,
+        ContestSubmission $contest_submission
+    ): RedirectResponse {
+    
+        $contest_submission->loadMissing('primaryThumbnail');
+    
+        if ($request->boolean('skip_step')) {
+    
+            if (!$contest_submission->primaryThumbnail) {
+                return back()->withErrors([
+                    'contest_file' => 'Please upload a thumbnail before continuing.',
+                ]);
+            }
+    
+            return redirect()->route('contestant.edit', [
+                'contest_submission' => $contest_submission,
+                'step' => 3,
+            ]);
+        }
+    
+        $request->validate([
+            'contest_file' => [
+                $contest_submission->primaryThumbnail
+                    ? 'nullable'
+                    : 'required',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:10240',
+            ],
+        ]);
+    
+        if ($request->hasFile('contest_file')) {
+    
+            $this->storeContestFile(
+                request: $request,
+                contestSubmission: $contest_submission,
+                fileType: ContestSubmissionFile::TYPE_THUMBNAIL,
+                isPrimary: true,
+                replaceExisting: true
+            );
+        }
+    
+        return redirect()->route('contestant.edit', [
+            'contest_submission' => $contest_submission,
+            'step' => 3,
+        ]);
+    }
     public function destroy($event_id,
         ContestSubmission $contest_submission
     ) {
@@ -509,6 +547,53 @@ class ContestantController extends Controller
                 'success',
                 'Contest submission deleted.'
             );
+    }
+    private function updatePagesStep(
+        Request $request,
+        ContestSubmission $contest_submission
+    ): RedirectResponse {
+    
+        $contest_submission->loadMissing('files');
+    
+        $existingPages = $contest_submission
+            ->files
+            ->where(
+                'file_type',
+                ContestSubmissionFile::TYPE_IMAGE
+            );
+    
+        if ($request->boolean('skip_step')) {
+    
+            if ($existingPages->isEmpty()) {
+                return back()->withErrors([
+                    'contest_files' => 'Please upload at least one page.',
+                ]);
+            }
+    
+            return redirect()->route('contestant.edit', [
+                'contest_submission' => $contest_submission,
+                'step' => 4,
+            ]);
+        }
+    
+        if (!$request->hasFile('contest_files')) {
+    
+            return back()->withErrors([
+                'contest_files' => 'Upload replacement pages or keep the existing ones.',
+            ]);
+        }
+    
+        $this->storeContestFiles(
+            request: $request,
+            contestSubmission: $contest_submission,
+            fileType: ContestSubmissionFile::TYPE_IMAGE,
+            replaceExisting: true
+        );
+    
+        return redirect()->route('contestant.edit', [
+            'contest_submission' => $contest_submission,
+            'step' => 4,
+        ]);
     }
 
 }
