@@ -165,7 +165,8 @@ class ApiController extends Controller
                 $event = Event::find($request->event_id)
                 ->load(['registrations' => function ($query) {
                         $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
-                    }]);
+                    },'submissions.files'
+                ]);
                     $data = $request->all();
 
                     return response()
@@ -180,7 +181,7 @@ class ApiController extends Controller
                     ->get()
                     ->load(['registrations' => function ($query) {
                         $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
-                    }]);
+                    },'submissions.files']);
                     $data = $request->all();
             
                     return response()
@@ -559,9 +560,9 @@ class ApiController extends Controller
             // dd($request->all());
             if(isset($request->card_series_id)){
 
-                $cardSeries = CardSeries::where('id',$request->card_series_id)->where('card_series_is_active', 1)->get()->load(['cards']);
+                $cardSeries = CardSeries::where('id',$request->card_series_id)->where('deleted_at', null)->where('card_series_is_active', 1)->get()->load(['cards']);
             } else {
-                $cardSeries = CardSeries::where('card_series_is_active', 1)->get()->load(['cards']);
+                $cardSeries = CardSeries::where('card_series_is_active', 1)->where('deleted_at', null)->get()->load(['cards']);
             }
 
             $data = $request->all();
