@@ -2,6 +2,23 @@
 
     <div class="bg-gray-50 py-10">
         <div class="mx-auto max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8">
+                <a
+                    href="{{ route('webisodes.create', $universe[0]['id'] ?? $universe->id) }}"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-5 w-5"
+                    >
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13l-2.685.805.805-2.685a4.5 4.5 0 0 1 1.13-1.897L16.862 4.487Zm0 0L19.5 7.125" />
+                    </svg>
+
+                    Create Webisode
+                </a>
 
             {{-- Hero --}}
             <div class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">

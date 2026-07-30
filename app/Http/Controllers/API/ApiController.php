@@ -136,9 +136,16 @@ class ApiController extends Controller
     public function getChapters(Request $request)
     {
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
+
             $pages = IssuePage::where('issue_id', $request->issue_id)->with('issue')->whereNull('issue_page_is_locked')->orderBy('issue_page_number')->get();
+            if($pages->isEmpty()){
+                return response()
+                ->json(null, 
+                200
+            );
+            }
             $issue = Issue::where('issue_book_id', $pages[0]['issue']['issue_book_id'])
-                            ->orderBy('issue_number')
+                            ->orderBy('issue_number')->with('polls.options.votes')
                             ->get();    
             $pages->put('chapters', $issue); 
 
@@ -165,7 +172,7 @@ class ApiController extends Controller
                 $event = Event::find($request->event_id)
                 ->load(['registrations' => function ($query) {
                         $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
-                    },'submissions.files'
+                    },'submissions.files','submissions.polls.options.votes',
                 ]);
                     $data = $request->all();
 
@@ -181,7 +188,7 @@ class ApiController extends Controller
                     ->get()
                     ->load(['registrations' => function ($query) {
                         $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
-                    },'submissions.files']);
+                    },'submissions.files','submissions.polls.options.votes',]);
                     $data = $request->all();
             
                     return response()
@@ -560,9 +567,9 @@ class ApiController extends Controller
             // dd($request->all());
             if(isset($request->card_series_id)){
 
-                $cardSeries = CardSeries::where('id',$request->card_series_id)->where('deleted_at', null)->where('card_series_is_active', 1)->get()->load(['cards']);
+                $cardSeries = CardSeries::where('id',$request->card_series_id)->where('deleted_at', null)->where('card_series_is_active', 1)->get()->load(['cards','polls.options.votes']);
             } else {
-                $cardSeries = CardSeries::where('card_series_is_active', 1)->where('deleted_at', null)->get()->load(['cards']);
+                $cardSeries = CardSeries::where('card_series_is_active', 1)->where('deleted_at', null)->get()->load(['cards','polls.options.votes']);
             }
 
             $data = $request->all();
@@ -622,9 +629,10 @@ class ApiController extends Controller
                             ->orderBy('video_number');
                     },
                     'universe',
+                    'polls.options.votes'
                 ])->findOrFail($request->webisode_id);
             } else {
-                $webisodes = Webisode::whereNull('deleted_at')->where('webisode_is_active', 1)->with(['videos'])->get();
+                $webisodes = Webisode::whereNull('deleted_at')->where('webisode_is_active', 1)->with(['videos','polls.options.votes'])->get();
             }
 
             $data = $request->all();
