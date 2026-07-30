@@ -87,7 +87,7 @@ class ApiController extends Controller
                 return response()
                 ->json(Book::where('is_active', 1)
                 ->where('id', $request->book_id)
-                ->with('issues')
+                ->with('issues.polls.options.votes')
                 ->get()
                 ->makeHidden(
                     [
@@ -116,7 +116,7 @@ class ApiController extends Controller
             return response()
                     ->json(Book::where('is_active', 1)
                     ->get()
-                    ->load('issues')
+                    ->load('issues.polls.options.votes')
                     ->makeHidden(
                         [
                             'created_at',

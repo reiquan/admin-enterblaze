@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Book extends Model
 {
@@ -51,5 +52,13 @@ class Book extends Model
     public function universe()
     {
         return $this->belongsTo(Universe::class, 'book_universe_id');
+    }
+
+    public function polls(): MorphMany
+    {
+        return $this->morphMany(
+            \App\Models\Poll::class,
+            'pollable'
+        );
     }
 }

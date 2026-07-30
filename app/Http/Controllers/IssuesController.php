@@ -9,12 +9,17 @@ use App\Models\IssuePage;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Services\PollService;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Validator;
 
 class IssuesController extends Controller
 {
+    public function __construct(
+        private readonly PollService $pollService
+    ) {
+    }
     /**
      * Display a listing of the resource.
      */
@@ -89,7 +94,13 @@ class IssuesController extends Controller
                         // if(isset($request->volume_number)){
                         //     $issue->volume_number = $request->volume_number;
                         // }
+                        
                     $issue->save();
+                    
+                    $this->pollService->createDefaultPoll($issue);
+
+
+
 
             }
 

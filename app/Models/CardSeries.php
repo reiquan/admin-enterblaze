@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class CardSeries extends Model
 {
@@ -52,5 +53,13 @@ class CardSeries extends Model
     public function book()
     {
         return $this->belongsTo(Book::Class);
+    }
+
+    public function polls(): MorphMany
+    {
+        return $this->morphMany(
+            \App\Models\Poll::class,
+            'pollable'
+        );
     }
 }
