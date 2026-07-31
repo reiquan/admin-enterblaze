@@ -8,6 +8,7 @@ use App\Models\EventRegistrationAttendance;
 use App\Models\EventRegistration;
 use App\Models\EventLivestream;
 use Illuminate\Validation\Rule;
+use App\Services\PollService;
 
 use App\Models\User;
 use Carbon\Carbon;
@@ -15,6 +16,10 @@ use Carbon\Carbon;
 class EventsController extends Controller
 {
     //
+    public function __construct(
+        private readonly PollService $pollService
+    ) {
+    }
     public function index(Request $request){
    
         // if(isset($request['candidate']) and $request['candidate']) {
@@ -214,6 +219,7 @@ class EventsController extends Controller
                 $event->attendees = json_encode($request->attendees);
                 $event->tags = $request->event_tags ?? null;
             $event->save();
+
        }
 
        $livestream = EventLivestream::findOrNew($request->event_livestream_id);

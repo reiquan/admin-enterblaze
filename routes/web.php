@@ -181,8 +181,17 @@ Route::middleware([
     )->name('contestant.destroy');
 
     //Livestream
-    Route::middleware('frontend.api')->get(
-        '/public/livestream/current','App\Http\Controllers\Api\EventLivestreamsController@current')->name('event.livestream');
+    Route::middleware('frontend.api')->get('/public/livestream/current','App\Http\Controllers\Api\EventLivestreamsController@current')->name('event.livestream');
+
+    //Polls
+    Route::get('/polls/index', 'App\Http\Controllers\PollController@index')->name('polls.index');
+    Route::get('/polls/create', 'App\Http\Controllers\PollController@create')->name('polls.create');
+    Route::post('/polls/store', 'App\Http\Controllers\PollController@store')->name('polls.store');
+    Route::get('/polls/{poll_id}/show', 'App\Http\Controllers\PollController@show')->name('polls.show');
+    Route::get('/polls/{poll}/edit', 'App\Http\Controllers\PollController@edit')->name('polls.edit');
+    Route::post('/polls/{poll}/update', 'App\Http\Controllers\PollController@update')->name('polls.update');
+    Route::delete('/polls/{poll}/destroy', 'App\Http\Controllers\PollController@destroy')->name('polls.destroy');
+
 
 });
 // Route::get('/twitch-test', function () {  TTHIS ROUTE IS FUNCTIONING PROPERLY. TESTING IN VALET/DEV IS NOT POSSIBLE. MUST TEST LIVE EVENT ON STAGING

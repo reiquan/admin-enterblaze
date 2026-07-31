@@ -11,10 +11,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use App\Services\PollService;
 use Validator;
 
 class BookController extends Controller
 {
+    public function __construct(
+        private readonly PollService $pollService
+    ) {
+    }
     /**
      * Display a listing of the resource.
      */
@@ -91,6 +96,7 @@ class BookController extends Controller
                         //     $book->volume_number = $request->volume_number;
                         // }
                     $book->save();
+                    $this->pollService->createDefaultPoll($book);
 
 
             }
