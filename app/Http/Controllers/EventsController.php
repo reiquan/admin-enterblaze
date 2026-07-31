@@ -219,7 +219,7 @@ class EventsController extends Controller
                 $event->attendees = json_encode($request->attendees);
                 $event->tags = $request->event_tags ?? null;
             $event->save();
-            $this->pollService->createDefaultPoll($event);
+
        }
 
        $livestream = EventLivestream::findOrNew($request->event_livestream_id);

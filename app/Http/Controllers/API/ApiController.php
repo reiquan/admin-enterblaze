@@ -21,15 +21,17 @@ use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\EventRegistrationAttendance;
 use App\Models\BlazeTokenTier;
+use App\Services\PollService;
 
 class ApiController extends Controller
 {
  
     
-    public function __construct(ValidationService $validationService, StripeService $stripeService, SubscriptionService $alertService){
+    public function __construct(ValidationService $validationService, StripeService $stripeService, SubscriptionService $alertService, PollService $pollService){
         $this->validationService = $validationService;
         $this->stripeService = $stripeService;
         $this->alertService = $alertService;
+        $this->pollService = $pollService;
     }
     public function getUniverses(Request $request)
     {
@@ -172,7 +174,7 @@ class ApiController extends Controller
                 $event = Event::find($request->event_id)
                 ->load(['registrations' => function ($query) {
                         $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
-                    },'submissions.files','submissions.polls.options.votes',
+                    },'submissions.files','submissions.polls.options.votes','submissions.user',
                 ]);
                     $data = $request->all();
 
@@ -188,7 +190,7 @@ class ApiController extends Controller
                     ->get()
                     ->load(['registrations' => function ($query) {
                         $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
-                    },'submissions.files','submissions.polls.options.votes',]);
+                    },'submissions.files','submissions.polls.options.votes','submissions.user',]);
                     $data = $request->all();
             
                     return response()
@@ -222,6 +224,65 @@ class ApiController extends Controller
             ->where('id', $request->registration_id)
             ->with('event')
             ->get();
+           
+            
+
+            if($registrations->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $registrations,
+                    ], 
+                    200
+                );
+            } else {
+                return response()
+                    ->json([
+                        'status' => 'error',
+                        'message' => 'Could Not Find Any Events',
+                    ], 
+                    300
+                );
+            }
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'data' => 'Unauthorized Request',
+                ], 
+                400
+            );
+        }
+
+    }
+
+    public function submitVote(Request $request){
+
+        
+
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
+ 
+            try{
+
+                $this->pollService->storeVote($request);
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => 'Vote succesfully registered',
+                    ], 
+                    200
+                );
+
+            } catch(e){
+
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'error' => 'The vote could not be submitted. Please try again later',
+                    ], 
+                    200
+                );
+            }
            
             
 

@@ -3,10 +3,14 @@
 namespace App\Services;
 
 use App\Models\Poll;
+use App\Models\PollOption;
+use App\Models\PollVote;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 use InvalidArgumentException;
+use Illuminate\Support\Str;
 use Throwable;
 
 class PollService
@@ -18,7 +22,7 @@ class PollService
     public function createDefaultPoll(
         Model $pollable,
         array $attributes = [],
-        array $options = []
+        array $options = [],
     ): Poll {
         if (!$pollable->exists) {
             throw new InvalidArgumentException(
@@ -184,5 +188,107 @@ class PollService
             ?? $pollable->issue_title
             ?? $pollable->webisode_title
             ?? class_basename($pollable);
+    }
+
+    public function storeVote(Request $request)
+    {
+        $validated = $request->validate([
+            'poll_id' => [
+                'required',
+                'integer',
+                'exists:polls,id',
+            ],
+            'option_id' => [
+                'required',
+                'integer',
+                'exists:poll_options,id',
+            ],
+            'voter_identifier' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+        ]);
+
+        $poll = Poll::query()
+            ->findOrFail($validated['poll_id']);
+
+        $option = PollOption::query()
+            ->where('id', $validated['option_id'])
+            ->where('poll_id', $poll->id)
+            ->first();
+
+        if (!$option) {
+            return response()->json([
+                'message' => 'The selected option does not belong to this poll.',
+            ], 422);
+        }
+
+        /*
+         * For authenticated API users, use the user ID.
+         * For guests, receive a persistent identifier from the front site.
+         * IP is included as a fallback, but should not be the only identifier.
+         */
+        $userId = $request->user()?->id;
+
+        $voterIdentifier = $userId
+            ? 'user:' . $userId
+            : $validated['voter_identifier'] ?? null;
+
+        if (!$voterIdentifier) {
+            $voterIdentifier = hash(
+                'sha256',
+                implode('|', [
+                    $request->ip(),
+                    $request->userAgent() ?? '',
+                    $poll->id,
+                ])
+            );
+        }
+
+        try {
+            $vote = DB::transaction(function () use (
+                $request,
+                $poll,
+                $option,
+                $userId,
+                $voterIdentifier
+            ) {
+                return PollVote::create([
+                    'poll_id' => $poll->id,
+                    'poll_option_id' => $option->id,
+                    'user_id' => $userId,
+                    'voter_identifier' => $voterIdentifier,
+                    'ip_address' => $request->ip(),
+                    'user_agent' => Str::limit(
+                        $request->userAgent() ?? '',
+                        1000
+                    ),
+                ]);
+            });
+        } catch (QueryException $exception) {
+            if (
+                in_array(
+                    $exception->getCode(),
+                    ['23000', '23505'],
+                    true
+                )
+            ) {
+                return response()->json([
+                    'message' => 'You have already voted in this poll.',
+                ], 409);
+            }
+
+            throw $exception;
+        }
+
+        return response()->json([
+            'message' => 'Your vote was recorded successfully.',
+            'data' => [
+                'vote_id' => $vote->id,
+                'poll_id' => $vote->poll_id,
+                'option_id' => $vote->poll_option_id,
+            ],
+        ], 201);
     }
 }
