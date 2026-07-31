@@ -14,10 +14,15 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Carbon\Carbon;
+use App\Services\PollService;
 use Validator;
 
 class CardSeriesController extends Controller
 {
+    public function __construct(
+        private readonly PollService $pollService
+    ) {
+    }
     /**
      * Display a listing of the resource.
      */
@@ -90,6 +95,7 @@ class CardSeriesController extends Controller
                         }
                     
                     $card_series->save();
+                    $this->pollService->createDefaultPoll($card_series);
 
             }
 

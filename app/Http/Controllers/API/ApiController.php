@@ -21,15 +21,17 @@ use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\EventRegistrationAttendance;
 use App\Models\BlazeTokenTier;
+use App\Services\PollService;
 
 class ApiController extends Controller
 {
  
     
-    public function __construct(ValidationService $validationService, StripeService $stripeService, SubscriptionService $alertService){
+    public function __construct(ValidationService $validationService, StripeService $stripeService, SubscriptionService $alertService, PollService $pollService){
         $this->validationService = $validationService;
         $this->stripeService = $stripeService;
         $this->alertService = $alertService;
+        $this->pollService = $pollService;
     }
     public function getUniverses(Request $request)
     {
@@ -87,7 +89,7 @@ class ApiController extends Controller
                 return response()
                 ->json(Book::where('is_active', 1)
                 ->where('id', $request->book_id)
-                ->with('issues')
+                ->with('issues.polls.options.votes')
                 ->get()
                 ->makeHidden(
                     [
@@ -116,7 +118,7 @@ class ApiController extends Controller
             return response()
                     ->json(Book::where('is_active', 1)
                     ->get()
-                    ->load('issues')
+                    ->load('issues.polls.options.votes')
                     ->makeHidden(
                         [
                             'created_at',
@@ -136,9 +138,16 @@ class ApiController extends Controller
     public function getChapters(Request $request)
     {
         if($request->header('EnterblazeAuth') == config('auth.api.token')){
+
             $pages = IssuePage::where('issue_id', $request->issue_id)->with('issue')->whereNull('issue_page_is_locked')->orderBy('issue_page_number')->get();
+            if($pages->isEmpty()){
+                return response()
+                ->json(null, 
+                200
+            );
+            }
             $issue = Issue::where('issue_book_id', $pages[0]['issue']['issue_book_id'])
-                            ->orderBy('issue_number')
+                            ->orderBy('issue_number')->with('polls.options.votes')
                             ->get();    
             $pages->put('chapters', $issue); 
 
@@ -165,7 +174,7 @@ class ApiController extends Controller
                 $event = Event::find($request->event_id)
                 ->load(['registrations' => function ($query) {
                         $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
-                    },'submissions.files'
+                    },'submissions.files','submissions.polls.options.votes','submissions.user',
                 ]);
                     $data = $request->all();
 
@@ -181,7 +190,7 @@ class ApiController extends Controller
                     ->get()
                     ->load(['registrations' => function ($query) {
                         $query->where('registration_end_date', '>=', now())->where('registration_is_active', 1);
-                    },'submissions.files']);
+                    },'submissions.files','submissions.polls.options.votes','submissions.user',]);
                     $data = $request->all();
             
                     return response()
@@ -215,6 +224,65 @@ class ApiController extends Controller
             ->where('id', $request->registration_id)
             ->with('event')
             ->get();
+           
+            
+
+            if($registrations->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $registrations,
+                    ], 
+                    200
+                );
+            } else {
+                return response()
+                    ->json([
+                        'status' => 'error',
+                        'message' => 'Could Not Find Any Events',
+                    ], 
+                    300
+                );
+            }
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'data' => 'Unauthorized Request',
+                ], 
+                400
+            );
+        }
+
+    }
+
+    public function submitVote(Request $request){
+
+        
+
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
+ 
+            try{
+
+                $this->pollService->storeVote($request);
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => 'Vote succesfully registered',
+                    ], 
+                    200
+                );
+
+            } catch(e){
+
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'error' => 'The vote could not be submitted. Please try again later',
+                    ], 
+                    200
+                );
+            }
            
             
 
@@ -560,9 +628,9 @@ class ApiController extends Controller
             // dd($request->all());
             if(isset($request->card_series_id)){
 
-                $cardSeries = CardSeries::where('id',$request->card_series_id)->where('deleted_at', null)->where('card_series_is_active', 1)->get()->load(['cards']);
+                $cardSeries = CardSeries::where('id',$request->card_series_id)->where('deleted_at', null)->where('card_series_is_active', 1)->get()->load(['cards','polls.options.votes']);
             } else {
-                $cardSeries = CardSeries::where('card_series_is_active', 1)->where('deleted_at', null)->get()->load(['cards']);
+                $cardSeries = CardSeries::where('card_series_is_active', 1)->where('deleted_at', null)->get()->load(['cards','polls.options.votes']);
             }
 
             $data = $request->all();
@@ -622,9 +690,10 @@ class ApiController extends Controller
                             ->orderBy('video_number');
                     },
                     'universe',
+                    'polls.options.votes'
                 ])->findOrFail($request->webisode_id);
             } else {
-                $webisodes = Webisode::whereNull('deleted_at')->where('webisode_is_active', 1)->with(['videos'])->get();
+                $webisodes = Webisode::whereNull('deleted_at')->where('webisode_is_active', 1)->with(['videos','polls.options.votes'])->get();
             }
 
             $data = $request->all();

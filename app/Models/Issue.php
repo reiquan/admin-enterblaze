@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Poll;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Issue extends Model
 {
@@ -41,5 +43,10 @@ class Issue extends Model
     }
     public function book(){
         return $this->belongsTo(Book::class, 'issue_book_id');
+    }
+
+    public function polls(): MorphMany
+    {
+        return $this->morphMany(Poll::class, 'pollable');
     }
 }

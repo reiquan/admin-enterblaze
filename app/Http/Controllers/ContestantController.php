@@ -10,11 +10,16 @@ use App\Models\ContestSubmissionFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Illuminate\Support\Collection;
+use App\Services\PollService;
 
 class ContestantController extends Controller
 {
     //
-    
+    public function __construct(
+        private readonly PollService $pollService
+    ) {
+    }
+
     public function index(Request $request, $event_id ): View|RedirectResponse {
         abort_if(
            auth()->user()->current_team_id !== 2,
@@ -125,6 +130,10 @@ class ContestantController extends Controller
                 'original_work_confirmed' => true,
                 'public_display_permission' => true,
             ]);
+
+            $attributes['question']='What did you think of '. $contest_submission->submission_title .'?';
+
+            $this->pollService->createDefaultPoll($contest_submission, $attributes, []);
         }
         
 

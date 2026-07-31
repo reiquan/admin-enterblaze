@@ -38,6 +38,7 @@ Route::post('submitOpenRegistrationAttendance', [ApiController::class, 'submitOp
 Route::post('submitReservation', [ApiController::class, 'submitReservation']);
 Route::get('getBlazeTokenTiers', [ApiController::class, 'getBlazeTokenTiers']);
 Route::get('checkRegistrationLimit', [ApiController::class, 'checkRegistrationLimit']);
+Route::post('submitVote', [ApiController::class, 'submitVote']);
 
 //Livestream
 Route::get('/public/livestream/current', [EventLivestreamsController::class, 'current']);
