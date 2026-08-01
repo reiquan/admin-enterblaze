@@ -100,7 +100,7 @@ class WebisodeVideosController extends Controller
                     'video_description'=> $request->video_description,
             
                     'video_price' => $request->video_price,
-                    'video_blaze_token_cost'=> intval($request->video_blaze_token_cost )/ intval(config('auth.blaze_tokens.exchange')) ?? 0,
+                    'video_blaze_token_cost'=> intval($request->video_price )/ intval(config('auth.blaze_tokens.exchange')) ?? 0,
             
                     'video_is_free'=> $request->boolean('video_is_free'),
                     'video_is_locked'=> $request->boolean('video_is_locked'),
@@ -130,7 +130,7 @@ class WebisodeVideosController extends Controller
                         'video_description'=> $request->video_description,
                 
                         'video_price' => $request->video_price,
-                        'video_blaze_token_cost'=> $request->video_blaze_token_cost ?? 0,
+                        'video_blaze_token_cost'=> intval($request->video_price )/ intval(config('auth.blaze_tokens.exchange')) ?? 0,
                 
                         'video_is_free'=> $request->boolean('video_is_free'),
                         'video_is_locked'=> $request->boolean('video_is_locked'),
