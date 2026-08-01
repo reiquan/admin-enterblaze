@@ -40,7 +40,7 @@ class WebisodesController extends Controller
     public function create(REQUEST $request, Universe $universe_id)
     {
         //
-    
+
         $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
         $universe = Universe::find($request->universe_id)->load('books', 'cardSeries');
         $universe_id = isset($request->universe_id) ? $request->universe_id : '';
@@ -63,7 +63,6 @@ class WebisodesController extends Controller
     public function store(Request $request, Universe $universe_id)
     {
           //validate info
-        // dd($request->all());
 
         $webisode = $request->webisode_id ? Webisode::find($request->webisode_id) : new webisode;
         //save info
@@ -93,7 +92,9 @@ class WebisodesController extends Controller
                         $webisode->webisode_release_date = $request->webisode_release_date;
                         $webisode->webisode_slug = strtolower(str_replace(" ","_",  $request->webisode_title));
                         $webisode->webisode_price = $request->webisode_price;
+                        
                     $webisode->save();
+                
                     $this->pollService->createDefaultPoll($webisode);
 
             }
@@ -129,8 +130,8 @@ class WebisodesController extends Controller
     {
         //
      
-        $webisode = Webisode::find($webisode_id)->first();
-        
+        $webisode = Webisode::find($webisode_id->id);
+
         $universe = $webisode->universe;
     
 
@@ -149,7 +150,9 @@ class WebisodesController extends Controller
         // dd($request->all());
 
         $step = isset($_REQUEST['step']) ? $_REQUEST['step'] : 1;
-        $webisode = Webisode::find($webisode_id)->first();
+ 
+        $webisode = Webisode::find($webisode_id->id);
+
         $universe = $webisode->universe;
 
         return view('universe/webisodes/create', compact('webisode', 'step','universe'));
