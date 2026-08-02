@@ -37,6 +37,7 @@ Route::get('getEvents', [ApiController::class, 'getEvents']);
 Route::post('submitOpenRegistrationAttendance', [ApiController::class, 'submitOpenRegistrationAttendance']);
 Route::post('submitReservation', [ApiController::class, 'submitReservation']);
 Route::get('getBlazeTokenTiers', [ApiController::class, 'getBlazeTokenTiers']);
+Route::get('getServices', [ApiController::class, 'getServices']);
 Route::get('checkRegistrationLimit', [ApiController::class, 'checkRegistrationLimit']);
 Route::post('submitVote', [ApiController::class, 'submitVote']);
 

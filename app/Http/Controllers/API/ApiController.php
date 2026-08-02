@@ -21,6 +21,7 @@ use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\EventRegistrationAttendance;
 use App\Models\BlazeTokenTier;
+use App\Models\Service;
 use App\Services\PollService;
 
 class ApiController extends Controller
@@ -779,8 +780,61 @@ class ApiController extends Controller
  
      }
 
-     
+     public function getServices(Request $request){
 
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
+        
+            $service = null;
+            $services = null;
+            // dd($request->all());
+            if(isset($request->service_id)){
+
+                $service = Service::find($request->service_id);
+            } else {
+                $services = Service::whereNull('deleted_at')->where('service_is_active', 1)->get();
+            }
+
+            $data = $request->all();
+    
+            if($service && $service->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $service,
+                    ], 
+                    200
+                );
+            } else if($services && $services->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $services,
+                    ], 
+                    200
+                );
+            } else {
+                return response()
+                    ->json([
+                        'status' => 'error',
+                        'message' => 'Could Not Find Any Services',
+                        'data' => $data,
+                    ], 
+                    400
+                );
+            }
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'data' => 'Unauthorized Request',
+                ], 
+                400
+            );
+        }
+ 
+     }
+
+     
      public function checkRegistrationLimit(Request $request){
         
         if($request->header('EnterblazeAuth') == config('auth.api.token')){

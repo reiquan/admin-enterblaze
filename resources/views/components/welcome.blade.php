@@ -170,7 +170,30 @@
                         Manage Polls &rarr;
                     </div>
                 </a>
+                <a href="{{ route('services.index') }}" class="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-red-200 hover:shadow-md">
+                    <div class="flex items-center">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-red-800 ring-1 ring-red-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                            </svg>
+
+                        </div>
+
+                        <h2 class="ml-4 text-lg font-semibold text-gray-900 group-hover:text-red-800">
+                            Services
+                        </h2>
+                    </div>
+
+                    <p class="mt-4 text-sm leading-relaxed text-gray-500">
+                        create and manage services
+                    </p>
+
+                    <div class="mt-5 text-sm font-semibold text-red-800">
+                        Manage Services &rarr;
+                    </div>
+                </a>
             </div>
+            
         </div>
     @endif
 </div>
