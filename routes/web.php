@@ -192,6 +192,17 @@ Route::middleware([
     Route::post('/polls/{poll}/update', 'App\Http\Controllers\PollController@update')->name('polls.update');
     Route::delete('/polls/{poll}/destroy', 'App\Http\Controllers\PollController@destroy')->name('polls.destroy');
 
+    //Services
+    Route::get('/services/dashboard', 'App\Http\Controllers\ServicesController@dashboard')->name('services.dashboard');
+    Route::get('/services/index', 'App\Http\Controllers\ServicesController@index')->name('services.index');
+    Route::get('/services/create', 'App\Http\Controllers\ServicesController@create')->name('services.create');
+    Route::get('/services/{service_id}/edit', 'App\Http\Controllers\ServicesController@edit')->name('services.edit');
+    Route::get('/services/{service_id}/show', 'App\Http\Controllers\ServicesController@show')->name('services.show');
+    Route::post('/services/submit', 'App\Http\Controllers\ServicesController@submit')->name('services.submit');
+    Route::post('/services/{service_id}/update', 'App\Http\Controllers\ServicesController@update')->name('services.update');
+    Route::post('/services/{service_id}/delete', 'App\Http\Controllers\ServicesController@destroy')->name('services.delete');
+    Route::post('/services/{service_id}/publish', 'App\Http\Controllers\ServicesController@publish')->name('services.publish');
+
 
 });
 // Route::get('/twitch-test', function () {  TTHIS ROUTE IS FUNCTIONING PROPERLY. TESTING IN VALET/DEV IS NOT POSSIBLE. MUST TEST LIVE EVENT ON STAGING
