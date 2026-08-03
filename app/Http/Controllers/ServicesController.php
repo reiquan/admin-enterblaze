@@ -44,7 +44,7 @@ class ServicesController extends Controller
 
             'service_tag' => $request->service_tag,
             'service_perks' => $request->service_perks,
-            'service_featured' => $request->featured,
+            'service_featured' => $request->service_featured,
             'service_frequency' => $request->service_frequency,
             'service_price' => $request->service_price,
             'service_is_active' => 1,
