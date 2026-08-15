@@ -17,6 +17,10 @@ class Service extends Model
      * @var string
      */
     protected $table = 'services';
+
+    protected $casts = [
+        'service_sale_ends_at' => 'date',
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -30,6 +34,10 @@ class Service extends Model
         'service_frequency',
         'service_tag',
         'service_perks',
+        'service_category',
+        'service_is_on_sale',
+        'service_sale_percentage',
+        'service_sale_ends_at',
         'service_featured'
     ];
 

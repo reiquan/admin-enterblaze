@@ -120,11 +120,53 @@
                                
                                 <div >
                                     <label for="service_frequency" class="block text-sm font-bold text-gray-900">Service Frequency</label>
-                                    <select id="service_frequency" name="service_frequency" autocomplete="service_frequency"   class="mt-2 mb-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-600 focus:ring-indigo-600">
+                                    <select id="service_frequency" name="service_frequency" autocomplete="service_frequency"   class="mt-2 mb-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-600 focus:ring-indigo-600" required>
                                         <option>Monthly</option>
                                         <option>Yearly</option>
                                         <option>One-Time</option>
                                     </select>
+                                </div>
+                                <div >
+                                    <label for="service_category" class="block text-sm font-bold text-gray-900">Service Category</label>
+                                    <select id="service_category" name="service_category" autocomplete="service_category"   class="mt-2 mb-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-600 focus:ring-indigo-600">
+                                        <option value="0">Select a Category</option>
+                                        <option value="publishing_services">Publishing</option>
+                                        <option value="creator_services">Creator</option>
+                                        <option value="influencer_services">Influencer</option>
+                                        <option value="fee_service">Fee</option>
+                                    </select>
+                                </div>
+                                <div >
+                                    <label for="service_is_on_sale" class="block text-sm font-bold text-gray-900">On Sale</label>
+                                    <select id="service_is_on_sale" name="service_is_on_sale" autocomplete="service_is_on_sale"   class="mt-2 mb-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-600 focus:ring-indigo-600">
+                                        <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="service_sale_percentage" class="block text-sm font-bold text-gray-900">Service Sale Percentage Off</label>
+                                    <input
+                                        type="number"
+                                        name="service_sale_percentage"
+                                        id="service_sale_percentage"
+                                        value="{{ old('service_sale_percentage', $service->service_sale_percentage ?? '') }}"
+                                        min="0"
+                                        class="mt-2 mb-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-600 focus:ring-indigo-600"
+                                        placeholder="25% Off"
+                                    >
+                                </div>
+                                <div class="sm:col-span-1">
+                                    <label for="service_sale_ends_at" class="block text-sm font-semibold text-gray-900">
+                                        Sale ends on:
+                                    </label>
+                                    <div class="mt-2">
+                                        <input type="date"
+                                                name="service_sale_ends_at"
+                                                id="service_sale_ends_at"
+                                                autocomplete="service_sale_ends_at"
+                                                value="{{ old('service_sale_ends_at') }}"
+                                                class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                                    </div>
                                 </div>
        
 

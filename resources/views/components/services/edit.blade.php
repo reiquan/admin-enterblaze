@@ -127,6 +127,50 @@
                             @endforeach
                         </select>
 
+                        <div >
+                            <label for="service_category" class="block text-sm font-bold text-gray-900">Service Category</label>
+                            <select id="service_category" name="service_category" autocomplete="service_category"   class="mt-2 mb-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-600 focus:ring-indigo-600">
+                            <option value="">Select Service  Category</option>
+                            @foreach(['publishing_services'=>'Publishing', 'creator_services'=>'Creator', 'influencer_services'=>'Influencer', 'fee_services'=>'Fee'] as $key => $category)
+                                <option value="{{ $key }}" @selected(old('service_category', $service->service_category ?? '') === $key)>{{ $category }}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                        <div >
+                            <label for="service_is_on_sale" class="block text-sm font-bold text-gray-900">On Sale</label>
+                            <select id="service_is_on_sale" name="service_is_on_sale" autocomplete="service_is_on_sale"   class="mt-2 mb-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-600 focus:ring-indigo-600">
+                            @foreach(['0' => 'No', '1' => 'Yes'] as $key => $active)
+                                <option value="{{ $key }}" @selected(old('service_is_on_sale', $service->service_is_on_sale ?? '') === $key)>{{ $active }}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="service_sale_percentage" class="block text-sm font-bold text-gray-900">Service Sale Percentage Off</label>
+                            <input
+                                type="number"
+                                name="service_sale_percentage"
+                                id="service_sale_percentage"
+                                value="{{ old('service_sale_percentage', $service->service_sale_percentage ?? '') }}"
+                                min="0"
+                                class="mt-2 mb-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-600 focus:ring-indigo-600"
+                                placeholder="25% Off"
+                                required
+                            >
+                        </div>
+                        <div class="sm:col-span-1">
+                            <label for="service_sale_ends_at" class="block text-sm font-semibold text-gray-900">
+                                Sale ends on:
+                            </label>
+                            <div class="mt-2">
+                                <input type="date"
+                                        name="service_sale_ends_at"
+                                        id="service_sale_ends_at"
+                                        autocomplete="service_sale_ends_at"
+                                        value="{{ old('service_sale_ends_at', $service->service_sale_ends_at?->format('Y-m-d')) }}"
+                                        class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                            </div>
+                        </div>
+
 
                         <div class="sm:col-span-2">
                             <label for="service_description" class="block text-sm font-bold text-gray-900">Service Description</label>

@@ -41,13 +41,17 @@ class ServicesController extends Controller
         $service = Service::create([
             'service_name' => $request->service_name,
             'service_description' => $request->service_description,
-
             'service_tag' => $request->service_tag,
             'service_perks' => $request->service_perks,
             'service_featured' => $request->service_featured,
+            'service_category' => $request->service_category,
+            'service_category' => $request->service_category,
+            'service_is_on_sale' => $request->service_is_on_sale,
             'service_frequency' => $request->service_frequency,
+            'service_sale_percentage' => $request->service_sale_percentage,
+            'service_sale_ends_at' => $request->service_sale_ends_at,
             'service_price' => $request->service_price,
-            'service_is_active' => 1,
+            'service_is_active' => 0,
         ]);
 
         return redirect()->route('services.index');
@@ -62,8 +66,12 @@ class ServicesController extends Controller
             $service->service_description = $request->service_description;
             $service->service_price = $request->service_price;
             $service->service_featured = $request->service_featured;
+            $service->service_category = $request->service_category;
+            $service->service_is_on_sale = $request->service_is_on_sale;
+            $service->service_sale_percentage = $request->service_sale_percentage;
+            $service->service_sale_ends_at = $request->service_sale_ends_at;
             $service->service_frequency = $request->service_frequency;
-            $service->service_is_active = 1;
+            $service->service_is_active = 0;
 
         $service->save();
         
