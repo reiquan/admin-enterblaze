@@ -42,18 +42,18 @@
 
                 <div class="mt-8 grid grid-cols-1 gap-x-6 gap-y-7 sm:grid-cols-6">
                     <div class="sm:col-span-4">
-                        <label for="card_character_name" class="block text-sm font-semibold text-gray-900">
-                            Chracter Full Name
+                        <label for="card_character_quote" class="block text-sm font-semibold text-gray-900">
+                            Character Quote
                         </label>
                         <div class="mt-2">
                             <input type="text"
-                                    name="card_character_name"
-                                    value="{{ $card->character->card_character_name ?? old('card_character_name') }}"
-                                    id="card_character_name"
-                                    autocomplete="card_character_name"
-                                    value="{{ old('card_character_name') }}"
+                                    name="card_character_quote"
+                                    value="{{ $card->character->card_character_quote ?? old('card_character_quote') }}"
+                                    id="card_character_quote"
+                                    autocomplete="card_character_quote"
+                                    value="{{ old('card_character_quote') }}"
                                     class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                                    placeholder="Example: Reiden Tapped In">
+                                    placeholder="Im HIM Cuh!!">
                         </div>
                     </div>
                     <div class="sm:col-span-2">

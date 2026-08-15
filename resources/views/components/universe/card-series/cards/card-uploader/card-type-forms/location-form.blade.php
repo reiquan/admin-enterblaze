@@ -52,7 +52,8 @@
                                     id="card_location_name"
                                     autocomplete="card_location_name"
                                     class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                                    placeholder="Example: Reiden Tapped In">
+                                    placeholder="Example: Reiden Tapped In"
+                                    required>
                         </div>
                     </div>
                     <div class="sm:col-span-2">
@@ -67,6 +68,7 @@
                             autocomplete="card_location_region"
                             value="{{ old('card_location_region') }}"
                             class="block w-full rounded-xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                            required
                             >
                         </div>
                     </div>
@@ -87,7 +89,7 @@
                                     class="flex min-h-[56px] flex-wrap items-center gap-2 rounded-2xl border border-gray-300 bg-white px-3 py-3 shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
                                 <input type="text" id="tag-input"
                                         class="min-w-[180px] flex-1 border-0 bg-transparent px-2 py-1 text-sm text-gray-900 placeholder:text-gray-400 focus:ring-0"
-                                        placeholder="Type a tag and press Enter">
+                                        placeholder="Type a tag and press Enter" required>
                             </div>
                             <input type="hidden" name="card_location_bonuses" id="event-tags-hidden" value="{{ old('card_location_bonuses', $location->bonuses ?? '') }}">
                             <p class="mt-2 text-xs text-gray-500">Press Enter or comma after each tag.</p>
