@@ -210,12 +210,12 @@
                                     </form>
                                     @endif
 
-                                    @if(Route::has('cards.destroy'))
-                                        <form method="POST" action="{{ route('cards.destroy', ['card' => $card->id]) }}" onsubmit="return confirm('Delete this card?')" class="w-full">
+                                    @if(Route::has('cards.delete'))
+                                        <form method="POST" action="{{ route('cards.delete', ['universe_id' => $card->series->universe->id,'card_series_id' => $card->series->id,'card_id' => $card->id]) }}" onsubmit="return confirm('Delete this card?')" class="w-full">
                                         <input type="hidden" id="u_id" name="universe_id" value="{{ $card->series->card_series_universe_id }}">
                                         <input type="hidden" id="c_id"  name="card_id" value="{{ $card->id }}">
                                             @csrf
-                                            @method('DELETE')
+                                            @method('POST')
                                             <button type="submit"
                                                 class="inline-flex w-full items-center justify-center rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100">
                                                 Delete

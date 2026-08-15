@@ -1,9 +1,10 @@
 <div class="bg-gray-50/70 px-4 py-6 sm:px-6 lg:px-8">
-    <form method="POST" action="{{ route('card-series.finish',['universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id ?? $universe_id, 'card_series_id' => $card_series->id ]) }}" class="mx-auto max-w-6xl" enctype="multipart/form-data">
+
+    <form method="POST" action="{{ route('card-series.finish',['universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id, 'card_series_id' => $card_series->id ?? $card_series_id ]) }}" class="mx-auto max-w-6xl" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="step" value="{{ $step }}">
-        <input type="hidden" name="universe_id" value="{{ $universe_id }}">
-        <input type="hidden" name="card_series_id" value="{{ $card_series_id }}">
+        <input type="hidden" name="universe_id" value="{{ $universe_id ?? $universe->id }}">
+        <input type="hidden" name="card_series_id" value="{{ $card_series_id ?? card_series->id }}">
 
         @if ($errors->any())
             <div class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
@@ -112,8 +113,8 @@
                                     <br>
                                     <div data-upload-card-zone class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4 transition hover:border-indigo-300 hover:bg-indigo-50/30">
                                         @livewire('card-series-upload', [
-                                            'universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id ?? $universe_id,
-                                            'card_series_id' => $card_series->id,
+                                            'universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id,
+                                            'card_series_id' => $card_series->id ?? $card_series_id,
                                             'current' => isset($card_series->card_series_image_front) ? Storage::disk('s3-public')->url($card_series->card_series_image_front) : null,
                                             'logo' => $card_series->card_series_image_front ?? '',
                                             'field' => 'card_series_image_front',
@@ -142,8 +143,8 @@
                                     <br>
                                     <div data-upload-card-zone class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4 transition hover:border-purple-300 hover:bg-purple-50/30">
                                         @livewire('card-series-upload', [
-                                            'universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id  ?? $universe_id,
-                                            'card_series_id' => $card_series->id,
+                                            'universe_id' => isset($_REQUEST['universe_id']) ? $_REQUEST['universe_id'] : $universe->id,
+                                            'card_series_id' => $card_series->id ?? $card_series_id,
                                             'current' => isset($card_series->card_series_image_back) ? Storage::disk('s3-public')->url($card_series->card_series_image_back) : null,
                                             'logo' => $card_series->card_series_image_back ?? '',
                                             'field' => 'card_series_image_back',
