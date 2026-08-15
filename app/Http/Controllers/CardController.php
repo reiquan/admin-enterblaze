@@ -248,7 +248,7 @@ class CardController extends Controller
         // dd($request->all());
        
         $request->validate([
-            'card_character_name' => ['required'],
+            'card_character_quote' => ['required'],
             'card_character_alias' => ['required'],
             'card_character_race' => ['required'],
             'card_character_gender' => ['required'],
@@ -258,7 +258,7 @@ class CardController extends Controller
 
         $cardCharacter = isset($request->card_character_id) ? CardCharacter::find($request->card_character_id) : new CardCharacter;
 
-        $cardCharacter->card_character_name = $request->card_character_name;
+        $cardCharacter->card_character_quote = $request->card_character_quote;
             $cardCharacter->card_character_universe_id = $request->card_character_universe_id;
             $cardCharacter->card_character_alias = $request->card_character_alias;
             $cardCharacter->card_character_race = $request->card_character_race ?? null;

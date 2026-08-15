@@ -13,7 +13,7 @@ class CardCharacter extends Model
     protected $table = 'card_characters';
 
     protected $fillable = [
-        'card_character_name',
+        'card_character_quote',
         'card_character_alias',
         'card_character_race',
         'card_character_gender',
