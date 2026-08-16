@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\BookController;
 use App\Models\Universe;
 use App\Models\Book;
+use App\Models\Subscriber;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,17 +19,29 @@ class UniverseController extends Controller
     {
         //
         $other_universes = null;
+        $universes = null;
+        $limit = null;
         if(auth()->user()->current_team_id == 2){
             $other_universes = Universe::where('universe_user_id', '!=', auth()->user()->id)->whereNull('deleted_at')->get();
-        } 
-        // dd($other_universes->toArray());
-        $universes = Universe::where('universe_user_id', auth()->user()->id)
-        ->whereNull('deleted_at')->get();
-    
+             // dd($other_universes->toArray());
+            $universes = Universe::where('universe_user_id', auth()->user()->id) ->whereNull('deleted_at')->get();
+
+        } else {
+
+            if(auth()->user()->current_team_id == 4){
+            $limit=1;
+            } else if(auth()->user()->current_team_id == 3) {
+            $limit = 3;
+            } else {
+                $limit=1;
+            }
+          
+
+            $universes = Universe::where('universe_user_id', auth()->user()->id) ->whereNull('deleted_at')->get();
+        }
        
-        // dd($universes->toArray());
       
-        return view('universe/index', compact('universes', 'other_universes'));
+        return view('universe/index', compact('universes', 'other_universes', 'limit'));
     }
 
     /**

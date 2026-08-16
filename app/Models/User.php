@@ -63,8 +63,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(ContestSubmission::class);
     }
-    public function universe()
+    public function universes()
     {
-        return $this->hasMany(Universe::class);
+        return $this->hasMany(Universe::class, 'universe_user_id');
     }
 }
