@@ -45,6 +45,9 @@ class Universe extends Model
     public function cardSeries(){
         return $this->hasMany(CardSeries::class, 'card_series_universe_id');
     }
+    public function user(){
+        return $this->belongsTo(User::class, 'universe_user_id');
+    }
 
     public function polls(): MorphMany
     {

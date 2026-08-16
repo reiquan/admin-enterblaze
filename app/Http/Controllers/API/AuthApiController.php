@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Subscriber;
+use App\Models\Service;
 use App\Services\SubscriptionService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -33,6 +34,7 @@ class AuthApiController extends Controller
 
     public function registerSubscriber(Request $request)
     {
+        $service = null;
         
         if(empty($request->name) || empty($request->email) || empty($request->password)){
             return response()->json(['message' => 'Invalid credentials'], 401);
@@ -61,6 +63,51 @@ class AuthApiController extends Controller
 
            } else {
 
+                if(isset($request->subscriber_service_id)){
+                    $service = Service::find($request->subscriber_service_id);
+                    if($service){
+                        $email_taken = User::where('email', $request->email)->get();
+
+                        if(!$email_taken->toArray()){
+                            if($service->service_tag == 'starter'){
+                                $user = User::create([
+                                    'name' => $request->name,
+                                    'email' => $request->email,
+                                    'password' => Hash::make($request->password),
+                                    'creator_community_opt_in' => 1,
+                                    'current_team_id' => 4,
+                                ]);
+                            } else {
+                               $user = User::create([
+                                    'name' => $input['name'],
+                                    'email' => $input['email'],
+                                    'password' => Hash::make($request->password),
+                                    'creator_community_opt_in' => 1,
+                                    'current_team_id' => 3,
+                                ]);
+                               
+                            }
+                            $subscriber = Subscriber::create([
+                                'name' => $request->name,
+                                'email' => $request->email,
+                                'password' => Hash::make($request->password),
+                                'is_creator' => 1,
+                                'subscriber_service_id' => $service->id,
+                                'subscriber_user_id' => $user->id,
+                            ]);
+                            
+                            $alertInfo = $this->alertService->createBody($user, 'artist_request');
+                            $this->alertService->processAlert($alertInfo, $request->email, 'new_artist');
+                            return response()->json(['success' => 'Artist request submitted!'], 200);
+                        }
+
+                        return response()->json(['error' => 'This email has been taken. Please use a different email', 200]);
+                    
+                        
+                    }
+
+                }
+
                 return response()->json(['error' => 'no subscriber found', 400]);
 
            }
@@ -68,7 +115,7 @@ class AuthApiController extends Controller
 
         $subscriber = Subscriber::where('email', $request->email)
                                     ->first();
-        // dd($subscriber);
+
         if(!$subscriber){
             $subscriber_u_name= Subscriber::where('name', 'like',  '%'.$request->name.'%')
             ->get();
