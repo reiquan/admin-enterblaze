@@ -18,7 +18,7 @@ class Subscriber extends Authenticatable
      */
     protected $table = 'subscribers';
     protected $fillable = [
-        'name', 'email', 'password', 'is_creator'
+        'name', 'email', 'password', 'is_creator', 'subscriber_service_id','subscriber_user_id'
     ];
 
    /**

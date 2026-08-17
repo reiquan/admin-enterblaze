@@ -30,8 +30,17 @@ class BookController extends Controller
         $books = Book::where('book_universe_id', $request->universe_id)->get();
        
         $universe = Universe::find($request->universe_id);
+        $limit = null;
 
-        return view('universe/books/index', compact('books', 'universe'));
+        if(auth()->user()->current_team_id == 4){
+        $limit=1;
+        } else if(auth()->user()->current_team_id == 3) {
+        $limit = 3;
+        } else {
+            $limit=null;
+        }
+
+        return view('universe/books/index', compact('books', 'universe', 'limit'));
     }
 
     /**

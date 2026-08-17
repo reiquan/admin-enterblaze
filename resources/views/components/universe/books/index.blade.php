@@ -26,7 +26,7 @@
                             Manage the books, manga volumes, one-shots, and story releases connected to this universe.
                         </p>
                     </div>
-
+                    @if($limit && count($books) !== $limit)
                     <form action="{{ route('books.create', ['universe_id' => $universe->id]) }}" method="GET">
                         <input type="hidden" name="universe_id" value="{{ $universe->id }}">
 
@@ -38,6 +38,7 @@
                             Add New Book
                         </button>
                     </form>
+                    @endif
                 </div>
             </div>
         </div>
@@ -145,18 +146,20 @@
                         <div class="border-t border-gray-100 bg-gray-50/70 p-5">
                             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                 <div class="flex gap-2">
-                                    @if($book->is_active)
-                                        <button id="unpublish{{ $book->id }}"
-                                                onclick="publishAction('unpublish', '{{ $book->book_slug_name }}', '{{ $book->id }}')"
-                                                class="rounded-2xl bg-yellow-500 px-4 py-2 text-xs font-black text-gray-950 shadow-sm transition hover:bg-yellow-400">
-                                            Unpublish
-                                        </button>
-                                    @else
-                                        <button id="publish{{ $book->id }}"
-                                                onclick="publishAction('publish', '{{ $book->book_slug_name }}', '{{ $book->id }}')"
-                                                class="rounded-2xl bg-green-600 px-4 py-2 text-xs font-black text-white shadow-sm transition hover:bg-green-700">
-                                            Publish
-                                        </button>
+                                    @if(auth()->user()->current_team_id==2)
+                                        @if($book->is_active)
+                                            <button id="unpublish{{ $book->id }}"
+                                                    onclick="publishAction('unpublish', '{{ $book->book_slug_name }}', '{{ $book->id }}')"
+                                                    class="rounded-2xl bg-yellow-500 px-4 py-2 text-xs font-black text-gray-950 shadow-sm transition hover:bg-yellow-400">
+                                                Unpublish
+                                            </button>
+                                        @else
+                                            <button id="publish{{ $book->id }}"
+                                                    onclick="publishAction('publish', '{{ $book->book_slug_name }}', '{{ $book->id }}')"
+                                                    class="rounded-2xl bg-green-600 px-4 py-2 text-xs font-black text-white shadow-sm transition hover:bg-green-700">
+                                                Publish
+                                            </button>
+                                        @endif
                                     @endif
 
                                     <button onclick="confirmDelete('{{ $book->id }}')"
@@ -202,7 +205,7 @@
                 <p class="mx-auto mt-3 max-w-md text-sm leading-6 text-gray-500">
                     Start building this universe by adding its first book, manga volume, or story release.
                 </p>
-
+                @if($limit && count($books) !== $limit)
                 <form action="{{ route('books.create', ['universe_id' => $universe->id]) }}" method="GET" class="mt-6">
                     <input type="hidden" name="universe_id" value="{{ $universe->id }}">
                     <button type="submit"
@@ -210,6 +213,7 @@
                         Create First Book
                     </button>
                 </form>
+                @endif
             </div>
         @endif
 

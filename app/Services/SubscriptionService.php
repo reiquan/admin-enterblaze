@@ -33,7 +33,7 @@ class SubscriptionService
         //get Candidate Subsribers
             // $candidate_subscribers = $this->getCandidateSubscribers(auth()->user()->candidate->id);
             if($alert_type == 'new_artist'){
-                $this->scheduleEmail($request, $email, 'new_artist');
+                $this->scheduleEmail($request, 'info@enterblaze.com', 'new_artist');
             } else if($alert_type == 'new_participant') {
                 $this->scheduleEmail($request, $email, 'new_participant');
             } else if($alert_type == 'reservation_accepted') {

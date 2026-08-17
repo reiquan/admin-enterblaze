@@ -26,7 +26,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email', 'password','creator_community_opt_in',
+        'name', 'email', 'password','creator_community_opt_in','current_team_id'
     ];
 
     /**
@@ -62,5 +62,9 @@ class User extends Authenticatable
     public function submissions()
     {
         return $this->hasMany(ContestSubmission::class);
+    }
+    public function universes()
+    {
+        return $this->hasMany(Universe::class, 'universe_user_id');
     }
 }
