@@ -203,6 +203,9 @@ Route::middleware([
     Route::post('/services/{service_id}/delete', 'App\Http\Controllers\ServicesController@destroy')->name('services.delete');
     Route::post('/services/{service_id}/publish', 'App\Http\Controllers\ServicesController@publish')->name('services.publish');
 
+      //Subscribers Series
+      Route::get('/subscriptions/index', 'App\Http\Controllers\SubscriptionController@index')->name('subscribers.index');
+
 
 });
 // Route::get('/twitch-test', function () {  TTHIS ROUTE IS FUNCTIONING PROPERLY. TESTING IN VALET/DEV IS NOT POSSIBLE. MUST TEST LIVE EVENT ON STAGING

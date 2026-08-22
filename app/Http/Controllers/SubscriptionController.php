@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\SubscriptionService;
 use App\Models\NotifySubscriberAlert;
+use App\Models\Subscriber;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,10 +16,12 @@ class SubscriptionController extends Controller
         $this->alertService = $alertService;
     }
 
-    public function index(){
-
-        // $this->twilio_service->createMessage();
-        return;
+    public function index()
+    {
+        $subscribers = Subscriber::latest()
+            ->paginate(25);
+    
+        return view('subscribers.index', compact('subscribers'));
     }
     public function create(Request $request){
 
