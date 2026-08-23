@@ -99,7 +99,7 @@
                                     <div class="rounded-2xl bg-gray-50 p-4 ring-1 ring-gray-100">
                                         <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Discount Price</p>
                                         <p class="mt-2 text-2xl font-black text-gray-950">
-                                            %{{ $service->service_sale_percentage }} OFF
+                                        ${{ number_format($service->service_price, 2) }} 
                                         </p>
                                     </div>
                                 @else
