@@ -871,7 +871,7 @@ class ApiController extends Controller
 
                 $code = Service::where('service_name', $request->promo_code)->where('service_sale_ends_at', '>', now())->get()->first();
 
-                if(!empty($code->toArray())){
+                if(!empty($code) && isset($code->service_name)){
                     return response()
                     ->json([
                         'status' => 'success',
