@@ -861,6 +861,56 @@ class ApiController extends Controller
         }
     }
 
+    public function getPromoCode(Request $request){
+
+        
+
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
+ 
+            try{
+
+                $code = Service::where('service_name', $request->promo_code)->where('service_sale_ends_at', '>', now())->get();
+
+                if(!empty($code->toArray())){
+                    return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $code[0]['service_sale_percentage'],
+                    ], 
+                    200
+                );
+                } else {
+                    return response()
+                    ->json([
+                        'status' => 'success',
+                        'warning' => 'No promo code found',
+                    ], 
+                    200
+                    );
+                }
+
+            } catch(e){
+
+                return response()
+                ->json([
+                    'status' => 'success',
+                    'error' => 'There was a problem. please try again later',
+                ], 
+                    200
+                );
+            }
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'data' => 'Unauthorized Request',
+                ], 
+                400
+            );
+        }
+
+    }
+
     
 
 }
