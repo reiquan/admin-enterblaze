@@ -131,7 +131,7 @@
                             <label for="service_category" class="block text-sm font-bold text-gray-900">Service Category</label>
                             <select id="service_category" name="service_category" autocomplete="service_category"   class="mt-2 mb-2 block w-full rounded-2xl border-gray-300 px-4 py-3 text-sm shadow-sm focus:border-indigo-600 focus:ring-indigo-600">
                             <option value="">Select Service  Category</option>
-                            @foreach(['publishing_services'=>'Publishing', 'creator_services'=>'Creator', 'influencer_services'=>'Influencer', 'fee_services'=>'Fee'] as $key => $category)
+                            @foreach(['publishing_services'=>'Publishing', 'creator_services'=>'Creator', 'influencer_services'=>'Influencer', 'fee_services'=>'Fee', 'promo_code'=>'Promo Code'] as $key => $category)
                                 <option value="{{ $key }}" @selected(old('service_category', $service->service_category ?? '') === $key)>{{ $category }}</option>
                             @endforeach
                             </select>
