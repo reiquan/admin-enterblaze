@@ -40,6 +40,7 @@ Route::get('getBlazeTokenTiers', [ApiController::class, 'getBlazeTokenTiers']);
 Route::get('getServices', [ApiController::class, 'getServices']);
 Route::get('checkRegistrationLimit', [ApiController::class, 'checkRegistrationLimit']);
 Route::post('submitVote', [ApiController::class, 'submitVote']);
+Route::get('getPromoCode', [ApiController::class, 'getPromoCode']);
 
 //Livestream
 Route::get('/public/livestream/current', [EventLivestreamsController::class, 'current']);

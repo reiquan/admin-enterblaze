@@ -134,6 +134,7 @@
                                         <option value="creator_services">Creator</option>
                                         <option value="influencer_services">Influencer</option>
                                         <option value="fee_service">Fee</option>
+                                        <option value="promo_code">Promo Code</option>
                                     </select>
                                 </div>
                                 <div >
