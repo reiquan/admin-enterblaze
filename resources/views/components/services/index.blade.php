@@ -74,6 +74,9 @@
                                     <p class="text-xs font-black uppercase tracking-[0.25em] text-gray-400">
                                         service #{{ $service->id }}
                                     </p>
+                                    <p class="text-xs font-black uppercase tracking-[0.25em] text-green-400">
+                                        {{ $service->service_category }}
+                                    </p>
 
                                     <h3 class="mt-2 text-2xl font-black tracking-tight text-gray-950">
                                         {{ $service->service_name }}
@@ -92,13 +95,22 @@
                             </div>
 
                             <div class="mt-6 grid gap-4 sm:grid-cols-2">
-
-                                <div class="rounded-2xl bg-gray-50 p-4 ring-1 ring-gray-100">
-                                    <p class="text-xs font-bold uppercase tracking-widest text-gray-400">USD Price</p>
-                                    <p class="mt-2 text-2xl font-black text-gray-950">
-                                        ${{ number_format($service->service_price, 2) }}
-                                    </p>
-                                </div>
+                                @if($service->service_category == 'promo_code')
+                                    <div class="rounded-2xl bg-gray-50 p-4 ring-1 ring-gray-100">
+                                        <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Discount Price</p>
+                                        <p class="mt-2 text-2xl font-black text-gray-950">
+                                        ${{ number_format($service->service_price, 2) }} 
+                                        </p>
+                                    </div>
+                                @else
+                                    <div class="rounded-2xl bg-gray-50 p-4 ring-1 ring-gray-100">
+                                        <p class="text-xs font-bold uppercase tracking-widest text-gray-400">USD Price</p>
+                                        <p class="mt-2 text-2xl font-black text-gray-950">
+                                            ${{ number_format($service->service_price, 2) }}
+                                        </p>
+                                    </div>
+                                @endif
+                       
                             </div>
 
                             <input type="hidden" id="{{ $service->id }}" value="{{ $service->id }}">
