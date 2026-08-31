@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -205,6 +206,16 @@ Route::middleware([
 
       //Subscribers Series
       Route::get('/subscriptions/index', 'App\Http\Controllers\SubscriptionController@index')->name('subscribers.index');
+
+    //Blogs
+    Route::get('/blogs/index', 'App\Http\Controllers\BlogsController@index')->name('blogs.index');
+    Route::get('/blogs/create', 'App\Http\Controllers\BlogsController@create')->name('blogs.create');
+    Route::post('/blogs/store', 'App\Http\Controllers\BlogsController@store')->name('blogs.store');
+    Route::get('/blogs/{blog_id}/show', 'App\Http\Controllers\BlogsController@show')->name('blogs.show');
+    Route::get('/blogs/{blog_id}/edit', 'App\Http\Controllers\BlogsController@edit')->name('blogs.edit');
+    Route::post('/blogs/upload', 'App\Http\Controllers\BlogsController@upload')->name('blogs.upload');
+    Route::post('/blogs/{blog_id}/update', 'App\Http\Controllers\BlogsController@update')->name('blogs.update');
+    Route::delete('/blogs/{blog_id}/destroy', 'App\Http\Controllers\BlogsController@destroy')->name('blogs.destroy');
 
 
 });
