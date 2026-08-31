@@ -41,6 +41,7 @@ Route::get('getServices', [ApiController::class, 'getServices']);
 Route::get('checkRegistrationLimit', [ApiController::class, 'checkRegistrationLimit']);
 Route::post('submitVote', [ApiController::class, 'submitVote']);
 Route::get('getPromoCode', [ApiController::class, 'getPromoCode']);
+Route::get('getBlogs', [ApiController::class, 'getBlogs']);
 
 //Livestream
 Route::get('/public/livestream/current', [EventLivestreamsController::class, 'current']);
