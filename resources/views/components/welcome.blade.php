@@ -215,6 +215,27 @@
                         Manage subscribers &rarr;
                     </div>
                 </a>
+                <a href="{{ route('blogs.index') }}" class="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-red-200 hover:shadow-md">
+                    <div class="flex items-center">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-red-800 ring-1 ring-red-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
+                        </svg>
+                        </div>
+
+                        <h2 class="ml-4 text-lg font-semibold text-gray-900 group-hover:text-red-800">
+                            Blogs
+                        </h2>
+                    </div>
+
+                    <p class="mt-4 text-sm leading-relaxed text-gray-500">
+                        Configure blogs for your platform.
+                    </p>
+
+                    <div class="mt-5 text-sm font-semibold text-red-800">
+                        Manage Blogs &rarr;
+                    </div>
+                </a>
                 
             </div>
             

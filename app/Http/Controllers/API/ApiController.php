@@ -22,6 +22,7 @@ use App\Models\EventRegistration;
 use App\Models\EventRegistrationAttendance;
 use App\Models\BlazeTokenTier;
 use App\Models\Service;
+use App\Models\Blog;
 use App\Services\PollService;
 
 class ApiController extends Controller
@@ -910,6 +911,64 @@ class ApiController extends Controller
         }
 
     }
+
+    public function getBlogs(Request $request){
+
+        if($request->header('EnterblazeAuth') == config('auth.api.token')){
+        
+            $blog = null;
+            $blogs = null;
+
+            if(isset($request->blog_id)){
+
+                $blog = Blog::where('status', 'published')
+                ->where('id',$request->blog_id)
+                ->orderBy('updated_at')->get()->first();
+            } else {
+                $blogs = Blog::where('status', 'published')->get();
+            }
+
+            $data = $request->all();
+    
+            if($blog && $blog->toArray()) {
+
+                $blog->incrementViews();
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $blog,
+                    ], 
+                    200
+                );
+            } else if($blogs && $blogs->toArray()) {
+                return response()
+                    ->json([
+                        'status' => 'success',
+                        'data' => $blogs,
+                    ], 
+                    200
+                );
+            } else {
+                return response()
+                    ->json([
+                        'status' => 'error',
+                        'message' => 'Could Not Find Any Blogs',
+                        'data' => $data,
+                    ], 
+                    400
+                );
+            }
+        } else {
+            return response()
+                ->json([
+                    'status' => 'error',
+                    'data' => 'Unauthorized Request',
+                ], 
+                400
+            );
+        }
+ 
+     }
 
     
 
