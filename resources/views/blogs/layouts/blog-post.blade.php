@@ -4,7 +4,15 @@
 ================================================================ --}}
 
 <div class="w-full">
-
+@if (isset($post) && Route::is('blogs.edit')) 
+    <form
+        method="POST"
+        id="postForm"
+        action="{{ route('blogs.update', $post->id) }}"
+        enctype="multipart/form-data"
+        class="space-y-8"
+    >
+@else
     <form
         method="POST"
         id="postForm"
@@ -12,6 +20,8 @@
         enctype="multipart/form-data"
         class="space-y-8"
     >
+@endif
+
         @csrf
 
 
