@@ -1,8 +1,10 @@
 @if($card->type->card_type_name !== 'Character' )
-    <form method="post" action="{{ route('cards.updateCardSkill', ['universe_id' => $universe_id ?? $universe->id, 'card_series_id' => $card_series_id, 'card_id' => $card->id]) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('cards.finish', ['universe_id' => $universe_id ?? $universe->id, 'card_series_id' => $card_series_id, 'card_id' => $card->id]) }}" enctype="multipart/form-data">
             @csrf
+            @method('POST')
 
             <input type="hidden" name="type" value="location">
+            <input type="hidden" name="skip" value="1">
             <input type="hidden" name="universe_id" value="{{ $universe_id ?? $universe->id }}">
             <input type="hidden" name="card_id" value="{{ $card->id ?? null }}">
             <div>

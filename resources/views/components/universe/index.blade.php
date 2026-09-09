@@ -17,7 +17,7 @@
                     </p>
                 </div>
             </div>
-            @if($limit && count(auth()->user()->universes) !== $limit)
+            @if(($limit < 1 && count(auth()->user()->universes) !== $limit) || auth()->user()->current_team_id == 2)
             <a href="{{ route('universe.create') }}"
                class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
@@ -60,7 +60,7 @@
                         <p class="mt-1 text-sm text-gray-500">Add a fresh world and connect books, cards, locations, powers, and story lore.</p>
                     </div>
                 </div>
-                @if($limit && count(auth()->user()->universes) !== $limit)
+                @if(($limit < 1 && count(auth()->user()->universes) !== $limit) || auth()->user()->current_team_id == 2)
      
                 <a href="{{ route('universe.create') }}"
                    class="inline-flex items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50">
@@ -154,7 +154,7 @@
                     </div>
                     <h3 class="mt-4 text-base font-semibold text-gray-900">No universes yet</h3>
                     <p class="mt-2 text-sm text-gray-500">Create your first universe to start building your story library.</p>
-                    @if($limit && count(auth()->user()->universes) !== $limit)
+                    @if(($limit < 1 && count(auth()->user()->universes) !== $limit) || auth()->user()->current_team_id == 2)
                     <a href="{{ route('universe.create') }}"
                        class="mt-5 inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500">
                         Create Universe
