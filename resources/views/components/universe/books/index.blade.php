@@ -26,7 +26,7 @@
                             Manage the books, manga volumes, one-shots, and story releases connected to this universe.
                         </p>
                     </div>
-                    @if($limit && count($books) !== $limit)
+                    @if(($limit < 1 && count($books) !== $limit) || auth()->user()->current_team_id == 2)
                     <form action="{{ route('books.create', ['universe_id' => $universe->id]) }}" method="GET">
                         <input type="hidden" name="universe_id" value="{{ $universe->id }}">
 
@@ -205,7 +205,7 @@
                 <p class="mx-auto mt-3 max-w-md text-sm leading-6 text-gray-500">
                     Start building this universe by adding its first book, manga volume, or story release.
                 </p>
-                @if($limit && count($books) !== $limit)
+                @if(($limit < 1 && count($books) !== $limit) || auth()->user()->current_team_id == 2)
                 <form action="{{ route('books.create', ['universe_id' => $universe->id]) }}" method="GET" class="mt-6">
                     <input type="hidden" name="universe_id" value="{{ $universe->id }}">
                     <button type="submit"
