@@ -61,6 +61,7 @@ class CardSeriesController extends Controller
      */
     public function store(Request $request)
     {
+ 
           //validate info
           if($request->step == 1){
             $request->validate([
@@ -169,7 +170,7 @@ class CardSeriesController extends Controller
      */
     public function update(Request $request)
     {
-        dd($request->all());
+ 
         $request->validate([
             'card_series_id' => ['required'],
             'universe_id' => ['required'],

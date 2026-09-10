@@ -12,6 +12,7 @@ use App\Models\CardSkillType;
 use App\Models\IssuePage;
 use App\Models\Book;
 use App\Models\CardEra;
+use App\Models\CardSeries;
 use App\Models\CardType;
 use App\Models\CardFaction;
 use App\Models\CardTier;
@@ -33,11 +34,16 @@ class CardController extends Controller
 
         $cards = Card::where('card_series_id', $request->card_series_id)->get();
 
+        $card_series = CardSeries::find($request->card_series_id);
         $card_series_id = $request->card_series_id;
+        $card_series_name = $card_series->card_series_name ?? null;
+
+
+        $card_series_name = $card_series_name;
        
         $universe = Universe::find($request->universe_id);
 
-        return view('universe/card-series/cards/index', compact('cards', 'card_series_id','universe'));
+        return view('universe/card-series/cards/index', compact('cards', 'card_series_id','universe', 'card_series_name'));
     }
 
     /**
@@ -303,7 +309,7 @@ class CardController extends Controller
 
     public function updateCardSkill(Request $request)
     {
-        // dd($request->all());
+
         $validated = $request->validate([
             'skills.0.card_skill_name' => 'required|string|max:255',
             'skills.0.card_skill_type_id' => 'required',
@@ -506,21 +512,22 @@ class CardController extends Controller
         /**
      * Display a listing of the resource.
      */
-    public function finish(REQUEST $request)
+    public function finish(Request $request, $universe_id, $card_series_id, $card_id)
     {
         //
-        $card = Card::find($request->card_id);
+        $card = Card::find($request->card_id ?? $card_id);
         $card_id = $card->id;
         // dd($card->toArray());
-        $universe = Universe::find($card->card_id);
-        $universe_id = $card->card_id;
+        $card_type_form ='finish';
+        $universe = Universe::find($universe_id);
+        $universe_id = $universe->id;
 
         $step = 3;
 
        if($request->type == 'edit'){
-        return view('universe.card-series.cards.edit', compact('step', 'universe_id', 'card_id', 'card'));
+        return view('universe.card-series.cards.edit', compact('step', 'universe_id', 'card_id','card_series_id', 'card', 'card_type_form'));
        } else {
-        return view('universe.card-series.cards.create', compact('step', 'universe_id', 'card_id', 'card'));
+        return view('universe.card-series.cards.create', compact('step', 'universe_id','card_series_id', 'card_id', 'card', 'card_type_form'));
        }
     }
 

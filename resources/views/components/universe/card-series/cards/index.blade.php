@@ -17,7 +17,7 @@
                 <div>
                     <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">Card Series Library</p>
                     <h1 class="mt-1 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                        {{ $universe->universe_name }}: {{ $cards[0]->series->card_series_name }} Card Series
+                        {{ $universe->universe_name }}: {{ $cards[0]->series->card_series_name ?? $cardSeriesName }} Card Series
                     </h1>
                     <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-500">
                         Create, publish, edit, and organize every collectible card series connected to this universe.
@@ -147,7 +147,7 @@
                 <h3 class="mt-4 text-lg font-semibold text-gray-900">No card series yet</h3>
                 <p class="mt-2 text-sm text-gray-500">Start by creating your first card series for this universe.</p>
 
-                <form action="{{ route('cards.create', ['universe_id' => $universe->id]) }}" method="GET" class="mt-6">
+                <form action="{{ route('cards.create', ['universe_id' => $universe->id, 'card_series_id' => $cardSeriesId]) }}" method="GET" class="mt-6">
                     <input type="hidden" name="universe_id" value="{{ $universe->id }}">
                     <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                         Add New Card Series
