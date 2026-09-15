@@ -28,6 +28,7 @@
         </div>
 
         <div class="mt-8 grid gap-4 sm:grid-cols-2">
+
             @foreach([1 => 'Event Info', 2 => 'Event Picture'] as $stepNumber => $stepTitle)
                 @php $isActive = $currentStep === $stepNumber; @endphp
 
@@ -57,6 +58,17 @@
                 @endif
             @endforeach
         </div>
+        <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-red-700">
+
+            @foreach($errors->all() as $error)
+
+                <li>
+                    {{ $error }}
+                </li>
+
+            @endforeach
+
+        </ul>
     </div>
 </div>
 
