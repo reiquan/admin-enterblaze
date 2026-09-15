@@ -212,6 +212,7 @@
                                                 autocomplete="issue_number"
                                                 class="block w-full rounded-2xl border-0 bg-white px-4 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
                                                 placeholder="1"
+                                                required
                                             >
                                         </div>
                                     </div>

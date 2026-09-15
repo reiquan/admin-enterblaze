@@ -38,7 +38,7 @@ class EventsController extends Controller
         // }
         
         $events = Event::all();
-        
+    
 
 
         return view('events/index', compact('events'));
@@ -122,6 +122,10 @@ class EventsController extends Controller
             'event_is_livestream' => [
                 'nullable',
                 'boolean',
+            ],
+            'event_about' => [
+                'required',
+                'string',
             ],
 
             'event_livestream_platform' => [
