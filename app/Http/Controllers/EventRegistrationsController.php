@@ -37,7 +37,7 @@ class EventRegistrationsController extends Controller
     }
     public function show(Request $request){
     
-     
+    
         $event_registration = EventRegistration::find($request->event_registration_id);
         $total = 0;
 
