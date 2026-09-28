@@ -920,12 +920,12 @@ class ApiController extends Controller
             $blogs = null;
 
             if(isset($request->blog_id)){
-
                 $blog = Blog::where('status', 'published')
                 ->where('id',$request->blog_id)
-                ->orderBy('updated_at')->get()->first();
+                ->orderBy('updated_at')->get();
             } else {
-                $blogs = Blog::where('status', 'published')->get();
+               
+                $blogs = Blog::where('status', 'published')->orderByDesc('updated_at')->get();
             }
 
             $data = $request->all();
