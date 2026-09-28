@@ -922,7 +922,7 @@ class ApiController extends Controller
             if(isset($request->blog_id)){
                 $blog = Blog::where('status', 'published')
                 ->where('id',$request->blog_id)
-                ->orderBy('updated_at')->get();
+                ->orderBy('updated_at')->get()->first();
             } else {
                
                 $blogs = Blog::where('status', 'published')->orderByDesc('updated_at')->get();
